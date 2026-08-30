@@ -12,4 +12,8 @@ config.resolver.nodeModulesPaths = [
   path.resolve(monorepoRoot, 'node_modules'),
 ];
 
+config.resolver.extraNodeModules = {
+  '@hospate/types': path.resolve(projectRoot, 'src/types/index.ts')
+};
+
 module.exports = config;
