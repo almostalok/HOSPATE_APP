@@ -29,7 +29,7 @@ export const HospateHeader: React.FC<HospateHeaderProps> = ({
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { paddingTop: Math.max(insets.top, 16) + 6 }]}>
+    <View style={[styles.container, { paddingTop: Math.max(insets.top, 36) + 8, paddingBottom: spacing.md }]}>
       <View style={styles.leftCol}>
         <View style={styles.brandRow}>
           <HospateLogo size={28} />
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.sm + 2,
     backgroundColor: colors.background,
     borderBottomWidth: 1,
     borderBottomColor: colors.border

@@ -10,7 +10,10 @@ import { PrimaryButton } from '../../components/PrimaryButton';
 import { HospateLogo } from '../../components/HospateLogo';
 import { Activity, FileText, Heart } from 'lucide-react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export const WelcomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const [loadingDemo, setLoadingDemo] = useState(false);
 
@@ -30,7 +33,7 @@ export const WelcomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => 
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <View style={[styles.content, { paddingTop: Math.max(insets.top, 36) + 8, paddingBottom: Math.max(insets.bottom, 24) }]}>
         {/* Brand Header */}
         <View style={styles.brandRow}>
           <HospateLogo size={34} />

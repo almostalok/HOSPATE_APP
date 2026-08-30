@@ -49,7 +49,7 @@ export const ProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => 
   return (
     <SafeAreaView style={styles.container}>
       {/* Apple Header */}
-      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 36) + 8, paddingBottom: spacing.sm + 2 }]}>
         <Text style={styles.headerTitle}>Patient Profile</Text>
       </View>
 

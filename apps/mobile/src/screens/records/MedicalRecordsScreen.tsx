@@ -60,7 +60,7 @@ export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation
   return (
     <SafeAreaView style={styles.container}>
       {/* Apple Header */}
-      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 36) + 8, paddingBottom: spacing.sm + 2 }]}>
         <View>
           <Text style={styles.headerTitle}>Medical Records</Text>
           <Text style={styles.headerSubtitle}>Personal health archive</Text>

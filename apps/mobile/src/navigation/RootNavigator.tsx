@@ -58,7 +58,7 @@ const Tab = createBottomTabNavigator();
 
 const MainTabs: React.FC = () => {
   const insets = useSafeAreaInsets();
-  const bottomPadding = Math.max(insets.bottom, Platform.OS === 'android' ? 10 : 8);
+  const bottomPadding = Math.max(insets.bottom, 16);
 
   return (
     <Tab.Navigator
@@ -68,16 +68,16 @@ const MainTabs: React.FC = () => {
           backgroundColor: '#121214',
           borderTopColor: colors.border,
           borderTopWidth: 0.5,
-          height: 52 + bottomPadding,
+          height: 60 + bottomPadding,
           paddingBottom: bottomPadding,
-          paddingTop: 6
+          paddingTop: 8
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: '500',
-          marginTop: 2
+          marginTop: 3
         }
       }}
     >

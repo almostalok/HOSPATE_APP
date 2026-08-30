@@ -21,7 +21,10 @@ import { PrimaryButton } from '../../components/PrimaryButton';
 import { HospateLogo } from '../../components/HospateLogo';
 import { ArrowLeft, Mail, Lock, UserCheck } from 'lucide-react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const { error } = useSelector((state: RootState) => state.auth);
 
@@ -64,7 +67,7 @@ export const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
       >
-        <ScrollView contentContainerStyle={styles.scroll}>
+        <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: Math.max(insets.top, 36) + 8, paddingBottom: Math.max(insets.bottom, 24) }]}>
           {/* Header Row */}
           <View style={styles.navRow}>
             <TouchableOpacity

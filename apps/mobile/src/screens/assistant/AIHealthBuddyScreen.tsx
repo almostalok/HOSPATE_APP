@@ -59,7 +59,7 @@ export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = (
   return (
     <SafeAreaView style={styles.container}>
       {/* Apple Header */}
-      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 36) + 8, paddingBottom: spacing.sm + 2 }]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <ArrowLeft size={20} color={colors.textPrimary} />
         </TouchableOpacity>

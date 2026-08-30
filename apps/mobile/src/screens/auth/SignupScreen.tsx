@@ -21,7 +21,10 @@ import { PrimaryButton } from '../../components/PrimaryButton';
 import { HospateLogo } from '../../components/HospateLogo';
 import { ArrowLeft, User, Mail, Lock, Phone, CheckSquare, Square } from 'lucide-react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export const SignupScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
 
   const [fullName, setFullName] = useState('');
@@ -59,7 +62,7 @@ export const SignupScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
       >
-        <ScrollView contentContainerStyle={styles.scroll}>
+        <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: Math.max(insets.top, 36) + 8, paddingBottom: Math.max(insets.bottom, 24) }]}>
           <View style={styles.navRow}>
             <TouchableOpacity
               style={styles.backBtn}
