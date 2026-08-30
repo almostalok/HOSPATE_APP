@@ -24,10 +24,10 @@ import { AcademicDebugModal } from '../../components/AcademicDebugModal';
 import {
   ArrowLeft,
   CheckCircle,
-  Cpu,
+  Terminal,
   Edit2,
   FileText,
-  Sparkles,
+  FileCheck,
   ShieldAlert
 } from 'lucide-react-native';
 
@@ -85,7 +85,7 @@ export const ExtractionReviewScreen: React.FC<{ navigation: any }> = ({ navigati
           style={styles.auditBtn}
           onPress={() => setDebugModalVisible(true)}
         >
-          <Cpu size={16} color={colors.accent} />
+          <Terminal size={14} color={colors.textSecondary} />
           <Text style={styles.auditBtnText}>Audit</Text>
         </TouchableOpacity>
       </View>
@@ -140,11 +140,11 @@ export const ExtractionReviewScreen: React.FC<{ navigation: any }> = ({ navigati
         {/* Bottom Actions */}
         <View style={styles.actionSection}>
           <PrimaryButton
-            title="Confirm & Run AI Health Analysis"
+            title="Confirm & Save Health Records"
             onPress={handleConfirm}
             loading={isSubmitting}
             size="lg"
-            icon={<Sparkles size={18} color="#FFFFFF" />}
+            icon={<FileCheck size={18} color="#FFFFFF" />}
             style={styles.confirmBtn}
           />
 
@@ -153,9 +153,9 @@ export const ExtractionReviewScreen: React.FC<{ navigation: any }> = ({ navigati
             onPress={() => setDebugModalVisible(true)}
             style={styles.inspectBtn}
           >
-            <Cpu size={16} color={colors.accent} />
+            <Terminal size={14} color={colors.textSecondary} />
             <Text style={styles.inspectText}>
-              Inspect Academic Pipeline (OCR → NLP → Range Engine)
+              Inspect Pipeline Telemetry & Extraction Audit
             </Text>
           </TouchableOpacity>
         </View>

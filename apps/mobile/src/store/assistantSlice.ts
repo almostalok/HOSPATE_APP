@@ -12,7 +12,7 @@ interface AssistantState {
 const initialWelcomeMessage: ChatMessage = {
   id: 'msg-welcome',
   sender: 'assistant',
-  text: `Hi Alex 👋\nI'm your **AI Health Buddy**.\n\nI've reviewed your recent health records including your **CBC, Lipid Panel**, and **Vitamin Panel**.\n\nHow can I help you understand your health today?`,
+  text: `Hi Alex 👋\nI'm your **Hospate Health Buddy**.\n\nI've reviewed your recent health records including your **CBC, Lipid Panel**, and **Vitamin Panel**.\n\nHow can I help you understand your health today?`,
   timestamp: new Date().toISOString(),
   suggestedQuestions: [
     'Explain my latest report',

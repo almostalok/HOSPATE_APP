@@ -46,7 +46,7 @@ export const HealthTimelineScreen: React.FC<{ navigation: any }> = ({ navigation
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <ArrowLeft size={22} color={colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>DIGITAL HEALTH TIMELINE</Text>
+        <Text style={styles.headerTitle}>Health Timeline</Text>
         <TouchableOpacity
           style={styles.addBtn}
           onPress={() => navigation.navigate('UploadDocument')}

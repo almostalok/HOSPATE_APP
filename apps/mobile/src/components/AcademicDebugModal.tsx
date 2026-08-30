@@ -12,7 +12,7 @@ import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { spacing, borderRadius } from '../theme/spacing';
 import { AcademicDebugData } from '@hospate/types';
-import { X, Cpu, CheckCircle2, ChevronRight, Terminal, Layers } from 'lucide-react-native';
+import { X, CheckCircle2, ChevronRight, Terminal, Layers } from 'lucide-react-native';
 
 interface AcademicDebugModalProps {
   visible: boolean;
@@ -117,8 +117,8 @@ export const AcademicDebugModal: React.FC<AcademicDebugModalProps> = ({
         {/* Modal Header */}
         <View style={styles.header}>
           <View style={styles.headerTitleRow}>
-            <Cpu size={20} color={colors.accent} />
-            <Text style={styles.headerTitle}>ACADEMIC PIPELINE AUDIT</Text>
+            <Terminal size={18} color={colors.primary} />
+            <Text style={styles.headerTitle}>PIPELINE TELEMETRY AUDIT</Text>
           </View>
           <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
             <X size={20} color={colors.textPrimary} />

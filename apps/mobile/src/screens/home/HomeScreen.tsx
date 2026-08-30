@@ -15,6 +15,7 @@ import { fetchHealthOverview } from '../../store/healthSlice';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { spacing, borderRadius } from '../../theme/spacing';
+import { LiveHealthAvatar } from '../../components/LiveHealthAvatar';
 import { HospateHeader } from '../../components/HospateHeader';
 import { HealthScoreCard } from '../../components/HealthScoreCard';
 import { InsightCard } from '../../components/InsightCard';
@@ -74,7 +75,14 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           <RefreshControl refreshing={refreshing || isLoading} onRefresh={onRefresh} tintColor={colors.primary} />
         }
       >
-        {/* 1. Hero Health Score Summary */}
+        {/* 1. Live Physiological Health Avatar */}
+        <LiveHealthAvatar
+          score={score?.score ?? 80}
+          userName={user?.fullName?.split(' ')[0] || 'Alex'}
+          onPress={() => navigation.navigate('HealthScore')}
+        />
+
+        {/* 2. Hero Health Score Summary */}
         <HealthScoreCard
           scoreData={score}
           onPress={() => navigation.navigate('HealthScore')}

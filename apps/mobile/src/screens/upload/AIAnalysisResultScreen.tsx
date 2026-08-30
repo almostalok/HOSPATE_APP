@@ -14,15 +14,15 @@ import { typography } from '../../theme/typography';
 import { spacing, borderRadius } from '../../theme/spacing';
 import { StatusBadge } from '../../components/StatusBadge';
 import { PrimaryButton } from '../../components/PrimaryButton';
+import { HospateLogo } from '../../components/HospateLogo';
 import {
   CheckCircle2,
   AlertCircle,
   AlertTriangle,
-  Sparkles,
-  TrendingUp,
+  ArrowUpRight,
   Clock,
-  ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Stethoscope
 } from 'lucide-react-native';
 
 export const AIAnalysisResultScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -30,8 +30,6 @@ export const AIAnalysisResultScreen: React.FC<{ navigation: any }> = ({ navigati
   const { score } = useSelector((state: RootState) => state.health);
 
   const parameters = selectedRecord?.extractedParameters || [];
-  const insights = selectedRecord?.insights || [];
-
   const abnormalParams = parameters.filter(p => p.status !== 'NORMAL');
   const normalParams = parameters.filter(p => p.status === 'NORMAL');
 
@@ -43,11 +41,11 @@ export const AIAnalysisResultScreen: React.FC<{ navigation: any }> = ({ navigati
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
+      {/* Apple Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <ShieldCheck size={20} color={colors.successText} />
-          <Text style={styles.headerTitle}>ANALYSIS COMPLETE</Text>
+          <ShieldCheck size={18} color={colors.success} />
+          <Text style={styles.headerTitle}>Report Processed</Text>
         </View>
       </View>
 
@@ -55,36 +53,36 @@ export const AIAnalysisResultScreen: React.FC<{ navigation: any }> = ({ navigati
         {/* Success Banner */}
         <View style={styles.heroBanner}>
           <View style={styles.successIconCircle}>
-            <CheckCircle2 size={32} color={colors.successText} />
+            <CheckCircle2 size={28} color="#FFFFFF" />
           </View>
-          <Text style={styles.heroTitle}>Your report is ready.</Text>
+          <Text style={styles.heroTitle}>Biomarkers Synchronized</Text>
           <Text style={styles.heroSubtitle}>
-            Hospate AI analyzed {parameters.length} parameters and identified {abnormalParams.length} notable findings.
+            Hospate extracted {parameters.length} biomarkers and identified {abnormalParams.length} notable flags.
           </Text>
         </View>
 
         {/* Health Score Impact Card */}
         <View style={styles.scoreImpactCard}>
           <View style={styles.scoreImpactLeft}>
-            <Sparkles size={16} color={colors.primary} />
+            <HospateLogo size={22} />
             <View style={{ marginLeft: spacing.sm }}>
               <Text style={styles.scoreImpactTitle}>Health Score Synchronized</Text>
-              <Text style={styles.scoreImpactSubtitle}>Updated to {score?.score || 82} / 100 ({score?.status || 'GOOD'})</Text>
+              <Text style={styles.scoreImpactSubtitle}>Updated to {score?.score || 80} / 100 ({score?.status || 'GOOD'})</Text>
             </View>
           </View>
           <View style={styles.scoreDeltaPill}>
-            <TrendingUp size={12} color={colors.successText} />
+            <ArrowUpRight size={13} color={colors.success} />
             <Text style={styles.scoreDeltaText}>+4 pts</Text>
           </View>
         </View>
 
-        {/* Section 1: Notable Findings Requiring Attention */}
+        {/* Section 1: Notable Findings */}
         {abnormalParams.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>NOTABLE FINDINGS ({abnormalParams.length})</Text>
+            <Text style={styles.sectionTitle}>ATTENTION REQUIRED ({abnormalParams.length})</Text>
 
             {abnormalParams.map((p, idx) => {
-              const isDanger = p.status === 'CRITICAL_HIGH' || p.status === 'CRITICAL_LOW';
+              const isDanger = p.status === 'CRITICAL_HIGH' || p.status === 'CRITICAL_LOW' || p.status === 'HIGH';
               return (
                 <View
                   key={p.id || idx}
@@ -93,9 +91,9 @@ export const AIAnalysisResultScreen: React.FC<{ navigation: any }> = ({ navigati
                   <View style={styles.findingTop}>
                     <View style={styles.findingLeft}>
                       {isDanger ? (
-                        <AlertCircle size={16} color={colors.dangerText} />
+                        <AlertCircle size={16} color={colors.danger} />
                       ) : (
-                        <AlertTriangle size={16} color={colors.warningText} />
+                        <AlertTriangle size={16} color={colors.warning} />
                       )}
                       <Text style={styles.paramName}>{p.parameter}</Text>
                     </View>
@@ -106,11 +104,11 @@ export const AIAnalysisResultScreen: React.FC<{ navigation: any }> = ({ navigati
                     <Text style={styles.valText}>
                       {p.value} <Text style={styles.unitText}>{p.unit}</Text>
                     </Text>
-                    <Text style={styles.refText}>Ref Target: {p.referenceText}</Text>
+                    <Text style={styles.refText}>Target Range: {p.referenceText || '< 100'}</Text>
                   </View>
 
                   <Text style={styles.clinicalDesc}>
-                    {p.clinicalNote || 'Above or below established clinical reference threshold.'}
+                    {p.clinicalNote || 'Measured biomarker is outside standard laboratory reference threshold.'}
                   </Text>
                 </View>
               );
@@ -121,11 +119,11 @@ export const AIAnalysisResultScreen: React.FC<{ navigation: any }> = ({ navigati
         {/* Section 2: Normal Parameters */}
         {normalParams.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>NORMAL PARAMETERS ({normalParams.length})</Text>
+            <Text style={styles.sectionTitle}>OPTIMAL & IN-RANGE ({normalParams.length})</Text>
             <View style={styles.normalGrid}>
               {normalParams.map((p, idx) => (
                 <View key={p.id || idx} style={styles.normalChip}>
-                  <CheckCircle2 size={12} color={colors.successText} />
+                  <CheckCircle2 size={12} color={colors.success} />
                   <Text style={styles.normalName}>{p.parameter}</Text>
                   <Text style={styles.normalVal}>{p.value} {p.unit}</Text>
                 </View>
@@ -134,22 +132,25 @@ export const AIAnalysisResultScreen: React.FC<{ navigation: any }> = ({ navigati
           </View>
         )}
 
-        {/* Doctor Talking Points Note */}
+        {/* Doctor Consultation Ready */}
         <View style={styles.doctorNote}>
-          <Text style={styles.doctorNoteTitle}>DOCTOR TALKING POINTS PREPARED</Text>
-          <Text style={styles.doctorNoteDesc}>
-            These findings have been formatted with non-diagnostic language ready for clinical review during your consultation.
-          </Text>
+          <Stethoscope size={16} color={colors.primary} />
+          <View style={{ marginLeft: spacing.sm, flex: 1 }}>
+            <Text style={styles.doctorNoteTitle}>Physician Review Ready</Text>
+            <Text style={styles.doctorNoteDesc}>
+              These laboratory findings are de-identified and organized for review with your treating physician.
+            </Text>
+          </View>
         </View>
 
         {/* Action Buttons */}
         <View style={styles.actionSection}>
           <PrimaryButton
-            title="Ask AI Health Buddy to Explain"
+            title="Ask Health Buddy to Explain"
             onPress={handleAskBuddy}
-            variant="ai"
+            variant="primary"
             size="lg"
-            icon={<Sparkles size={18} color="#FFFFFF" />}
+            icon={<HospateLogo size={18} />}
             style={styles.buddyBtn}
           />
 
@@ -164,10 +165,10 @@ export const AIAnalysisResultScreen: React.FC<{ navigation: any }> = ({ navigati
 
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('HomeTab')}
+            onPress={() => navigation.navigate('MainTabs')}
             style={styles.homeLink}
           >
-            <Text style={styles.homeLinkText}>Return to Home Dashboard</Text>
+            <Text style={styles.homeLinkText}>Return to Summary</Text>
           </TouchableOpacity>
         </View>
 
@@ -183,8 +184,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
@@ -195,55 +194,54 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   headerTitle: {
-    ...typography.label,
-    fontSize: 12,
-    color: colors.successText,
-    marginLeft: spacing.xs + 2,
-    letterSpacing: 1
+    ...typography.headline,
+    color: colors.textPrimary,
+    fontSize: 16,
+    marginLeft: 6
   },
   scroll: {
     padding: spacing.lg
   },
   heroBanner: {
-    backgroundColor: colors.surfaceElevated,
-    borderRadius: borderRadius.xl,
-    padding: spacing.xl,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
     alignItems: 'center',
+    marginBottom: spacing.md,
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
-    marginBottom: spacing.md
+    borderColor: colors.border
   },
   successIconCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: colors.successGlow,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: colors.success,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.md
+    marginBottom: spacing.sm
   },
   heroTitle: {
-    ...typography.h1,
-    fontSize: 24,
-    color: colors.textPrimary
+    ...typography.h2,
+    color: colors.textPrimary,
+    fontWeight: '700'
   },
   heroSubtitle: {
-    ...typography.body,
+    ...typography.subheadline,
     color: colors.textSecondary,
     textAlign: 'center',
-    marginTop: spacing.xs,
+    marginTop: 4,
     lineHeight: 20
   },
   scoreImpactCard: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
+    marginBottom: spacing.lg,
     borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: spacing.lg
+    borderColor: colors.border
   },
   scoreImpactLeft: {
     flexDirection: 'row',
@@ -252,25 +250,27 @@ const styles = StyleSheet.create({
   },
   scoreImpactTitle: {
     ...typography.bodySemibold,
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontSize: 15
   },
   scoreImpactSubtitle: {
     ...typography.caption,
-    color: colors.textSecondary,
-    marginTop: 1
+    color: colors.textMuted,
+    marginTop: 2
   },
   scoreDeltaPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.successGlow,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 3,
+    backgroundColor: 'rgba(48, 209, 88, 0.12)',
+    paddingHorizontal: spacing.sm + 2,
+    paddingVertical: 4,
     borderRadius: borderRadius.pill
   },
   scoreDeltaText: {
     ...typography.captionSemibold,
-    color: colors.successText,
-    marginLeft: 3
+    color: colors.success,
+    fontSize: 11,
+    marginLeft: 2
   },
   section: {
     marginBottom: spacing.lg
@@ -278,112 +278,108 @@ const styles = StyleSheet.create({
   sectionTitle: {
     ...typography.label,
     fontSize: 11,
-    color: colors.textMuted,
-    letterSpacing: 1,
+    color: colors.textSecondary,
+    letterSpacing: 0.5,
     marginBottom: spacing.sm
   },
   findingCard: {
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     marginBottom: spacing.sm,
     borderWidth: 1
   },
-  warningBorder: {
-    borderColor: 'rgba(245, 158, 11, 0.35)'
-  },
   dangerBorder: {
-    borderColor: 'rgba(239, 68, 68, 0.4)'
+    borderColor: 'rgba(255, 69, 58, 0.35)'
+  },
+  warningBorder: {
+    borderColor: 'rgba(255, 159, 10, 0.35)'
   },
   findingTop: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.xs + 2
+    justifyContent: 'space-between',
+    marginBottom: spacing.xs
   },
   findingLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    marginRight: spacing.sm
+    alignItems: 'center'
   },
   paramName: {
     ...typography.bodySemibold,
     color: colors.textPrimary,
-    marginLeft: spacing.xs + 2
+    fontSize: 15,
+    marginLeft: 6
   },
   valueRow: {
     flexDirection: 'row',
-    alignItems: 'baseline',
     justifyContent: 'space-between',
-    backgroundColor: colors.surface,
-    padding: spacing.sm,
-    borderRadius: borderRadius.md,
-    marginVertical: spacing.xs
+    alignItems: 'baseline',
+    marginVertical: 4
   },
   valText: {
     ...typography.h3,
-    fontSize: 16,
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontWeight: '700'
   },
   unitText: {
     ...typography.caption,
-    color: colors.textSecondary
+    color: colors.textMuted,
+    fontWeight: '400'
   },
   refText: {
     ...typography.caption,
-    color: colors.textMuted
+    color: colors.textSecondary
   },
   clinicalDesc: {
     ...typography.caption,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
+    color: colors.textMuted,
+    marginTop: 4,
     lineHeight: 16
   },
   normalGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap'
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border
   },
   normalChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
-    paddingHorizontal: spacing.sm + 2,
-    paddingVertical: spacing.xs + 2,
+    paddingVertical: spacing.xs + 2
+  },
+  normalName: {
+    ...typography.body,
+    fontSize: 14,
+    color: colors.textPrimary,
+    marginLeft: 6,
+    flex: 1
+  },
+  normalVal: {
+    ...typography.captionSemibold,
+    color: colors.textSecondary,
+    fontSize: 13
+  },
+  doctorNote: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.md,
-    marginRight: spacing.xs + 2,
-    marginBottom: spacing.xs + 2,
+    padding: spacing.md,
+    marginBottom: spacing.lg,
     borderWidth: 1,
     borderColor: colors.border
   },
-  normalName: {
-    ...typography.captionSemibold,
-    color: colors.textPrimary,
-    marginLeft: 4,
-    marginRight: 6
-  },
-  normalVal: {
-    ...typography.caption,
-    color: colors.textMuted,
-    fontSize: 10
-  },
-  doctorNote: {
-    backgroundColor: 'rgba(14, 165, 233, 0.08)',
-    borderRadius: borderRadius.md,
-    padding: spacing.md,
-    borderWidth: 1,
-    borderColor: 'rgba(14, 165, 233, 0.25)',
-    marginBottom: spacing.lg
-  },
   doctorNoteTitle: {
-    ...typography.label,
-    fontSize: 9,
-    color: colors.primary,
-    marginBottom: 4
+    ...typography.bodySemibold,
+    fontSize: 13,
+    color: colors.textPrimary
   },
   doctorNoteDesc: {
     ...typography.caption,
-    color: colors.textSecondary,
+    color: colors.textMuted,
+    marginTop: 2,
     lineHeight: 16
   },
   actionSection: {
@@ -393,14 +389,15 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm
   },
   timelineBtn: {
-    marginBottom: spacing.md
+    marginBottom: spacing.sm
   },
   homeLink: {
     alignItems: 'center',
     paddingVertical: spacing.sm
   },
   homeLinkText: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary
+    ...typography.bodySemibold,
+    color: colors.primary,
+    fontSize: 14
   }
 });
