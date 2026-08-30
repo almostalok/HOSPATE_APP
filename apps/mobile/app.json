@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Hospate",
-    "slug": "hospate-mobile",
+    "slug": "hospate",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "eae5b675-07bc-40f1-84ba-3f4179c169f6"
+      }
     }
   }
 }
