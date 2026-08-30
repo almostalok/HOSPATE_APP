@@ -26,7 +26,10 @@ import {
   AlertCircle
 } from 'lucide-react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export const MedicationsScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const { medications, todayLogs, adherenceRate, isLoading } = useSelector(
     (state: RootState) => state.medications
@@ -44,7 +47,7 @@ export const MedicationsScreen: React.FC<{ navigation: any }> = ({ navigation })
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
         <View>
           <Text style={styles.headerTitle}>Medications</Text>
           <Text style={styles.headerSubtitle}>Active schedules & adherence tracking</Text>

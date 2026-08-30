@@ -17,9 +17,12 @@ import { spacing, borderRadius } from '../../theme/spacing';
 import { TimelineItem } from '../../components/TimelineItem';
 import { ArrowLeft, Clock, Filter, Plus } from 'lucide-react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const TIMELINE_FILTERS = ['ALL', 'LAB', 'PRESCRIPTION', 'CONSULTATION'];
 
 export const HealthTimelineScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const { timeline, isLoading } = useSelector((state: RootState) => state.health);
   const [activeFilter, setActiveFilter] = useState('ALL');
@@ -42,9 +45,9 @@ export const HealthTimelineScreen: React.FC<{ navigation: any }> = ({ navigation
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <ArrowLeft size={22} color={colors.textPrimary} />
+          <ArrowLeft size={20} color={colors.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Health Timeline</Text>
         <TouchableOpacity

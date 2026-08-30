@@ -18,6 +18,8 @@ import { spacing, borderRadius } from '../../theme/spacing';
 import { RecordCard } from '../../components/RecordCard';
 import { Search, Plus, FileQuestion } from 'lucide-react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const FILTER_TABS = [
   { key: 'ALL', label: 'All' },
   { key: 'LAB_REPORT', label: 'Lab Reports' },
@@ -26,6 +28,7 @@ const FILTER_TABS = [
 ];
 
 export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const { records, filterType, searchQuery, isLoading } = useSelector(
     (state: RootState) => state.records
@@ -57,7 +60,7 @@ export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation
   return (
     <SafeAreaView style={styles.container}>
       {/* Apple Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
         <View>
           <Text style={styles.headerTitle}>Medical Records</Text>
           <Text style={styles.headerSubtitle}>Personal health archive</Text>

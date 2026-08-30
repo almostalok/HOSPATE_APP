@@ -27,7 +27,10 @@ import {
   Lock
 } from 'lucide-react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export const EmergencyCardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const [card, setCard] = useState<EmergencyCard | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -67,7 +70,7 @@ export const EmergencyCardScreen: React.FC<{ navigation: any }> = ({ navigation 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <ArrowLeft size={22} color={colors.textPrimary} />
         </TouchableOpacity>

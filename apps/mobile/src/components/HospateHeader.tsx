@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { spacing, borderRadius } from '../theme/spacing';
@@ -25,8 +26,10 @@ export const HospateHeader: React.FC<HospateHeaderProps> = ({
   onDebugPress,
   navigation
 }) => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: Math.max(insets.top, 16) + 6 }]}>
       <View style={styles.leftCol}>
         <View style={styles.brandRow}>
           <HospateLogo size={28} />
@@ -42,7 +45,7 @@ export const HospateHeader: React.FC<HospateHeaderProps> = ({
             onPress={onDebugPress}
             style={styles.debugBtn}
           >
-            <Terminal size={14} color={colors.textSecondary} />
+            <Terminal size={13} color={colors.textSecondary} />
             <Text style={styles.debugText}>Audit</Text>
           </TouchableOpacity>
         )}
@@ -53,7 +56,7 @@ export const HospateHeader: React.FC<HospateHeaderProps> = ({
             onPress={onEmergencyPress || (() => navigation?.navigate('EmergencyCard'))}
             style={styles.sosBtn}
           >
-            <ShieldAlert size={14} color="#FFFFFF" />
+            <ShieldAlert size={13} color="#FFFFFF" />
             <Text style={styles.sosText}>SOS</Text>
           </TouchableOpacity>
         )}
@@ -68,8 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
-    paddingTop: Platform.OS === 'ios' ? 8 : spacing.md,
-    paddingBottom: spacing.sm,
+    paddingBottom: spacing.sm + 2,
     backgroundColor: colors.background,
     borderBottomWidth: 1,
     borderBottomColor: colors.border

@@ -51,10 +51,15 @@ import { EmergencyCardScreen } from '../screens/emergency/EmergencyCardScreen';
 import { ProfileScreen } from '../screens/profile/ProfileScreen';
 import { SettingsScreen } from '../screens/profile/SettingsScreen';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const MainTabs: React.FC = () => {
+  const insets = useSafeAreaInsets();
+  const bottomPadding = Math.max(insets.bottom, Platform.OS === 'android' ? 10 : 8);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -63,9 +68,9 @@ const MainTabs: React.FC = () => {
           backgroundColor: '#121214',
           borderTopColor: colors.border,
           borderTopWidth: 0.5,
-          height: Platform.OS === 'ios' ? 88 : 64,
-          paddingBottom: Platform.OS === 'ios' ? 28 : 8,
-          paddingTop: 8
+          height: 52 + bottomPadding,
+          paddingBottom: bottomPadding,
+          paddingTop: 6
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,

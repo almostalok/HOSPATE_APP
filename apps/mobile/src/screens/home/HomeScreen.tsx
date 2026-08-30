@@ -199,18 +199,8 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={{ height: 80 }} />
+        <View style={{ height: 24 }} />
       </ScrollView>
-
-      {/* Apple Floating Health Buddy Button */}
-      <TouchableOpacity
-        activeOpacity={0.85}
-        onPress={() => navigation.navigate('AIHealthBuddy')}
-        style={styles.floatingButton}
-      >
-        <HospateLogo size={20} />
-        <Text style={styles.floatingText}>Health Buddy</Text>
-      </TouchableOpacity>
 
       {/* Academic Debug Modal */}
       <AcademicDebugModal

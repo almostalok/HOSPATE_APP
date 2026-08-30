@@ -28,6 +28,8 @@ import {
   ShieldAlert
 } from 'lucide-react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const SPECIALITY_FILTERS = [
   'All',
   'Cardiology',
@@ -38,6 +40,7 @@ const SPECIALITY_FILTERS = [
 ];
 
 export const HospitalDiscoveryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const { hospitals, isLoading } = useSelector((state: RootState) => state.hospitals);
 
@@ -60,7 +63,7 @@ export const HospitalDiscoveryScreen: React.FC<{ navigation: any }> = ({ navigat
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
         <Text style={styles.headerTitle}>Hospital Discovery</Text>
         <Text style={styles.headerSubtitle}>Verified healthcare facilities & bed availability</Text>
       </View>

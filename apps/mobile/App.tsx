@@ -12,7 +12,7 @@ export default function App() {
       <View style={styles.root}>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <View style={styles.container}>
-            <StatusBar style="light" backgroundColor="#090D16" />
+            <StatusBar style="light" backgroundColor="#000000" translucent={true} />
             <RootNavigator />
           </View>
         </SafeAreaProvider>
@@ -24,7 +24,7 @@ export default function App() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#090D16',
+    backgroundColor: '#000000',
     ...(Platform.OS === 'web'
       ? {
           height: '100vh' as any,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#090D16',
+    backgroundColor: '#000000',
     width: '100%',
     height: '100%',
     ...(Platform.OS === 'web'

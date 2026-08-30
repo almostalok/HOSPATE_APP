@@ -28,8 +28,10 @@ import {
   CheckCircle,
   Video
 } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const AppointmentsScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const { appointments, isLoading } = useSelector((state: RootState) => state.appointments);
 
@@ -73,7 +75,7 @@ export const AppointmentsScreen: React.FC<{ navigation: any }> = ({ navigation }
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
         <View>
           <Text style={styles.headerTitle}>Appointments</Text>
           <Text style={styles.headerSubtitle}>Doctor consultations & clinical follow-ups</Text>

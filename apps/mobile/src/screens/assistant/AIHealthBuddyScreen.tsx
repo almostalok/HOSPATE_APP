@@ -21,10 +21,13 @@ import { AIMessage } from '../../components/AIMessage';
 import { HospateLogo } from '../../components/HospateLogo';
 import { ArrowLeft, Send, Trash2, Shield } from 'lucide-react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = ({
   route,
   navigation
 }) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const { messages, isThinking, suggestedPrompts } = useSelector(
     (state: RootState) => state.assistant
@@ -56,7 +59,7 @@ export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = (
   return (
     <SafeAreaView style={styles.container}>
       {/* Apple Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 14) + 4 }]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <ArrowLeft size={20} color={colors.textPrimary} />
         </TouchableOpacity>
