@@ -221,7 +221,7 @@ const SAMPLE_REPORTS: Record<string, { title: string; type: any; text: string }>
     title: 'Comprehensive CBC & Lipid Panel',
     type: 'LAB_REPORT',
     text: `APOLLO DIAGNOSTICS & RESEARCH CENTRE
-Patient: Alex Morgan | Age: 28 Y | Sex: M
+Patient: Alok Kumar Singh | Age: 26 Y | Sex: M | Blood: O+
 Date: 30-Aug-2026 | Ref By: Dr. Sarah Sharma
 
 TEST PARAMETERS & RESULTS:
@@ -241,7 +241,7 @@ SGPT / ALT: 28 U/L (Ref: 7 - 45 U/L)
     title: 'Vitamin & Micronutrient Profile',
     type: 'LAB_REPORT',
     text: `MAX LABS CENTRAL PATHOLOGY
-Patient: Alex Morgan | Date: 20-Aug-2026
+Patient: Alok Kumar Singh | Date: 20-Aug-2026
 Test Name: Micronutrient Panel
 
 Vitamin D (25-OH): 18 ng/mL (Ref: 30 - 100 ng/mL) - LOW
@@ -253,7 +253,7 @@ Hemoglobin: 14.0 g/dL (Ref: 13.0 - 17.0 g/dL)
     title: 'Comprehensive Metabolic Panel (CMP)',
     type: 'LAB_REPORT',
     text: `METROPOLIS HEALTHCARE LAB
-Patient: Alex Morgan | Date: 30-Aug-2026
+Patient: Alok Kumar Singh | Date: 30-Aug-2026
 Fasting Blood Glucose: 92 mg/dL (Ref: 70 - 99 mg/dL)
 HbA1c: 5.4 % (Ref: 4.0 - 5.6 %)
 Serum Creatinine: 0.85 mg/dL (Ref: 0.6 - 1.2 mg/dL)

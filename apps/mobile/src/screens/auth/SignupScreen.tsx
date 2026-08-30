@@ -83,7 +83,7 @@ export const SignupScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
               <User size={18} color={colors.textMuted} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="Full name (e.g. Alex Morgan)"
+                placeholder="Full name (e.g. Alok Kumar Singh)"
                 placeholderTextColor={colors.textMuted}
                 value={fullName}
                 onChangeText={setFullName}

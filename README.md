@@ -77,7 +77,7 @@ hospate_mobile/
 
 | Role | Email | Password | Details |
 | :--- | :--- | :--- | :--- |
-| **Demo Patient** | `demo@hospate.app` | `Hospate123!` | Pre-populated profile for **Alex Morgan** (28Y, Male, Blood Group A+) with CBC, Lipid Profile, Vitamin Panel, Prescription, active Metformin & Vitamin D3 medications, upcoming appointment at Apollo Health City, and Emergency Card. |
+| **Demo Patient** | `demo@hospate.app` | `Hospate123!` | Pre-populated profile for **Alok Kumar Singh** (26Y, Male, Height: 184cm, Weight: 70kg, Blood Group O+) with CBC, Lipid Profile, Vitamin Panel, Prescription, active Metformin & Vitamin D3 medications, upcoming appointment at Apollo Health City, and Emergency Card. |
 
 ---
 
@@ -115,7 +115,7 @@ Press `w` in terminal to launch in browser preview, or scan QR code with Expo Go
 
 ## 5. Hero Vertical Slice Demonstration Walkthrough
 
-1. **Login**: Tap **"Fast Demo Access (Alex Morgan)"** on the Welcome screen.
+1. **Login**: Tap **"Fast Demo Access (Alok Kumar Singh)"** on the Welcome screen.
 2. **Home Dashboard**: Inspect the hero **AI Health Score (82 / GOOD, +4 pts)**, the 5 dimension bars, quick biomarker metrics, and critical health alerts (Low Vitamin D, Elevated LDL).
 3. **Medical Records**: Navigate to the **Records** tab. Observe existing chronological records (CBC + Lipid, Vitamin Panel, Prescription).
 4. **Hero Upload Flow**: Tap **"+ Upload"** → Choose **"Comprehensive CBC & Lipid Panel"** preset (or choose photo/PDF).

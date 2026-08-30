@@ -95,7 +95,7 @@ export const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
               <Text style={styles.demoTitle}>QUICK DEMO ACCESS</Text>
             </View>
             <Text style={styles.demoDesc}>
-              Instant 1-tap sign in with pre-populated patient profile (Alex Morgan).
+              Instant 1-tap sign in with pre-populated patient profile (Alok Kumar Singh).
             </Text>
           </TouchableOpacity>
 

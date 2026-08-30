@@ -57,7 +57,7 @@ export const ProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => 
         {/* Live Physiological Health Avatar */}
         <LiveHealthAvatar
           score={80}
-          userName={user?.fullName || 'Alex Morgan'}
+          userName={user?.fullName || 'Alok Kumar Singh'}
           onPress={() => navigation.navigate('HealthScore')}
         />
 
@@ -65,11 +65,11 @@ export const ProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => 
         <View style={styles.userCard}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
-              {user?.fullName?.split(' ').map(n => n[0]).join('') || 'AM'}
+              {user?.fullName?.split(' ').map(n => n[0]).join('') || 'AK'}
             </Text>
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user?.fullName || 'Alex Morgan'}</Text>
+            <Text style={styles.userName}>{user?.fullName || 'Alok Kumar Singh'}</Text>
             <Text style={styles.userEmail}>{user?.email || 'demo@hospate.app'}</Text>
             <View style={styles.roleBadge}>
               <UserCheck size={11} color={colors.primary} />
@@ -82,22 +82,22 @@ export const ProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => 
         <View style={styles.metricsStrip}>
           <View style={styles.stripItem}>
             <Text style={styles.stripLabel}>BLOOD</Text>
-            <Text style={[styles.stripVal, { color: colors.danger }]}>{profile?.bloodGroup || 'A+'}</Text>
+            <Text style={[styles.stripVal, { color: colors.danger }]}>{profile?.bloodGroup || 'O+'}</Text>
           </View>
           <View style={styles.stripDivider} />
           <View style={styles.stripItem}>
             <Text style={styles.stripLabel}>AGE</Text>
-            <Text style={styles.stripVal}>{profile?.age || 28} Y</Text>
+            <Text style={styles.stripVal}>{profile?.age || 26} Y</Text>
           </View>
           <View style={styles.stripDivider} />
           <View style={styles.stripItem}>
             <Text style={styles.stripLabel}>HEIGHT</Text>
-            <Text style={styles.stripVal}>{profile?.heightCm || 178} cm</Text>
+            <Text style={styles.stripVal}>{profile?.heightCm || 184} cm</Text>
           </View>
           <View style={styles.stripDivider} />
           <View style={styles.stripItem}>
             <Text style={styles.stripLabel}>WEIGHT</Text>
-            <Text style={styles.stripVal}>{profile?.weightKg || 74} kg</Text>
+            <Text style={styles.stripVal}>{profile?.weightKg || 70} kg</Text>
           </View>
         </View>
 

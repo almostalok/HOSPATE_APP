@@ -32,7 +32,7 @@ interface LiveHealthAvatarProps {
 
 export const LiveHealthAvatar: React.FC<LiveHealthAvatarProps> = ({
   score = 80,
-  userName = 'Alex',
+  userName = 'Alok',
   heartRate = 72,
   spo2 = 98,
   onPress

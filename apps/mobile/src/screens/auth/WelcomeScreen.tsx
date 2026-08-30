@@ -88,7 +88,7 @@ export const WelcomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => 
         {/* Action Section */}
         <View style={styles.buttonSection}>
           <PrimaryButton
-            title="Fast Demo Access (Alex Morgan)"
+            title="Fast Demo Access (Alok Kumar Singh)"
             onPress={handleDemoLogin}
             loading={loadingDemo}
             variant="primary"

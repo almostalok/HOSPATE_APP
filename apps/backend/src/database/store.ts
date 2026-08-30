@@ -43,8 +43,8 @@ class HospateDataStore {
     const demoUser: User = {
       id: demoUserId,
       email: demoEmail,
-      fullName: 'Alex Morgan',
-      phone: '+1 (555) 234-5678',
+      fullName: 'Alok Kumar Singh',
+      phone: '+91 98765 43210',
       role: 'patient',
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
       createdAt: '2026-06-01T00:00:00.000Z',
@@ -57,13 +57,13 @@ class HospateDataStore {
     const profile: HealthProfile = {
       id: 'profile-alex-001',
       userId: demoUserId,
-      dob: '1998-04-15',
-      age: 28,
+      dob: '2000-05-15',
+      age: 26,
       gender: 'male',
-      heightCm: 178,
-      weightKg: 74,
-      bmi: 23.4,
-      bloodGroup: 'A+',
+      heightCm: 184,
+      weightKg: 70,
+      bmi: 20.7,
+      bloodGroup: 'O+',
       allergies: ['Penicillin', 'Sulfa Drugs'],
       chronicConditions: ['Mild Dyslipidemia (Managed)'],
       currentMedications: ['Metformin 500mg', 'Vitamin D3 60,000 IU', 'Omega-3 1000mg'],
@@ -71,8 +71,8 @@ class HospateDataStore {
       alcoholStatus: 'occasional',
       activityLevel: 'moderate',
       emergencyContact: {
-        name: 'Emma Morgan',
-        relationship: 'Spouse',
+        name: 'Emma Singh',
+        relationship: 'Family Contact',
         phone: '+1 (555) 019-2834'
       },
       updatedAt: '2026-08-30T10:00:00.000Z'
@@ -611,15 +611,15 @@ class HospateDataStore {
     const emgCard: EmergencyCard = {
       cardId: 'HOSP-EMG-8921',
       patientId: demoUserId,
-      fullName: 'Alex Morgan',
-      age: 28,
-      dob: '1998-04-15',
+      fullName: 'Alok Kumar Singh',
+      age: 26,
+      dob: '2000-05-15',
       gender: 'male',
-      bloodGroup: 'A+',
+      bloodGroup: 'O+',
       primaryEmergencyContact: {
-        name: 'Emma Morgan',
-        relationship: 'Spouse',
-        phone: '+1 (555) 019-2834'
+        name: 'Emma Singh',
+        relationship: 'Family Contact',
+        phone: '+91 98765 43210'
       },
       secondaryEmergencyContact: {
         name: 'Dr. Sarah Sharma (Physician)',

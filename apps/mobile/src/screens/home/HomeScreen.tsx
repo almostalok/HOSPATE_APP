@@ -78,7 +78,7 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         {/* 1. Live Physiological Health Avatar */}
         <LiveHealthAvatar
           score={score?.score ?? 80}
-          userName={user?.fullName?.split(' ')[0] || 'Alex'}
+          userName={user?.fullName?.split(' ')[0] || 'Alok'}
           onPress={() => navigation.navigate('HealthScore')}
         />
 

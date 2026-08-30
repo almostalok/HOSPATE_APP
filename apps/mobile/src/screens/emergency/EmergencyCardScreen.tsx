@@ -96,15 +96,15 @@ export const EmergencyCardScreen: React.FC<{ navigation: any }> = ({ navigation 
           {/* Patient Core Info */}
           <View style={styles.patientRow}>
             <View style={styles.nameCol}>
-              <Text style={styles.patientName}>{card?.fullName || 'Alex Morgan'}</Text>
+              <Text style={styles.patientName}>{card?.fullName || 'Alok Kumar Singh'}</Text>
               <Text style={styles.patientMeta}>
-                Age: {card?.age || 28} Y • Male • DOB: {card?.dob || '1998-04-15'}
+                Age: {card?.age || 26} Y • Male • DOB: {card?.dob || '2000-05-15'}
               </Text>
             </View>
 
             <View style={styles.bloodBadge}>
               <Text style={styles.bloodLabel}>BLOOD</Text>
-              <Text style={styles.bloodValue}>{card?.bloodGroup || 'A+'}</Text>
+              <Text style={styles.bloodValue}>{card?.bloodGroup || 'O+'}</Text>
             </View>
           </View>
 

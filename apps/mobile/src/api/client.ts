@@ -30,7 +30,7 @@ export function getApiBaseUrl(): string {
 const MOCK_USER: User = {
   id: 'user-alex-001',
   email: 'demo@hospate.app',
-  fullName: 'Alex Morgan',
+  fullName: 'Alok Kumar Singh',
   role: 'patient',
   createdAt: '2026-08-01T00:00:00Z',
   updatedAt: '2026-08-20T00:00:00Z'
@@ -39,13 +39,13 @@ const MOCK_USER: User = {
 const MOCK_PROFILE: HealthProfile = {
   id: 'profile-alex-001',
   userId: 'user-alex-001',
-  dob: '1998-05-14',
-  age: 28,
+  dob: '2000-05-14',
+  age: 26,
   gender: 'male',
-  bloodGroup: 'A+',
-  heightCm: 178,
-  weightKg: 74,
-  bmi: 23.4,
+  bloodGroup: 'O+',
+  heightCm: 184,
+  weightKg: 70,
+  bmi: 20.7,
   allergies: ['Penicillin', 'Sulfa Drugs'],
   chronicConditions: ['Pre-hypertension'],
   currentMedications: ['Metformin 500mg', 'Vitamin D3 60,000 IU'],
@@ -53,9 +53,9 @@ const MOCK_PROFILE: HealthProfile = {
   alcoholStatus: 'occasional',
   activityLevel: 'moderate',
   emergencyContact: {
-    name: 'Emma Morgan',
-    relationship: 'Spouse',
-    phone: '+1 (555) 234-5678'
+    name: 'Emma Singh',
+    relationship: 'Family Contact',
+    phone: '+91 98765 43210'
   },
   updatedAt: '2026-08-20T00:00:00Z'
 };
@@ -431,20 +431,20 @@ class HospateApiClient {
       return {
         cardId: 'card-alex-001',
         patientId: 'user-alex-001',
-        fullName: 'Alex Morgan',
-        age: 28,
-        dob: '1998-05-14',
+        fullName: 'Alok Kumar Singh',
+        age: 26,
+        dob: '2000-05-14',
         gender: 'male',
-        bloodGroup: 'A+',
+        bloodGroup: 'O+',
         primaryEmergencyContact: {
-          name: 'Emma Morgan',
-          relationship: 'Spouse',
-          phone: '+1 (555) 234-5678'
+          name: 'Emma Singh',
+          relationship: 'Family Contact',
+          phone: '+91 98765 43210'
         },
         secondaryEmergencyContact: {
-          name: 'Robert Morgan',
-          relationship: 'Father',
-          phone: '+1 (555) 876-5432'
+          name: 'Dr. Sarah Sharma',
+          relationship: 'Primary Care Physician',
+          phone: '+91 40 2360 7777'
         },
         allergies: ['Penicillin', 'Sulfa Drugs'],
         chronicConditions: ['Pre-hypertension'],
