@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="128" fill="#002046"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="42" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Infinity Heart Contour -->
+    <path d="M 256 310 L 135 188 C 90 143 90 75 145 40 C 200 5 256 60 300 110 L 377 188 C 422 238 422 310 367 345 C 312 380 256 325 210 275 L 135 188" />
+    <path d="M 256 310 L 377 188 C 422 143 422 75 367 40 C 312 5 256 60 210 110 L 135 188 C 90 238 90 310 145 345 C 200 380 256 325 300 275" />
+  </g>
+  <!-- Medical Cross (+) at Bottom -->
+  <rect x="232" y="348" width="48" height="116" rx="14" fill="#FFFFFF"/>
+  <rect x="198" y="382" width="116" height="48" rx="14" fill="#FFFFFF"/>
+</svg>

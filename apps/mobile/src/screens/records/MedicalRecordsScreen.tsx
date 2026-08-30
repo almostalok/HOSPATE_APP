@@ -16,13 +16,13 @@ import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { spacing, borderRadius } from '../../theme/spacing';
 import { RecordCard } from '../../components/RecordCard';
-import { Search, Upload, Filter, Plus, FileQuestion } from 'lucide-react-native';
+import { Search, Plus, FileQuestion } from 'lucide-react-native';
 
 const FILTER_TABS = [
-  { key: 'ALL', label: 'All Records' },
+  { key: 'ALL', label: 'All' },
   { key: 'LAB_REPORT', label: 'Lab Reports' },
   { key: 'PRESCRIPTION', label: 'Prescriptions' },
-  { key: 'SCAN', label: 'Scans & Imaging' }
+  { key: 'SCAN', label: 'Scans' }
 ];
 
 export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -56,11 +56,11 @@ export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Top Header */}
+      {/* Apple Header */}
       <View style={styles.header}>
         <View>
           <Text style={styles.headerTitle}>Medical Records</Text>
-          <Text style={styles.headerSubtitle}>Centralized FHIR-aligned health vault</Text>
+          <Text style={styles.headerSubtitle}>Personal health archive</Text>
         </View>
 
         <TouchableOpacity
@@ -68,18 +68,18 @@ export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation
           onPress={() => navigation.navigate('UploadDocument')}
           style={styles.uploadBtn}
         >
-          <Plus size={18} color="#FFFFFF" />
+          <Plus size={16} color="#FFFFFF" />
           <Text style={styles.uploadBtnText}>Upload</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Search Bar */}
+      {/* Apple Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>
-          <Search size={18} color={colors.textMuted} style={styles.searchIcon} />
+          <Search size={16} color={colors.textMuted} style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search reports, parameters, clinics..."
+            placeholder="Search reports, biomarkers, clinics..."
             placeholderTextColor={colors.textMuted}
             value={searchText}
             onChangeText={setSearchText}
@@ -89,21 +89,24 @@ export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation
         </View>
       </View>
 
-      {/* Filter Tabs */}
+      {/* Apple Segmented Control */}
       <View style={styles.filterRow}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterScroll}>
-          {FILTER_TABS.map(tab => (
-            <TouchableOpacity
-              key={tab.key}
-              activeOpacity={0.8}
-              onPress={() => handleSelectFilter(tab.key)}
-              style={[styles.filterChip, filterType === tab.key && styles.filterChipActive]}
-            >
-              <Text style={[styles.filterText, filterType === tab.key && styles.filterTextActive]}>
-                {tab.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
+          {FILTER_TABS.map(tab => {
+            const isSelected = filterType === tab.key;
+            return (
+              <TouchableOpacity
+                key={tab.key}
+                activeOpacity={0.7}
+                onPress={() => handleSelectFilter(tab.key)}
+                style={[styles.filterChip, isSelected && styles.filterChipActive]}
+              >
+                <Text style={[styles.filterText, isSelected && styles.filterTextActive]}>
+                  {tab.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       </View>
 
@@ -117,18 +120,18 @@ export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation
       >
         {records.length === 0 ? (
           <View style={styles.emptyState}>
-            <FileQuestion size={48} color={colors.textMuted} />
-            <Text style={styles.emptyTitle}>Your health story starts here.</Text>
+            <FileQuestion size={44} color={colors.textMuted} />
+            <Text style={styles.emptyTitle}>No medical records found</Text>
             <Text style={styles.emptySubtitle}>
-              Upload your first medical report and Hospate will begin building your continuous health timeline.
+              Upload a lab report or prescription to start tracking your biomarkers over time.
             </Text>
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => navigation.navigate('UploadDocument')}
               style={styles.emptyUploadBtn}
             >
-              <Upload size={16} color="#FFFFFF" />
-              <Text style={styles.emptyUploadText}>Upload Report</Text>
+              <Plus size={16} color="#FFFFFF" />
+              <Text style={styles.emptyUploadText}>Upload First Document</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -136,7 +139,7 @@ export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation
             <RecordCard
               key={rec.id}
               record={rec}
-              onPress={handleRecordPress}
+              onPress={() => handleRecordPress(rec)}
             />
           ))
         )}
@@ -158,12 +161,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
-    paddingBottom: spacing.sm
+    paddingBottom: spacing.xs
   },
   headerTitle: {
     ...typography.h1,
-    fontSize: 24,
-    color: colors.textPrimary
+    fontSize: 26,
+    color: colors.textPrimary,
+    fontWeight: '700'
   },
   headerSubtitle: {
     ...typography.caption,
@@ -175,23 +179,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs + 2,
+    paddingVertical: 7,
     borderRadius: borderRadius.pill
   },
   uploadBtnText: {
-    ...typography.bodySemibold,
+    ...typography.captionSemibold,
     color: '#FFFFFF',
     marginLeft: 4,
     fontSize: 13
   },
   searchContainer: {
     paddingHorizontal: spacing.lg,
-    marginVertical: spacing.xs + 2
+    marginTop: spacing.sm,
+    marginBottom: spacing.xs
   },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.md,
     paddingHorizontal: spacing.md,
     borderWidth: 1,
@@ -204,11 +209,12 @@ const styles = StyleSheet.create({
     flex: 1,
     ...typography.body,
     color: colors.textPrimary,
-    paddingVertical: spacing.sm + 2
+    paddingVertical: 10
   },
   filterRow: {
-    paddingVertical: spacing.sm,
-    backgroundColor: colors.surface
+    paddingVertical: spacing.xs + 2,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border
   },
   filterScroll: {
     paddingHorizontal: spacing.lg
@@ -217,7 +223,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: 6,
     borderRadius: borderRadius.pill,
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     marginRight: spacing.xs + 2,
     borderWidth: 1,
     borderColor: colors.border
@@ -227,15 +233,16 @@ const styles = StyleSheet.create({
     borderColor: colors.primary
   },
   filterText: {
-    ...typography.label,
-    fontSize: 10,
-    color: colors.textSecondary
+    ...typography.captionSemibold,
+    color: colors.textSecondary,
+    fontSize: 12
   },
   filterTextActive: {
     color: '#FFFFFF'
   },
   scroll: {
-    paddingTop: spacing.xs + 2
+    padding: spacing.lg,
+    paddingTop: spacing.sm
   },
   emptyState: {
     padding: spacing.xxl,
@@ -266,6 +273,6 @@ const styles = StyleSheet.create({
   emptyUploadText: {
     ...typography.bodySemibold,
     color: '#FFFFFF',
-    marginLeft: spacing.xs + 2
+    marginLeft: spacing.xs
   }
 });

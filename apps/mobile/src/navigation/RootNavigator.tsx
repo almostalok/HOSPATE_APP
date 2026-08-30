@@ -7,15 +7,16 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
+import { HospateLogo } from '../components/HospateLogo';
 
 // Icons
 import {
-  Home,
-  Calendar,
+  Activity,
   FileText,
-  Building,
+  Pill,
   User,
-  Sparkles
+  Calendar,
+  Building
 } from 'lucide-react-native';
 
 // Auth Screens
@@ -59,9 +60,9 @@ const MainTabs: React.FC = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.surface,
+          backgroundColor: '#121214',
           borderTopColor: colors.border,
-          borderTopWidth: 1,
+          borderTopWidth: 0.5,
           height: Platform.OS === 'ios' ? 88 : 64,
           paddingBottom: Platform.OS === 'ios' ? 28 : 8,
           paddingTop: 8
@@ -69,8 +70,9 @@ const MainTabs: React.FC = () => {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarLabelStyle: {
-          ...typography.label,
-          fontSize: 9
+          fontSize: 10,
+          fontWeight: '500',
+          marginTop: 2
         }
       }}
     >
@@ -78,40 +80,42 @@ const MainTabs: React.FC = () => {
         name="HomeTab"
         component={HomeScreen}
         options={{
-          tabBarLabel: 'HOME',
-          tabBarIcon: ({ color, size }) => <Home size={20} color={color} />
-        }}
-      />
-      <Tab.Screen
-        name="AppointmentsTab"
-        component={AppointmentsScreen}
-        options={{
-          tabBarLabel: 'APPOINTMENTS',
-          tabBarIcon: ({ color, size }) => <Calendar size={20} color={color} />
+          tabBarLabel: 'Summary',
+          tabBarIcon: ({ color }) => <Activity size={22} color={color} />
         }}
       />
       <Tab.Screen
         name="RecordsTab"
         component={MedicalRecordsScreen}
         options={{
-          tabBarLabel: 'RECORDS',
-          tabBarIcon: ({ color, size }) => <FileText size={20} color={color} />
+          tabBarLabel: 'Records',
+          tabBarIcon: ({ color }) => <FileText size={22} color={color} />
         }}
       />
       <Tab.Screen
-        name="HospitalsTab"
-        component={HospitalDiscoveryScreen}
+        name="BuddyTab"
+        component={AIHealthBuddyScreen}
         options={{
-          tabBarLabel: 'HOSPITALS',
-          tabBarIcon: ({ color, size }) => <Building size={20} color={color} />
+          tabBarLabel: 'Buddy',
+          tabBarIcon: ({ color, focused }) => (
+            <HospateLogo size={22} color={focused ? colors.primary : colors.textMuted} />
+          )
+        }}
+      />
+      <Tab.Screen
+        name="MedicationsTab"
+        component={MedicationsScreen}
+        options={{
+          tabBarLabel: 'Medications',
+          tabBarIcon: ({ color }) => <Pill size={22} color={color} />
         }}
       />
       <Tab.Screen
         name="ProfileTab"
         component={ProfileScreen}
         options={{
-          tabBarLabel: 'PROFILE',
-          tabBarIcon: ({ color, size }) => <User size={20} color={color} />
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color }) => <User size={22} color={color} />
         }}
       />
     </Tab.Navigator>
@@ -119,8 +123,6 @@ const MainTabs: React.FC = () => {
 };
 
 export const RootNavigator: React.FC = () => {
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -164,6 +166,7 @@ export const RootNavigator: React.FC = () => {
         {/* Secondary Modules */}
         <Stack.Screen name="Medications" component={MedicationsScreen} />
         <Stack.Screen name="Appointments" component={AppointmentsScreen} />
+        <Stack.Screen name="HospitalDiscovery" component={HospitalDiscoveryScreen} />
         <Stack.Screen name="HospitalDetail" component={HospitalDetailScreen} />
         <Stack.Screen name="EmergencyCard" component={EmergencyCardScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
