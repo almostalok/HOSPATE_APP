@@ -4,31 +4,30 @@ import {
   MedicalRecord,
   LabParameter,
   HealthInsight,
-  HealthScore,
   TimelineEvent,
   Medication,
   MedicationLog,
   Appointment,
   Hospital,
   EmergencyCard,
+  HealthScore,
   AcademicDebugData
 } from '@hospate/types';
 import { HealthAnalysisEngine } from '../analysis/analysisEngine';
-import { v4 as uuidv4 } from 'uuid';
 
-class HospateDataStore {
+export class DataStore {
   public users: Map<string, User> = new Map();
-  public userPasswords: Map<string, string> = new Map(); // email -> hash
-  public healthProfiles: Map<string, HealthProfile> = new Map(); // userId -> HealthProfile
-  public records: Map<string, MedicalRecord> = new Map(); // recordId -> MedicalRecord
-  public parameters: Map<string, LabParameter> = new Map(); // paramId -> LabParameter
-  public insights: Map<string, HealthInsight> = new Map(); // insightId -> HealthInsight
+  public userPasswords: Map<string, string> = new Map();
+  public healthProfiles: Map<string, HealthProfile> = new Map();
+  public records: Map<string, MedicalRecord> = new Map();
+  public parameters: Map<string, LabParameter> = new Map();
+  public insights: Map<string, HealthInsight> = new Map();
   public timelineEvents: Map<string, TimelineEvent> = new Map();
   public medications: Map<string, Medication> = new Map();
-  public medicationLogs: Map<string, MedicationLog[]> = new Map(); // date -> logs
+  public medicationLogs: Map<string, MedicationLog[]> = new Map();
   public appointments: Map<string, Appointment> = new Map();
   public hospitals: Map<string, Hospital> = new Map();
-  public emergencyCards: Map<string, EmergencyCard> = new Map(); // patientId -> EmergencyCard
+  public emergencyCards: Map<string, EmergencyCard> = new Map();
   public academicAudits: Map<string, AcademicDebugData> = new Map();
 
   constructor() {
@@ -39,7 +38,7 @@ class HospateDataStore {
     const demoUserId = 'user-alex-001';
     const demoEmail = 'demo@hospate.app';
 
-    // 1. Demo User
+    // 1. Demo User: Alok Kumar Singh
     const demoUser: User = {
       id: demoUserId,
       email: demoEmail,
@@ -47,13 +46,13 @@ class HospateDataStore {
       phone: '+91 98765 43210',
       role: 'patient',
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
-      createdAt: '2026-06-01T00:00:00.000Z',
+      createdAt: '2026-01-01T00:00:00.000Z',
       updatedAt: '2026-08-30T00:00:00.000Z'
     };
     this.users.set(demoUserId, demoUser);
     this.userPasswords.set(demoEmail, 'Hospate123!');
 
-    // 2. Health Profile
+    // 2. Health Profile: Alok Kumar Singh (184cm, 70kg, O+)
     const profile: HealthProfile = {
       id: 'profile-alex-001',
       userId: demoUserId,
@@ -64,22 +63,23 @@ class HospateDataStore {
       weightKg: 70,
       bmi: 20.7,
       bloodGroup: 'O+',
-      allergies: ['Penicillin', 'Sulfa Drugs'],
-      chronicConditions: ['Mild Dyslipidemia (Managed)'],
-      currentMedications: ['Metformin 500mg', 'Vitamin D3 60,000 IU', 'Omega-3 1000mg'],
+      allergies: ['Dust Mites', 'Mild Penicillin Sensitivity'],
+      chronicConditions: ['None (Active & Healthy)'],
+      currentMedications: ['Vitamin D3 60,000 IU (Weekly)', 'Omega-3 Triple Strength 1000mg', 'Zinc + Vitamin C Complex'],
       smokingStatus: 'never',
       alcoholStatus: 'occasional',
-      activityLevel: 'moderate',
+      activityLevel: 'active',
       emergencyContact: {
         name: 'Emma Singh',
         relationship: 'Family Contact',
-        phone: '+1 (555) 019-2834'
+        phone: '+91 98765 43210'
       },
       updatedAt: '2026-08-30T10:00:00.000Z'
     };
     this.healthProfiles.set(demoUserId, profile);
 
     // 3. Medical Records & Lab Parameters
+    // Record 1: Annual Executive Health Checkup & CBC + Lipid Profile (Aug 30, 2026)
     const rec1Id = 'rec-lipid-cbc-aug30';
     const rec1Date = '2026-08-30';
     const rec1Params: LabParameter[] = [
@@ -88,39 +88,39 @@ class HospateDataStore {
         recordId: rec1Id,
         parameter: 'Hemoglobin',
         category: 'Hematology',
-        value: 14.2,
+        value: 15.1,
         unit: 'g/dL',
         referenceLow: 13.0,
         referenceHigh: 17.0,
         referenceText: '13.0 - 17.0 g/dL',
         status: 'NORMAL',
-        confidence: 0.98,
+        confidence: 0.99,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel',
-        clinicalNote: 'Optimal oxygen-carrying reference range.'
+        source: 'Annual Executive Health Checkup',
+        clinicalNote: 'Optimal oxygen-carrying capacity.'
       },
       {
         id: 'p-2',
         recordId: rec1Id,
         parameter: 'Total WBC Count',
         category: 'Hematology',
-        value: 6800,
+        value: 6400,
         unit: 'cells/mcL',
         referenceLow: 4500,
         referenceHigh: 11000,
         referenceText: '4500 - 11000 cells/mcL',
         status: 'NORMAL',
-        confidence: 0.97,
+        confidence: 0.98,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel',
-        clinicalNote: 'Normal immune baseline.'
+        source: 'Annual Executive Health Checkup',
+        clinicalNote: 'Healthy immune cell count.'
       },
       {
         id: 'p-3',
         recordId: rec1Id,
         parameter: 'Platelet Count',
         category: 'Hematology',
-        value: 245,
+        value: 260,
         unit: '10^3/mcL',
         referenceLow: 150,
         referenceHigh: 450,
@@ -128,114 +128,116 @@ class HospateDataStore {
         status: 'NORMAL',
         confidence: 0.99,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel'
+        source: 'Annual Executive Health Checkup'
       },
       {
         id: 'p-4',
         recordId: rec1Id,
         parameter: 'Total Cholesterol',
         category: 'Lipid',
-        value: 215,
+        value: 178,
         unit: 'mg/dL',
         referenceLow: 125,
         referenceHigh: 200,
-        referenceText: '125 - 200 mg/dL',
-        status: 'HIGH',
-        confidence: 0.96,
+        referenceText: '< 200 mg/dL',
+        status: 'NORMAL',
+        confidence: 0.97,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel',
-        clinicalNote: 'Borderline elevated circulating cholesterol.'
+        source: 'Annual Executive Health Checkup',
+        clinicalNote: 'Desirable circulating cholesterol level.'
       },
       {
         id: 'p-5',
         recordId: rec1Id,
         parameter: 'LDL Cholesterol',
         category: 'Lipid',
-        value: 142,
+        value: 96,
         unit: 'mg/dL',
         referenceLow: 0,
         referenceHigh: 100,
         referenceText: '< 100 mg/dL',
-        status: 'HIGH',
-        confidence: 0.97,
+        status: 'NORMAL',
+        confidence: 0.98,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel',
-        clinicalNote: 'Above recommended reference range.'
+        source: 'Annual Executive Health Checkup',
+        clinicalNote: 'Optimal cardiovascular threshold.'
       },
       {
         id: 'p-6',
         recordId: rec1Id,
         parameter: 'HDL Cholesterol',
         category: 'Lipid',
-        value: 48,
+        value: 56,
         unit: 'mg/dL',
         referenceLow: 40,
         referenceHigh: 60,
         referenceText: '> 40 mg/dL',
         status: 'NORMAL',
-        confidence: 0.95,
+        confidence: 0.96,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel'
+        source: 'Annual Executive Health Checkup',
+        clinicalNote: 'Protective high-density lipoprotein level.'
       },
       {
         id: 'p-7',
         recordId: rec1Id,
         parameter: 'Triglycerides',
         category: 'Lipid',
-        value: 165,
+        value: 110,
         unit: 'mg/dL',
         referenceLow: 0,
         referenceHigh: 150,
         referenceText: '< 150 mg/dL',
-        status: 'HIGH',
-        confidence: 0.94,
+        status: 'NORMAL',
+        confidence: 0.97,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel'
+        source: 'Annual Executive Health Checkup'
       },
       {
         id: 'p-8',
         recordId: rec1Id,
         parameter: 'Fasting Blood Glucose',
         category: 'Metabolic',
-        value: 88,
+        value: 86,
         unit: 'mg/dL',
         referenceLow: 70,
         referenceHigh: 99,
         referenceText: '70 - 99 mg/dL',
         status: 'NORMAL',
-        confidence: 0.98,
+        confidence: 0.99,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel'
+        source: 'Annual Executive Health Checkup',
+        clinicalNote: 'Normal euglycemic fasting level.'
       },
       {
         id: 'p-9',
         recordId: rec1Id,
         parameter: 'Serum Creatinine',
         category: 'Renal',
-        value: 0.9,
+        value: 0.95,
         unit: 'mg/dL',
         referenceLow: 0.6,
         referenceHigh: 1.2,
         referenceText: '0.6 - 1.2 mg/dL',
         status: 'NORMAL',
-        confidence: 0.97,
+        confidence: 0.98,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel'
+        source: 'Annual Executive Health Checkup'
       },
       {
         id: 'p-10',
         recordId: rec1Id,
         parameter: 'SGPT / ALT',
         category: 'Hepatic',
-        value: 28,
+        value: 22,
         unit: 'U/L',
         referenceLow: 7,
         referenceHigh: 45,
         referenceText: '7 - 45 U/L',
         status: 'NORMAL',
-        confidence: 0.95,
+        confidence: 0.96,
         measuredAt: rec1Date,
-        source: 'Comprehensive CBC & Lipid Panel'
+        source: 'Annual Executive Health Checkup'
       }
     ];
 
@@ -246,7 +248,7 @@ class HospateDataStore {
     const rec1Insights = HealthAnalysisEngine.generateInsights(
       demoUserId,
       rec1Id,
-      'Comprehensive CBC & Lipid Panel',
+      'Annual Executive Health Checkup & CBC + Lipid Profile',
       rec1Params
     );
 
@@ -258,12 +260,12 @@ class HospateDataStore {
       id: rec1Id,
       patientId: demoUserId,
       type: 'LAB_REPORT',
-      title: 'Blood Test (CBC + Lipid Profile)',
-      subtitle: '10 parameters analyzed by Hospate AI',
+      title: 'Annual Health Checkup & Lipid Profile',
+      subtitle: '10 biomarkers verified • All parameters in optimal reference ranges',
       category: 'Diagnostic Pathology',
       documentUrl: 'https://hospate.app/docs/sample_cbc_lipid.pdf',
       uploadedAt: '2026-08-30T09:30:00.000Z',
-      source: 'Apollo Diagnostics Laboratory',
+      source: 'Apollo Diagnostics Laboratory, Jubilee Hills',
       status: 'COMPLETED',
       parametersCount: rec1Params.length,
       insightsCount: rec1Insights.length,
@@ -274,32 +276,32 @@ class HospateDataStore {
     };
     this.records.set(rec1Id, record1);
 
-    // Record 2: Vitamin Panel (Aug 20, 2026)
-    const rec2Id = 'rec-vit-aug20';
-    const rec2Date = '2026-08-20';
+    // Record 2: Vitamin & Micronutrient Profile (Aug 15, 2026)
+    const rec2Id = 'rec-vit-aug15';
+    const rec2Date = '2026-08-15';
     const rec2Params: LabParameter[] = [
       {
         id: 'p-11',
         recordId: rec2Id,
         parameter: 'Vitamin D (25-OH)',
         category: 'Vitamin',
-        value: 18,
+        value: 24,
         unit: 'ng/mL',
         referenceLow: 30,
         referenceHigh: 100,
         referenceText: '30 - 100 ng/mL',
         status: 'LOW',
-        confidence: 0.96,
+        confidence: 0.97,
         measuredAt: rec2Date,
-        source: 'Comprehensive Vitamin Panel',
-        clinicalNote: 'Below reference range; supplementation recommended upon physician advice.'
+        source: 'Micronutrient & Vitamin Panel',
+        clinicalNote: 'Mild insufficiency; weekly 60K IU supplementation ongoing.'
       },
       {
         id: 'p-12',
         recordId: rec2Id,
         parameter: 'Vitamin B12',
         category: 'Vitamin',
-        value: 420,
+        value: 480,
         unit: 'pg/mL',
         referenceLow: 200,
         referenceHigh: 900,
@@ -307,7 +309,37 @@ class HospateDataStore {
         status: 'NORMAL',
         confidence: 0.98,
         measuredAt: rec2Date,
-        source: 'Comprehensive Vitamin Panel'
+        source: 'Micronutrient & Vitamin Panel'
+      },
+      {
+        id: 'p-13',
+        recordId: rec2Id,
+        parameter: 'Serum Ferritin',
+        category: 'Hematology',
+        value: 145,
+        unit: 'ng/mL',
+        referenceLow: 30,
+        referenceHigh: 400,
+        referenceText: '30 - 400 ng/mL',
+        status: 'NORMAL',
+        confidence: 0.97,
+        measuredAt: rec2Date,
+        source: 'Micronutrient & Vitamin Panel'
+      },
+      {
+        id: 'p-14',
+        recordId: rec2Id,
+        parameter: 'Serum Calcium',
+        category: 'Electrolytes',
+        value: 9.6,
+        unit: 'mg/dL',
+        referenceLow: 8.5,
+        referenceHigh: 10.2,
+        referenceText: '8.5 - 10.2 mg/dL',
+        status: 'NORMAL',
+        confidence: 0.99,
+        measuredAt: rec2Date,
+        source: 'Micronutrient & Vitamin Panel'
       }
     ];
 
@@ -318,7 +350,7 @@ class HospateDataStore {
     const rec2Insights = HealthAnalysisEngine.generateInsights(
       demoUserId,
       rec2Id,
-      'Comprehensive Vitamin Panel',
+      'Micronutrient & Vitamin Panel',
       rec2Params
     );
 
@@ -330,62 +362,158 @@ class HospateDataStore {
       id: rec2Id,
       patientId: demoUserId,
       type: 'LAB_REPORT',
-      title: 'Comprehensive Vitamin Panel',
-      subtitle: 'Vitamin D below reference range',
+      title: 'Vitamin & Micronutrient Profile',
+      subtitle: 'Vitamin D3 improving on course • B12 & Calcium optimal',
       category: 'Nutrition & Micronutrients',
       documentUrl: 'https://hospate.app/docs/sample_vitamin_panel.pdf',
-      uploadedAt: '2026-08-20T14:15:00.000Z',
-      source: 'Max Labs Central',
+      uploadedAt: '2026-08-15T14:15:00.000Z',
+      source: 'Max Diagnostics Central Laboratory',
       status: 'COMPLETED',
       parametersCount: rec2Params.length,
       insightsCount: rec2Insights.length,
       extractedParameters: rec2Params,
       insights: rec2Insights,
-      createdAt: '2026-08-20T14:15:00.000Z',
-      updatedAt: '2026-08-20T14:16:00.000Z'
+      createdAt: '2026-08-15T14:15:00.000Z',
+      updatedAt: '2026-08-15T14:16:00.000Z'
     };
     this.records.set(rec2Id, record2);
 
-    // Record 3: Prescription
+    // Record 3: Clinical Prescription & Supplement Regimen (Aug 27, 2026)
     const rec3Id = 'rec-rx-aug27';
     const record3: MedicalRecord = {
       id: rec3Id,
       patientId: demoUserId,
       type: 'PRESCRIPTION',
-      title: 'Consultation & Prescription',
-      subtitle: 'General Internal Medicine (3 medications prescribed)',
+      title: 'Preventive Wellness Prescription',
+      subtitle: 'Dr. Sarah Sharma • Vitamin D3 60K weekly & Omega-3 daily',
       category: 'Clinical Prescription',
       documentUrl: 'https://hospate.app/docs/rx_aug27.pdf',
       uploadedAt: '2026-08-27T16:00:00.000Z',
-      source: 'Dr. Sarah Sharma Clinic',
+      source: 'Apollo Health City, Internal Medicine',
       status: 'COMPLETED',
       parametersCount: 0,
       insightsCount: 0,
-      notes: 'Prescribed Metformin 500mg BD for glycemic stability and Cholecalciferol weekly.',
+      notes: 'Prescribed Cholecalciferol 60K weekly for 8 weeks and Omega-3 1000mg daily. Follow-up review scheduled in 6 weeks.',
       createdAt: '2026-08-27T16:00:00.000Z',
       updatedAt: '2026-08-27T16:00:00.000Z'
     };
     this.records.set(rec3Id, record3);
 
-    // 4. Timeline Events
+    // Record 4: Comprehensive Metabolic & Thyroid Panel (Jun 10, 2026)
+    const rec4Id = 'rec-cmp-jun10';
+    const rec4Date = '2026-06-10';
+    const rec4Params: LabParameter[] = [
+      {
+        id: 'p-15',
+        recordId: rec4Id,
+        parameter: 'Fasting Blood Glucose',
+        category: 'Metabolic',
+        value: 84,
+        unit: 'mg/dL',
+        referenceLow: 70,
+        referenceHigh: 99,
+        referenceText: '70 - 99 mg/dL',
+        status: 'NORMAL',
+        confidence: 0.99,
+        measuredAt: rec4Date,
+        source: 'Metabolic & Thyroid Panel'
+      },
+      {
+        id: 'p-16',
+        recordId: rec4Id,
+        parameter: 'HbA1c',
+        category: 'Metabolic',
+        value: 5.2,
+        unit: '%',
+        referenceLow: 4.0,
+        referenceHigh: 5.6,
+        referenceText: '< 5.7 %',
+        status: 'NORMAL',
+        confidence: 0.99,
+        measuredAt: rec4Date,
+        source: 'Metabolic & Thyroid Panel',
+        clinicalNote: 'Excellent glycemic control over 90 days.'
+      },
+      {
+        id: 'p-17',
+        recordId: rec4Id,
+        parameter: 'TSH (Thyroid Stimulating Hormone)',
+        category: 'Thyroid',
+        value: 1.85,
+        unit: 'uIU/mL',
+        referenceLow: 0.4,
+        referenceHigh: 4.5,
+        referenceText: '0.40 - 4.50 uIU/mL',
+        status: 'NORMAL',
+        confidence: 0.98,
+        measuredAt: rec4Date,
+        source: 'Metabolic & Thyroid Panel'
+      }
+    ];
+
+    for (const p of rec4Params) {
+      this.parameters.set(p.id, p);
+    }
+
+    const record4: MedicalRecord = {
+      id: rec4Id,
+      patientId: demoUserId,
+      type: 'LAB_REPORT',
+      title: 'Comprehensive Metabolic & Thyroid Panel',
+      subtitle: 'HbA1c: 5.2% (Optimal) • TSH: 1.85 uIU/mL',
+      category: 'Metabolic & Endocrine',
+      documentUrl: 'https://hospate.app/docs/cmp_jun10.pdf',
+      uploadedAt: '2026-06-10T11:00:00.000Z',
+      source: 'Metropolis Healthcare Diagnostics',
+      status: 'COMPLETED',
+      parametersCount: rec4Params.length,
+      insightsCount: 1,
+      extractedParameters: rec4Params,
+      createdAt: '2026-06-10T11:00:00.000Z',
+      updatedAt: '2026-06-10T11:00:00.000Z'
+    };
+    this.records.set(rec4Id, record4);
+
+    // Record 5: Cardiology Stress Echo & ECG (Apr 05, 2026)
+    const rec5Id = 'rec-echo-apr05';
+    const record5: MedicalRecord = {
+      id: rec5Id,
+      patientId: demoUserId,
+      type: 'SCAN',
+      title: 'Resting ECG & 2D Echocardiography',
+      subtitle: 'Normal Sinus Rhythm • Resting HR: 68 BPM • Ejection Fraction: 62%',
+      category: 'Cardiovascular Imaging',
+      documentUrl: 'https://hospate.app/docs/ecg_apr05.pdf',
+      uploadedAt: '2026-04-05T15:30:00.000Z',
+      source: 'MaxCure Heart Institute, Hitec City',
+      status: 'COMPLETED',
+      parametersCount: 0,
+      insightsCount: 1,
+      notes: 'Normal ventricular dimensions and wall motion. No valvular abnormalities. High athletic cardio reserve.',
+      createdAt: '2026-04-05T15:30:00.000Z',
+      updatedAt: '2026-04-05T15:30:00.000Z'
+    };
+    this.records.set(rec5Id, record5);
+
+    // 4. Timeline Events (Chronological medical stream)
     this.timelineEvents.set('t-1', {
       id: 't-1',
       date: '2026-08-30T09:30:00.000Z',
       formattedDate: 'AUG 30, 2026',
-      title: 'Blood Test (CBC + Lipid Profile)',
-      subtitle: '10 parameters • 2 insights (LDL & Cholesterol above reference)',
+      title: 'Annual Executive Health Checkup',
+      subtitle: 'Apollo Diagnostics • 10 parameters (All within optimal target)',
       type: 'LAB',
-      severity: 'WARNING',
+      severity: 'NORMAL',
       recordId: rec1Id,
-      insights: ['LDL Cholesterol: 142 mg/dL', 'Total Cholesterol: 215 mg/dL']
+      insights: ['Hemoglobin: 15.1 g/dL', 'LDL Cholesterol: 96 mg/dL', 'Glucose: 86 mg/dL']
     });
 
     this.timelineEvents.set('t-2', {
       id: 't-2',
       date: '2026-08-27T16:00:00.000Z',
       formattedDate: 'AUG 27, 2026',
-      title: 'Doctor Consultation & Prescription',
-      subtitle: 'Dr. Sarah Sharma • 3 active medications logged',
+      title: 'Preventive Wellness Consultation',
+      subtitle: 'Dr. Sarah Sharma (Apollo) • Vitamin D3 60K weekly & Omega-3',
       type: 'PRESCRIPTION',
       severity: 'NORMAL',
       recordId: rec3Id
@@ -393,23 +521,46 @@ class HospateDataStore {
 
     this.timelineEvents.set('t-3', {
       id: 't-3',
-      date: '2026-08-20T14:15:00.000Z',
-      formattedDate: 'AUG 20, 2026',
+      date: '2026-08-15T14:15:00.000Z',
+      formattedDate: 'AUG 15, 2026',
       title: 'Vitamin & Micronutrient Panel',
-      subtitle: 'Vitamin D: 18 ng/mL (Below reference range)',
+      subtitle: 'Max Labs • Vitamin D3: 24 ng/mL (Supplementation active)',
       type: 'LAB',
       severity: 'WARNING',
       recordId: rec2Id,
-      insights: ['Vitamin D (25-OH): 18 ng/mL [Low]']
+      insights: ['Vitamin D (25-OH): 24 ng/mL [Mild Low]', 'B12: 480 pg/mL [Normal]']
     });
 
     this.timelineEvents.set('t-4', {
       id: 't-4',
-      date: '2026-07-18T10:00:00.000Z',
-      formattedDate: 'JUL 18, 2026',
-      title: 'Baseline Complete Blood Count',
-      subtitle: 'All 8 hematology parameters within normal ranges',
+      date: '2026-06-10T11:00:00.000Z',
+      formattedDate: 'JUN 10, 2026',
+      title: 'Comprehensive Metabolic & Thyroid Panel',
+      subtitle: 'Metropolis Healthcare • HbA1c: 5.2% & TSH: 1.85 uIU/mL',
       type: 'LAB',
+      severity: 'NORMAL',
+      recordId: rec4Id,
+      insights: ['HbA1c: 5.2% [Optimal]', 'TSH: 1.85 uIU/mL [Normal]']
+    });
+
+    this.timelineEvents.set('t-5', {
+      id: 't-5',
+      date: '2026-04-05T15:30:00.000Z',
+      formattedDate: 'APR 05, 2026',
+      title: 'Resting ECG & 2D Echocardiography',
+      subtitle: 'MaxCure Heart Institute • Normal Sinus Rhythm (EF: 62%)',
+      type: 'CONSULTATION',
+      severity: 'NORMAL',
+      recordId: rec5Id
+    });
+
+    this.timelineEvents.set('t-6', {
+      id: 't-6',
+      date: '2026-01-14T10:00:00.000Z',
+      formattedDate: 'JAN 14, 2026',
+      title: 'Annual Dental & Preventive Checkup',
+      subtitle: 'Apollo Dental Care • Clean oral hygiene evaluation',
+      type: 'CONSULTATION',
       severity: 'NORMAL'
     });
 
@@ -417,195 +568,258 @@ class HospateDataStore {
     const med1: Medication = {
       id: 'med-1',
       patientId: demoUserId,
-      name: 'Metformin',
-      genericName: 'Metformin Hydrochloride',
-      dosage: '500 mg',
-      frequency: 'Twice daily',
-      instructions: 'Take with or immediately after meals',
-      scheduledTimes: ['08:00', '20:00'],
+      name: 'Cholecalciferol (Vitamin D3)',
+      genericName: 'Vitamin D3 60,000 IU',
+      dosage: '60,000 IU',
+      frequency: 'Once weekly (Sundays)',
+      instructions: 'Take 1 capsule with milk after breakfast',
+      scheduledTimes: ['10:00'],
+      startDate: '2026-08-27',
+      prescribedBy: 'Dr. Sarah Sharma',
+      active: true,
+      adherenceRate: 1.0
+    };
+
+    const med2: Medication = {
+      id: 'med-2',
+      patientId: demoUserId,
+      name: 'Omega-3 Triple Strength',
+      genericName: 'Fish Oil (EPA 500mg / DHA 400mg)',
+      dosage: '1000 mg',
+      frequency: 'Once daily (Mornings)',
+      instructions: 'Take 1 softgel with water after breakfast',
+      scheduledTimes: ['08:30'],
+      startDate: '2026-08-27',
+      prescribedBy: 'Dr. Sarah Sharma',
+      active: true,
+      adherenceRate: 0.96
+    };
+
+    const med3: Medication = {
+      id: 'med-3',
+      patientId: demoUserId,
+      name: 'Zinc + Vitamin C Complex',
+      genericName: 'Immunity Chewable (Zinc 15mg + Vit C 500mg)',
+      dosage: '1 Tablet',
+      frequency: 'Once daily (Afternoons)',
+      instructions: 'Chew 1 tablet after lunch',
+      scheduledTimes: ['13:30'],
       startDate: '2026-08-27',
       prescribedBy: 'Dr. Sarah Sharma',
       active: true,
       adherenceRate: 0.94
     };
 
-    const med2: Medication = {
-      id: 'med-2',
-      patientId: demoUserId,
-      name: 'Cholecalciferol (Vitamin D3)',
-      genericName: 'Vitamin D3 60K',
-      dosage: '60,000 IU',
-      frequency: 'Once weekly (Sundays)',
-      instructions: 'Take with milk after breakfast',
-      scheduledTimes: ['10:00'],
-      startDate: '2026-08-21',
-      prescribedBy: 'Dr. Sarah Sharma',
-      active: true,
-      adherenceRate: 1.0
-    };
-
-    const med3: Medication = {
-      id: 'med-3',
-      patientId: demoUserId,
-      name: 'Omega-3 Fish Oil',
-      genericName: 'EPA / DHA',
-      dosage: '1000 mg',
-      frequency: 'Once daily',
-      instructions: 'Take after dinner',
-      scheduledTimes: ['21:00'],
-      startDate: '2026-08-01',
-      prescribedBy: 'Self / Nutritionist',
-      active: true,
-      adherenceRate: 0.88
-    };
-
     this.medications.set(med1.id, med1);
     this.medications.set(med2.id, med2);
     this.medications.set(med3.id, med3);
 
-    // Medication logs for today
-    const todayStr = '2026-08-30';
-    const logs: MedicationLog[] = [
+    // Today's Medication Logs
+    const todayLogs: MedicationLog[] = [
       {
         id: 'log-1',
-        medicationId: med1.id,
-        medicationName: med1.name,
-        dosage: med1.dosage,
-        scheduledTime: '08:00 AM',
-        takenAt: '2026-08-30T08:12:00.000Z',
+        medicationId: med2.id,
+        medicationName: 'Omega-3 Triple Strength',
+        dosage: '1000 mg',
+        scheduledTime: '08:30 AM',
         status: 'TAKEN',
-        date: todayStr
+        date: '2026-08-30'
       },
       {
         id: 'log-2',
-        medicationId: med1.id,
-        medicationName: med1.name,
-        dosage: med1.dosage,
-        scheduledTime: '08:00 PM',
-        status: 'PENDING',
-        date: todayStr
+        medicationId: med3.id,
+        medicationName: 'Zinc + Vitamin C Complex',
+        dosage: '1 Tablet',
+        scheduledTime: '01:30 PM',
+        status: 'TAKEN',
+        date: '2026-08-30'
       },
       {
         id: 'log-3',
-        medicationId: med3.id,
-        medicationName: med3.name,
-        dosage: med3.dosage,
-        scheduledTime: '09:00 PM',
-        status: 'PENDING',
-        date: todayStr
+        medicationId: med1.id,
+        medicationName: 'Cholecalciferol (Vitamin D3)',
+        dosage: '60,000 IU',
+        scheduledTime: '10:00 AM (Sunday)',
+        status: 'TAKEN',
+        date: '2026-08-30'
       }
     ];
-    this.medicationLogs.set(todayStr, logs);
+    this.medicationLogs.set(demoUserId, todayLogs);
 
-    // 6. Appointments
+    // 6. Appointments (Upcoming & Past)
     const appt1: Appointment = {
       id: 'appt-1',
       patientId: demoUserId,
       doctorName: 'Dr. Sarah Sharma',
-      doctorSpeciality: 'Internal Medicine & Cardiology',
+      doctorSpeciality: 'Preventive Cardiology & Internal Medicine',
       hospitalName: 'Apollo Health City',
-      hospitalAddress: 'Road No. 72, Jubilee Hills, Hyderabad',
-      date: '2026-09-05',
-      time: '10:30 AM',
+      hospitalAddress: 'Jubilee Hills, Road No. 72, Hyderabad',
+      date: '2026-09-12',
+      time: '11:00 AM',
       status: 'UPCOMING',
       type: 'IN_PERSON',
-      notes: 'Follow-up on Lipid profile and Vitamin D supplementation progress.'
+      notes: '6-week routine follow-up on Vitamin D3 levels and overall metabolic status.'
     };
 
     const appt2: Appointment = {
       id: 'appt-2',
       patientId: demoUserId,
-      doctorName: 'Dr. Rajesh Mehta',
-      doctorSpeciality: 'General Physician',
-      hospitalName: 'Max Super Speciality Hospital',
-      hospitalAddress: '1 Press Enclave Marg, Saket, New Delhi',
-      date: '2026-08-27',
-      time: '04:00 PM',
+      doctorName: 'Dr. Rajesh Varma',
+      doctorSpeciality: 'Sports Medicine & Orthopedics',
+      hospitalName: 'MaxCure Hospitals',
+      hospitalAddress: 'Mindspace IT Park, Hitec City, Hyderabad',
+      date: '2026-10-05',
+      time: '04:30 PM',
+      status: 'UPCOMING',
+      type: 'IN_PERSON',
+      notes: 'Postural posture evaluation & resistance training physical therapy clearance.'
+    };
+
+    const appt3: Appointment = {
+      id: 'appt-3',
+      patientId: demoUserId,
+      doctorName: 'Dr. Ananya Sen',
+      doctorSpeciality: 'Clinical Dermatology & Allergy Care',
+      hospitalName: 'Apollo Clinic',
+      hospitalAddress: 'Kondapur Main Road, Hyderabad',
+      date: '2026-08-10',
+      time: '03:00 PM',
       status: 'COMPLETED',
-      type: 'IN_PERSON'
+      type: 'IN_PERSON',
+      notes: 'Routine seasonal dust allergy review. Prescribed antihistamine SOS.'
+    };
+
+    const appt4: Appointment = {
+      id: 'appt-4',
+      patientId: demoUserId,
+      doctorName: 'Dr. Sarah Sharma',
+      doctorSpeciality: 'Internal Medicine',
+      hospitalName: 'Apollo Health City',
+      hospitalAddress: 'Jubilee Hills, Hyderabad',
+      date: '2026-06-10',
+      time: '10:30 AM',
+      status: 'COMPLETED',
+      type: 'IN_PERSON',
+      notes: 'Reviewed CMP & Thyroid results. Confirmed excellent cardiovascular markers.'
     };
 
     this.appointments.set(appt1.id, appt1);
     this.appointments.set(appt2.id, appt2);
+    this.appointments.set(appt3.id, appt3);
+    this.appointments.set(appt4.id, appt4);
 
-    // 7. Hospitals
+    // 7. Verified Hospitals
     const hosp1: Hospital = {
-      id: 'hosp-apollo',
+      id: 'hosp-apollo-hyd',
       name: 'Apollo Health City',
-      address: 'Road No. 72, Jubilee Hills, Hyderabad',
+      address: 'Road No. 72, Film Nagar, Jubilee Hills',
       city: 'Hyderabad',
-      distanceKm: 2.4,
-      rating: 4.8,
+      distanceKm: 2.8,
+      rating: 4.9,
       reviewCount: 1420,
-      specialities: ['Cardiology', 'Internal Medicine', 'Endocrinology', 'Diagnostics', 'Emergency 24x7'],
-      availableBeds: 114,
       contactPhone: '+91 40 2360 7777',
+      availableBeds: 48,
+      specialities: ['Cardiology', 'Internal Medicine', 'Neurology', 'Orthopedics', 'Emergency 24x7', 'Diagnostics'],
+      insuranceAccepted: ['Star Health', 'HDFC ERGO', 'Max Bupa', 'ICICI Lombard', 'Care Health', 'Medi Assist'],
       emergencyAvailable: true,
-      insuranceAccepted: ['Star Health', 'HDFC ERGO', 'ICICI Lombard', 'Max Bupa', 'Care Health'],
-      imageUrl: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=500&auto=format&fit=crop&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=600&auto=format&fit=crop&q=80',
       doctors: [
         {
-          id: 'doc-sharma',
+          id: 'doc-1',
           name: 'Dr. Sarah Sharma',
           speciality: 'Cardiology & Internal Medicine',
           experienceYears: 14,
-          availableSlot: 'Tomorrow at 10:30 AM'
+          availableSlot: '11:00 AM Today'
         },
         {
-          id: 'doc-rao',
-          name: 'Dr. K. V. Rao',
-          speciality: 'Endocrinology & Diabetology',
-          experienceYears: 19,
-          availableSlot: 'Friday at 02:00 PM'
+          id: 'doc-2',
+          name: 'Dr. Srinivas Rao',
+          speciality: 'Interventional Cardiology',
+          experienceYears: 22,
+          availableSlot: '02:30 PM Tomorrow'
         }
       ]
     };
 
     const hosp2: Hospital = {
-      id: 'hosp-max',
-      name: 'Max Super Speciality Hospital',
-      address: '1 Press Enclave Marg, Saket',
-      city: 'New Delhi',
-      distanceKm: 4.1,
-      rating: 4.7,
+      id: 'hosp-aig-hyd',
+      name: 'AIG Hospitals (Asian Institute of Gastroenterology)',
+      address: '1-66/AIG/1, Mindspace Road, Gachibowli',
+      city: 'Hyderabad',
+      distanceKm: 4.2,
+      rating: 4.8,
       reviewCount: 980,
-      specialities: ['General Medicine', 'Neurology', 'Orthopedics', 'Pathology'],
-      availableBeds: 82,
-      contactPhone: '+91 11 2651 5050',
+      contactPhone: '+91 40 4244 4222',
+      availableBeds: 74,
+      specialities: ['Gastroenterology', 'Hepatology', 'Organ Transplant', 'Internal Medicine', 'Emergency 24x7'],
+      insuranceAccepted: ['Star Health', 'HDFC ERGO', 'Max Bupa', 'Bajaj Allianz', 'Medi Assist'],
       emergencyAvailable: true,
-      insuranceAccepted: ['All Major Third-Party Administrators (TPAs)'],
-      imageUrl: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=500&auto=format&fit=crop&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&auto=format&fit=crop&q=80',
       doctors: [
         {
-          id: 'doc-mehta',
-          name: 'Dr. Rajesh Mehta',
-          speciality: 'General Medicine',
-          experienceYears: 11,
-          availableSlot: 'Today at 05:30 PM'
+          id: 'doc-3',
+          name: 'Dr. D. Nageshwar Reddy',
+          speciality: 'Gastroenterology & Endoscopy',
+          experienceYears: 30,
+          availableSlot: '10:00 AM Thursday'
         }
       ]
     };
 
     const hosp3: Hospital = {
-      id: 'hosp-fortis',
-      name: 'Fortis Memorial Research Institute',
-      address: 'Sector 44, Opposite HUDA City Centre',
-      city: 'Gurugram',
-      distanceKm: 6.8,
-      rating: 4.6,
-      reviewCount: 1150,
-      specialities: ['Cardiology', 'Oncology', 'Organ Transplant', 'Emergency'],
-      availableBeds: 95,
-      contactPhone: '+91 124 496 2200',
+      id: 'hosp-maxcure-hyd',
+      name: 'MaxCure Hospitals (Medicover)',
+      address: 'Behind Cyber Towers, Hitec City, Madhapur',
+      city: 'Hyderabad',
+      distanceKm: 3.5,
+      rating: 4.7,
+      reviewCount: 650,
+      contactPhone: '+91 40 6833 4455',
+      availableBeds: 32,
+      specialities: ['Sports Medicine', 'Cardiology', 'Critical Care', 'Orthopedics', 'Emergency 24x7'],
+      insuranceAccepted: ['Star Health', 'HDFC ERGO', 'ICICI Lombard', 'Reliance General', 'Care Health'],
       emergencyAvailable: true,
-      insuranceAccepted: ['All Major Providers'],
-      imageUrl: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=500&auto=format&fit=crop&q=80',
-      doctors: []
+      imageUrl: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&auto=format&fit=crop&q=80',
+      doctors: [
+        {
+          id: 'doc-4',
+          name: 'Dr. Rajesh Varma',
+          speciality: 'Sports Medicine & Orthopedics',
+          experienceYears: 16,
+          availableSlot: '04:30 PM Today'
+        }
+      ]
+    };
+
+    const hosp4: Hospital = {
+      id: 'hosp-care-hyd',
+      name: 'CARE Hospitals',
+      address: 'Road No. 1, Banjara Hills',
+      city: 'Hyderabad',
+      distanceKm: 5.1,
+      rating: 4.8,
+      reviewCount: 890,
+      contactPhone: '+91 40 6165 6565',
+      availableBeds: 41,
+      specialities: ['Cardiology', 'Pulmonology', 'Nephrology', 'Emergency 24x7', 'Diagnostics'],
+      insuranceAccepted: ['Star Health', 'HDFC ERGO', 'Max Bupa', 'ICICI Lombard', 'Care Health'],
+      emergencyAvailable: true,
+      imageUrl: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600&auto=format&fit=crop&q=80',
+      doctors: [
+        {
+          id: 'doc-5',
+          name: 'Dr. K. Somaraju',
+          speciality: 'Chief Interventional Cardiologist',
+          experienceYears: 25,
+          availableSlot: '09:30 AM Tomorrow'
+        }
+      ]
     };
 
     this.hospitals.set(hosp1.id, hosp1);
     this.hospitals.set(hosp2.id, hosp2);
     this.hospitals.set(hosp3.id, hosp3);
+    this.hospitals.set(hosp4.id, hosp4);
 
     // 8. Emergency Card
     const emgCard: EmergencyCard = {
@@ -626,10 +840,10 @@ class HospateDataStore {
         relationship: 'Primary Care Physician',
         phone: '+91 40 2360 7777'
       },
-      allergies: ['Penicillin (Anaphylactoid Rash)', 'Sulfa Drugs'],
-      chronicConditions: ['Mild Dyslipidemia (Managed with diet/statin)'],
-      activeMedications: ['Metformin 500mg BD', 'Vitamin D3 60K weekly', 'Omega-3 1000mg OD'],
-      criticalMedicalNotes: 'Patient wears contact lenses. No known cardiovascular incidents.',
+      allergies: ['Dust Mites', 'Mild Penicillin Sensitivity'],
+      chronicConditions: ['None (Active & Healthy)'],
+      activeMedications: ['Vitamin D3 60K weekly', 'Omega-3 Triple Strength 1000mg OD', 'Zinc + Vit C Complex OD'],
+      criticalMedicalNotes: 'Active fitness enthusiast (Gym 4x/week). No cardiovascular abnormalities or chronic disease.',
       qrPayload: 'https://emergency.hospate.app/card/HOSP-EMG-8921?secToken=99a8b712',
       secureToken: '99a8b712',
       lastUpdated: '2026-08-30T10:00:00.000Z'
@@ -638,4 +852,4 @@ class HospateDataStore {
   }
 }
 
-export const dataStore = new HospateDataStore();
+export const dataStore = new DataStore();

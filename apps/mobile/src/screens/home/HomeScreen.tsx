@@ -117,26 +117,26 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         <View style={styles.metricGrid}>
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Hemoglobin</Text>
-            <Text style={styles.metricValue}>14.2 <Text style={styles.metricUnit}>g/dL</Text></Text>
+            <Text style={styles.metricValue}>15.1 <Text style={styles.metricUnit}>g/dL</Text></Text>
             <StatusBadge status="NORMAL" />
           </View>
 
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Fasting Glucose</Text>
-            <Text style={styles.metricValue}>88 <Text style={styles.metricUnit}>mg/dL</Text></Text>
+            <Text style={styles.metricValue}>86 <Text style={styles.metricUnit}>mg/dL</Text></Text>
             <StatusBadge status="NORMAL" />
           </View>
 
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Vitamin D3</Text>
-            <Text style={styles.metricValue}>18 <Text style={styles.metricUnit}>ng/mL</Text></Text>
+            <Text style={styles.metricValue}>24 <Text style={styles.metricUnit}>ng/mL</Text></Text>
             <StatusBadge status="LOW" />
           </View>
 
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>LDL Cholesterol</Text>
-            <Text style={styles.metricValue}>142 <Text style={styles.metricUnit}>mg/dL</Text></Text>
-            <StatusBadge status="HIGH" />
+            <Text style={styles.metricValue}>96 <Text style={styles.metricUnit}>mg/dL</Text></Text>
+            <StatusBadge status="NORMAL" />
           </View>
         </View>
 
@@ -176,10 +176,10 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
               <Pill size={18} color="#FFFFFF" />
             </View>
             <View style={styles.itemContent}>
-              <Text style={styles.itemTitle}>Metformin • 500 mg</Text>
-              <Text style={styles.itemMeta}>Scheduled: 08:00 PM • After dinner</Text>
+              <Text style={styles.itemTitle}>Omega-3 Triple Strength • 1000 mg</Text>
+              <Text style={styles.itemMeta}>Scheduled: 08:30 AM • Taken after breakfast</Text>
             </View>
-            <StatusBadge status="PENDING" />
+            <StatusBadge status="NORMAL" />
           </TouchableOpacity>
 
           {/* Upcoming appointment */}
@@ -193,7 +193,7 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
             </View>
             <View style={styles.itemContent}>
               <Text style={styles.itemTitle}>Dr. Sarah Sharma</Text>
-              <Text style={styles.itemMeta}>Cardiology & Internal • Sept 5 at 10:30 AM</Text>
+              <Text style={styles.itemMeta}>Cardiology & Internal • Sept 12 at 11:00 AM</Text>
             </View>
             <ChevronRight size={16} color={colors.textMuted} />
           </TouchableOpacity>

@@ -61,27 +61,27 @@ const MOCK_PROFILE: HealthProfile = {
 };
 
 const MOCK_SCORE: HealthScore = {
-  score: 80,
-  status: 'GOOD',
-  changeDelta: 4,
-  previousScore: 76,
+  score: 88,
+  status: 'EXCELLENT',
+  changeDelta: 3,
+  previousScore: 85,
   dimensions: {
-    cardiovascular: 73,
-    metabolic: 82,
-    nutrition: 70,
-    lifestyle: 88,
-    medicationAdherence: 92
+    cardiovascular: 86,
+    metabolic: 92,
+    nutrition: 78,
+    lifestyle: 90,
+    medicationAdherence: 95
   },
   positiveFactors: [
-    'Recent CBC shows solid hemoglobin levels at 14.2 g/dL',
-    'Consistent 94% medication adherence contributing positively'
+    'Optimal blood pressure (118/76 mmHg) and resting heart rate (68 BPM)',
+    'HbA1c of 5.2% reflects excellent glycemic stability',
+    'High adherence (96%) with weekly Vitamin D3 & daily Omega-3'
   ],
   negativeFactors: [
-    'Lipid panel highlights elevated LDL (142 mg/dL) requiring dietary attention',
-    'Vitamin D3 is borderline low at 18 ng/mL'
+    'Vitamin D3 (24 ng/mL) is slightly below 30 ng/mL baseline, continuing weekly course'
   ],
   lastCalculatedAt: new Date().toISOString(),
-  disclaimer: 'AI Health Score is for informational wellness tracking only.'
+  disclaimer: 'Health score is for personal wellness tracking and informational insight.'
 };
 
 const MOCK_INSIGHTS: HealthInsight[] = [
