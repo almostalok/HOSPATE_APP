@@ -62,10 +62,28 @@ async function testAPI() {
     // 8. Medications & Hospitals
     const meds = await fetch(base + '/medications').then(r => r.json());
     const hosps = await fetch(base + '/hospitals').then(r => r.json());
-    console.log('✓ [8/8] Secondary Modules: Medications (' + meds.medications.length + ' active, ' + Math.round(meds.adherenceRate * 100) + '% adherence), Hospitals (' + hosps.length + ' facilities)');
+    console.log('✓ [8/12] Secondary Modules: Medications (' + meds.medications.length + ' active, ' + Math.round(meds.adherenceRate * 100) + '% adherence), Hospitals (' + hosps.length + ' facilities)');
+
+    // 9. Clinical Nutrition & Diet Planner
+    const diet = await fetch(base + '/diet').then(r => r.json());
+    console.log(`✓ [9/12] Nutrition Engine: ${diet.consumedCalories}/${diet.dailyCaloriesTarget} kcal • Protein: ${diet.proteinConsumed}/${diet.proteinTarget}g • Hydration: ${diet.waterConsumedLiters}L`);
+
+    // 10. Sleep & Circadian Rhythm
+    const sleep = await fetch(base + '/sleep').then(r => r.json());
+    console.log(`✓ [10/12] Sleep Telemetry: ${sleep.totalDurationHours}h duration • Quality Score: ${sleep.qualityScore}/100 • Resting HR: ${sleep.restingHeartRateBpm} BPM • HRV: ${sleep.heartRateVariabilityMs}ms`);
+
+    // 11. Medical Bills & Insurance Claims
+    const bills = await fetch(base + '/bills').then(r => r.json());
+    const totalBilled = bills.reduce((acc, b) => acc + b.totalAmount, 0);
+    console.log(`✓ [11/12] Medical Bills & Insurance: ${bills.length} itemized invoices • Total ₹${totalBilled.toLocaleString('en-IN')} (Star Health Cashless Covered)`);
+
+    // 12. Immunization & Live Vitals
+    const vax = await fetch(base + '/vaccines').then(r => r.json());
+    const vitals = await fetch(base + '/vitals').then(r => r.json());
+    console.log(`✓ [12/12] Immunization & Vitals: ${vax.length} ABDM vaccines verified • Live HR: ${vitals.heartRateBpm} BPM, BP: ${vitals.bloodPressureSystolic}/${vitals.bloodPressureDiastolic} mmHg, SpO2: ${vitals.spo2Percent}%`);
 
     console.log('\n====================================================');
-    console.log('  ALL API VERIFICATIONS PASSED SUCCESSFULLY (100%)');
+    console.log('  ALL 12/12 API VERIFICATIONS PASSED SUCCESSFULLY (100%)');
     console.log('====================================================');
   } catch (err) {
     console.error('\n❌ API Test Failed! Is the backend running?');

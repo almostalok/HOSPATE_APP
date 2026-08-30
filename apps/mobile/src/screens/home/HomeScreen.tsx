@@ -30,7 +30,12 @@ import {
   Clock,
   Stethoscope,
   Activity,
-  Heart
+  Heart,
+  Moon,
+  Receipt,
+  ShieldCheck,
+  Droplet,
+  Flame
 } from 'lucide-react-native';
 
 export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -199,7 +204,70 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={{ height: 24 }} />
+        {/* 6. Health Buddy Lifestyle & Wellness Hub */}
+        <View style={[styles.sectionHeader, { marginTop: spacing.lg }]}>
+          <Text style={styles.sectionTitle}>HEALTH BUDDY WELLNESS & CLAIMS</Text>
+        </View>
+
+        <View style={styles.wellnessGrid}>
+          {/* Diet & Nutrition */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('DietPlanner')}
+            style={styles.wellnessCard}
+          >
+            <View style={[styles.wellnessIconCircle, { backgroundColor: 'rgba(52, 199, 89, 0.12)' }]}>
+              <Flame size={20} color="#34C759" />
+            </View>
+            <Text style={styles.wellnessCardTitle}>Diet & Nutrition</Text>
+            <Text style={styles.wellnessCardVal}>1,980 / 2,650 <Text style={styles.wellnessCardUnit}>kcal</Text></Text>
+            <Text style={styles.wellnessCardSub}>Protein 124g • Water 2.8L</Text>
+          </TouchableOpacity>
+
+          {/* Sleep & Circadian */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('SleepTracker')}
+            style={styles.wellnessCard}
+          >
+            <View style={[styles.wellnessIconCircle, { backgroundColor: 'rgba(94, 92, 230, 0.12)' }]}>
+              <Moon size={20} color="#5E5CE6" />
+            </View>
+            <Text style={styles.wellnessCardTitle}>Sleep & Recovery</Text>
+            <Text style={styles.wellnessCardVal}>7h 45m <Text style={styles.wellnessCardUnit}>• 89 Score</Text></Text>
+            <Text style={styles.wellnessCardSub}>Resting HR 56 BPM</Text>
+          </TouchableOpacity>
+
+          {/* Medical Bills & Claims */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('MedicalBills')}
+            style={styles.wellnessCard}
+          >
+            <View style={[styles.wellnessIconCircle, { backgroundColor: 'rgba(10, 132, 255, 0.12)' }]}>
+              <Receipt size={20} color="#0A84FF" />
+            </View>
+            <Text style={styles.wellnessCardTitle}>Bills & Claims</Text>
+            <Text style={styles.wellnessCardVal}>₹6,500 <Text style={styles.wellnessCardUnit}>Settled</Text></Text>
+            <Text style={styles.wellnessCardSub}>Star Health 82% Cashless</Text>
+          </TouchableOpacity>
+
+          {/* Immunization Passport */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('Vaccinations')}
+            style={styles.wellnessCard}
+          >
+            <View style={[styles.wellnessIconCircle, { backgroundColor: 'rgba(255, 159, 10, 0.12)' }]}>
+              <ShieldCheck size={20} color="#FF9F0A" />
+            </View>
+            <Text style={styles.wellnessCardTitle}>Immunization</Text>
+            <Text style={styles.wellnessCardVal}>3 Vaccines <Text style={styles.wellnessCardUnit}>Active</Text></Text>
+            <Text style={styles.wellnessCardSub}>ABDM Digital Passport</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ height: 32 }} />
       </ScrollView>
 
       {/* Academic Debug Modal */}
@@ -370,5 +438,50 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginLeft: 8,
     fontWeight: '600'
+  },
+  wellnessGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: spacing.sm
+  },
+  wellnessCard: {
+    width: '48.5%',
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border
+  },
+  wellnessIconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.xs
+  },
+  wellnessCardTitle: {
+    ...typography.caption,
+    color: colors.textSecondary,
+    fontWeight: '600',
+    marginBottom: 2
+  },
+  wellnessCardVal: {
+    ...typography.bodySemibold,
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 2
+  },
+  wellnessCardUnit: {
+    ...typography.caption,
+    color: colors.textMuted,
+    fontWeight: '400'
+  },
+  wellnessCardSub: {
+    ...typography.caption,
+    color: colors.textMuted,
+    fontSize: 11
   }
 });

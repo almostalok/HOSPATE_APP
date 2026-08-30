@@ -1,6 +1,6 @@
 /**
- * HOSPATE - AI Health Buddy Shared Types
- * FHIR-oriented health models and API contracts
+ * HOSPATE - Shared Types & Clinical Data Models
+ * Apple Health HIG & FHIR-oriented health models
  */
 
 export type Gender = 'male' | 'female' | 'other' | 'prefer_not_to_say';
@@ -41,7 +41,7 @@ export interface HealthProfile {
   updatedAt: string;
 }
 
-export type RecordType = 'LAB_REPORT' | 'PRESCRIPTION' | 'SCAN' | 'CONSULTATION';
+export type RecordType = 'LAB_REPORT' | 'PRESCRIPTION' | 'SCAN' | 'CONSULTATION' | 'BILL' | 'VACCINATION';
 export type ProcessingStatus = 'UPLOADED' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'NEEDS_REVIEW';
 
 export type ParameterStatus =
@@ -103,7 +103,7 @@ export interface ScoreDimensions {
 export interface HealthScore {
   score: number;
   status: ScoreStatus;
-  changeDelta: number; // e.g. +4
+  changeDelta: number;
   previousScore: number;
   dimensions: ScoreDimensions;
   positiveFactors: string[];
@@ -139,7 +139,7 @@ export interface TimelineEvent {
   formattedDate: string;
   title: string;
   subtitle: string;
-  type: 'RECORD' | 'LAB' | 'PRESCRIPTION' | 'CONSULTATION' | 'INSIGHT';
+  type: 'RECORD' | 'LAB' | 'PRESCRIPTION' | 'CONSULTATION' | 'INSIGHT' | 'BILL' | 'VACCINATION';
   severity?: Severity;
   recordId?: string;
   parameterSummary?: string;
@@ -152,14 +152,17 @@ export interface Medication {
   name: string;
   genericName?: string;
   dosage: string;
-  frequency: string; // e.g. "Twice daily"
-  instructions: string; // e.g. "Take after meals"
-  scheduledTimes: string[]; // e.g. ["08:00", "20:00"]
+  frequency: string;
+  instructions: string;
+  scheduledTimes: string[];
   startDate: string;
   endDate?: string;
   prescribedBy?: string;
   active: boolean;
-  adherenceRate: number; // e.g. 92%
+  adherenceRate: number;
+  remainingCount?: number;
+  totalCount?: number;
+  refillReminder?: boolean;
 }
 
 export interface MedicationLog {
@@ -237,6 +240,139 @@ export interface EmergencyCard {
   lastUpdated: string;
 }
 
+// -------------------------------------------------------------
+// Nutrition & Diet Planner Models
+// -------------------------------------------------------------
+export interface MealItem {
+  id: string;
+  name: string;
+  portion: string;
+  calories: number;
+  proteinGrams: number;
+  carbsGrams: number;
+  fatGrams: number;
+  micronutrientBoost?: string;
+  isLogged: boolean;
+  time: string;
+}
+
+export interface MealCategory {
+  category: 'Breakfast' | 'Lunch' | 'Post-Workout' | 'Dinner' | 'Snacks';
+  recommendedTime: string;
+  targetCalories: number;
+  items: MealItem[];
+}
+
+export interface DietPlan {
+  id: string;
+  patientId: string;
+  goal: string;
+  dailyCaloriesTarget: number;
+  consumedCalories: number;
+  proteinTarget: number;
+  proteinConsumed: number;
+  carbsTarget: number;
+  carbsConsumed: number;
+  fatTarget: number;
+  fatConsumed: number;
+  waterTargetLiters: number;
+  waterConsumedLiters: number;
+  meals: MealCategory[];
+  clinicalHighlights: string[];
+}
+
+// -------------------------------------------------------------
+// Sleep & Circadian Telemetry Models
+// -------------------------------------------------------------
+export interface SleepStage {
+  stage: 'DEEP' | 'REM' | 'LIGHT' | 'AWAKE';
+  durationMinutes: number;
+  percentage: number;
+  color: string;
+}
+
+export interface SleepData {
+  id: string;
+  date: string;
+  totalDurationHours: number;
+  totalMinutes: number;
+  qualityScore: number;
+  bedTime: string;
+  wakeTime: string;
+  restingHeartRateBpm: number;
+  heartRateVariabilityMs: number;
+  respiratoryRateBreathsPerMin: number;
+  stages: SleepStage[];
+  insights: string[];
+  weeklyAverages: {
+    avgHours: number;
+    avgScore: number;
+    deepSleepPct: number;
+  };
+}
+
+// -------------------------------------------------------------
+// Medical Bills & Insurance Models
+// -------------------------------------------------------------
+export interface BillItem {
+  id: string;
+  description: string;
+  category: 'Pharmacy' | 'Diagnostics' | 'Consultation' | 'Room & Nursing' | 'Procedure';
+  amount: number;
+  coveredByInsurance: number;
+  patientPayable: number;
+}
+
+export interface MedicalBill {
+  id: string;
+  invoiceNumber: string;
+  hospitalName: string;
+  hospitalAddress: string;
+  date: string;
+  totalAmount: number;
+  insuranceClaimedAmount: number;
+  patientPaidAmount: number;
+  paymentStatus: 'PAID' | 'PENDING' | 'INSURANCE_PROCESSING';
+  insuranceProvider: string;
+  claimId?: string;
+  items: BillItem[];
+  receiptUrl?: string;
+}
+
+// -------------------------------------------------------------
+// Vaccination & Immunization Models
+// -------------------------------------------------------------
+export interface VaccinationRecord {
+  id: string;
+  vaccineName: string;
+  targetDisease: string;
+  doseNumber: number;
+  totalDoses: number;
+  administeredDate: string;
+  expiryOrBoosterDate?: string;
+  administeredBy: string;
+  batchNumber: string;
+  status: 'COMPLETED' | 'BOOSTER_DUE' | 'SCHEDULED';
+  certificateUrl?: string;
+}
+
+// -------------------------------------------------------------
+// Daily Telemetry Vitals Model
+// -------------------------------------------------------------
+export interface DailyVitals {
+  heartRateBpm: number;
+  bloodPressureSystolic: number;
+  bloodPressureDiastolic: number;
+  spo2Percent: number;
+  bodyTemperatureFahrenheit: number;
+  dailySteps: number;
+  activeBurnCalories: number;
+  lastSyncedAt: string;
+}
+
+// -------------------------------------------------------------
+// Chat & Context Models
+// -------------------------------------------------------------
 export interface ChatMessageSource {
   title: string;
   date: string;
@@ -270,6 +406,8 @@ export interface AIContextPayload {
     frequency: string;
   }[];
   healthScore: HealthScore;
+  dietPlan?: DietPlan;
+  sleepData?: SleepData;
 }
 
 export interface AcademicDebugStep {

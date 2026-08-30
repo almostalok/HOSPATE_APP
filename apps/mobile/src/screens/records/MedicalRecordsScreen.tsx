@@ -24,7 +24,9 @@ const FILTER_TABS = [
   { key: 'ALL', label: 'All' },
   { key: 'LAB_REPORT', label: 'Lab Reports' },
   { key: 'PRESCRIPTION', label: 'Prescriptions' },
-  { key: 'SCAN', label: 'Scans' }
+  { key: 'SCAN', label: 'Scans & Echo' },
+  { key: 'BILL', label: 'Bills & Invoices' },
+  { key: 'VACCINATION', label: 'Vaccines' }
 ];
 
 export const MedicalRecordsScreen: React.FC<{ navigation: any }> = ({ navigation }) => {

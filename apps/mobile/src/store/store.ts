@@ -6,6 +6,8 @@ import assistantReducer from './assistantSlice';
 import medicationsReducer from './medicationsSlice';
 import appointmentsReducer from './appointmentsSlice';
 import hospitalsReducer from './hospitalsSlice';
+import wellnessReducer from './wellnessSlice';
+import billsReducer from './billsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +17,9 @@ export const store = configureStore({
     assistant: assistantReducer,
     medications: medicationsReducer,
     appointments: appointmentsReducer,
-    hospitals: hospitalsReducer
+    hospitals: hospitalsReducer,
+    wellness: wellnessReducer,
+    bills: billsReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

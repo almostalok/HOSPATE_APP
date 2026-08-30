@@ -11,7 +11,12 @@ import {
   Hospital,
   EmergencyCard,
   HealthScore,
-  AcademicDebugData
+  AcademicDebugData,
+  DietPlan,
+  SleepData,
+  MedicalBill,
+  VaccinationRecord,
+  DailyVitals
 } from '@hospate/types';
 import { HealthAnalysisEngine } from '../analysis/analysisEngine';
 
@@ -29,6 +34,11 @@ export class DataStore {
   public hospitals: Map<string, Hospital> = new Map();
   public emergencyCards: Map<string, EmergencyCard> = new Map();
   public academicAudits: Map<string, AcademicDebugData> = new Map();
+  public dietPlans: Map<string, DietPlan> = new Map();
+  public sleepRecords: Map<string, SleepData> = new Map();
+  public medicalBills: Map<string, MedicalBill> = new Map();
+  public vaccinations: Map<string, VaccinationRecord[]> = new Map();
+  public dailyVitals: Map<string, DailyVitals> = new Map();
 
   constructor() {
     this.seedInitialData();
@@ -495,7 +505,49 @@ export class DataStore {
     };
     this.records.set(rec5Id, record5);
 
-    // 4. Timeline Events (Chronological medical stream)
+    // Record 6: Medical Bill & Insurance Settlement (Aug 30, 2026)
+    const rec6Id = 'rec-bill-aug30';
+    const record6: MedicalRecord = {
+      id: rec6Id,
+      patientId: demoUserId,
+      type: 'BILL',
+      title: 'Apollo Comprehensive Pathology Invoice',
+      subtitle: 'Invoice #APL-2026-89412 • Total ₹6,500 (Star Health Covered 80%)',
+      category: 'Hospital Invoice & Claims',
+      documentUrl: 'https://hospate.app/docs/invoice_aug30.pdf',
+      uploadedAt: '2026-08-30T10:15:00.000Z',
+      source: 'Apollo Health City Billing Desk',
+      status: 'COMPLETED',
+      parametersCount: 0,
+      insightsCount: 0,
+      notes: 'Cashless claim processed directly under Star Health comprehensive plan.',
+      createdAt: '2026-08-30T10:15:00.000Z',
+      updatedAt: '2026-08-30T10:15:00.000Z'
+    };
+    this.records.set(rec6Id, record6);
+
+    // Record 7: Digital Immunization Certificate (Feb 18, 2026)
+    const rec7Id = 'rec-vax-feb18';
+    const record7: MedicalRecord = {
+      id: rec7Id,
+      patientId: demoUserId,
+      type: 'VACCINATION',
+      title: 'Digital Immunization & Booster Certificate',
+      subtitle: 'COVID-19 mRNA Precautionary Dose & Tdap Booster Verified',
+      category: 'Preventive Immunization',
+      documentUrl: 'https://hospate.app/docs/vaccine_cert.pdf',
+      uploadedAt: '2026-02-18T09:00:00.000Z',
+      source: 'National Digital Health Mission (ABDM)',
+      status: 'COMPLETED',
+      parametersCount: 0,
+      insightsCount: 0,
+      notes: 'Verified digitally via ABDM Health ID: 91-8921-7721-0042.',
+      createdAt: '2026-02-18T09:00:00.000Z',
+      updatedAt: '2026-02-18T09:00:00.000Z'
+    };
+    this.records.set(rec7Id, record7);
+
+    // 4. Timeline Events
     this.timelineEvents.set('t-1', {
       id: 't-1',
       date: '2026-08-30T09:30:00.000Z',
@@ -510,6 +562,17 @@ export class DataStore {
 
     this.timelineEvents.set('t-2', {
       id: 't-2',
+      date: '2026-08-30T10:15:00.000Z',
+      formattedDate: 'AUG 30, 2026',
+      title: 'Hospital Invoice & Insurance Claim',
+      subtitle: 'Apollo Billing • ₹6,500 settled (Star Health Coverage ₹5,200)',
+      type: 'BILL',
+      severity: 'NORMAL',
+      recordId: rec6Id
+    });
+
+    this.timelineEvents.set('t-3', {
+      id: 't-3',
       date: '2026-08-27T16:00:00.000Z',
       formattedDate: 'AUG 27, 2026',
       title: 'Preventive Wellness Consultation',
@@ -519,8 +582,8 @@ export class DataStore {
       recordId: rec3Id
     });
 
-    this.timelineEvents.set('t-3', {
-      id: 't-3',
+    this.timelineEvents.set('t-4', {
+      id: 't-4',
       date: '2026-08-15T14:15:00.000Z',
       formattedDate: 'AUG 15, 2026',
       title: 'Vitamin & Micronutrient Panel',
@@ -531,8 +594,8 @@ export class DataStore {
       insights: ['Vitamin D (25-OH): 24 ng/mL [Mild Low]', 'B12: 480 pg/mL [Normal]']
     });
 
-    this.timelineEvents.set('t-4', {
-      id: 't-4',
+    this.timelineEvents.set('t-5', {
+      id: 't-5',
       date: '2026-06-10T11:00:00.000Z',
       formattedDate: 'JUN 10, 2026',
       title: 'Comprehensive Metabolic & Thyroid Panel',
@@ -543,8 +606,8 @@ export class DataStore {
       insights: ['HbA1c: 5.2% [Optimal]', 'TSH: 1.85 uIU/mL [Normal]']
     });
 
-    this.timelineEvents.set('t-5', {
-      id: 't-5',
+    this.timelineEvents.set('t-6', {
+      id: 't-6',
       date: '2026-04-05T15:30:00.000Z',
       formattedDate: 'APR 05, 2026',
       title: 'Resting ECG & 2D Echocardiography',
@@ -554,14 +617,15 @@ export class DataStore {
       recordId: rec5Id
     });
 
-    this.timelineEvents.set('t-6', {
-      id: 't-6',
-      date: '2026-01-14T10:00:00.000Z',
-      formattedDate: 'JAN 14, 2026',
-      title: 'Annual Dental & Preventive Checkup',
-      subtitle: 'Apollo Dental Care • Clean oral hygiene evaluation',
-      type: 'CONSULTATION',
-      severity: 'NORMAL'
+    this.timelineEvents.set('t-7', {
+      id: 't-7',
+      date: '2026-02-18T09:00:00.000Z',
+      formattedDate: 'FEB 18, 2026',
+      title: 'Digital Immunization & Booster',
+      subtitle: 'National Health Mission • COVID-19 Booster & Tdap Verified',
+      type: 'VACCINATION',
+      severity: 'NORMAL',
+      recordId: rec7Id
     });
 
     // 5. Medications
@@ -577,7 +641,10 @@ export class DataStore {
       startDate: '2026-08-27',
       prescribedBy: 'Dr. Sarah Sharma',
       active: true,
-      adherenceRate: 1.0
+      adherenceRate: 1.0,
+      remainingCount: 6,
+      totalCount: 8,
+      refillReminder: true
     };
 
     const med2: Medication = {
@@ -592,7 +659,10 @@ export class DataStore {
       startDate: '2026-08-27',
       prescribedBy: 'Dr. Sarah Sharma',
       active: true,
-      adherenceRate: 0.96
+      adherenceRate: 0.96,
+      remainingCount: 24,
+      totalCount: 60,
+      refillReminder: false
     };
 
     const med3: Medication = {
@@ -607,7 +677,10 @@ export class DataStore {
       startDate: '2026-08-27',
       prescribedBy: 'Dr. Sarah Sharma',
       active: true,
-      adherenceRate: 0.94
+      adherenceRate: 0.94,
+      remainingCount: 18,
+      totalCount: 30,
+      refillReminder: true
     };
 
     this.medications.set(med1.id, med1);
@@ -646,7 +719,7 @@ export class DataStore {
     ];
     this.medicationLogs.set(demoUserId, todayLogs);
 
-    // 6. Appointments (Upcoming & Past)
+    // 6. Appointments
     const appt1: Appointment = {
       id: 'appt-1',
       patientId: demoUserId,
@@ -849,6 +922,377 @@ export class DataStore {
       lastUpdated: '2026-08-30T10:00:00.000Z'
     };
     this.emergencyCards.set(demoUserId, emgCard);
+
+    // 9. Personalized Clinical Nutrition & Diet Planner
+    const dietPlan: DietPlan = {
+      id: 'diet-alok-001',
+      patientId: demoUserId,
+      goal: 'Lean Muscle & Metabolic Performance (Active Fitness)',
+      dailyCaloriesTarget: 2650,
+      consumedCalories: 1980,
+      proteinTarget: 160,
+      proteinConsumed: 124,
+      carbsTarget: 320,
+      carbsConsumed: 235,
+      fatTarget: 70,
+      fatConsumed: 52,
+      waterTargetLiters: 3.5,
+      waterConsumedLiters: 2.8,
+      clinicalHighlights: [
+        'High bioavailability protein to support 4x weekly athletic recovery',
+        'Rich in dietary Vitamin D3 precursors & Omega-3 anti-inflammatory fats',
+        'Balanced complex carbohydrates maintaining steady glycemic control (HbA1c: 5.2%)'
+      ],
+      meals: [
+        {
+          category: 'Breakfast',
+          recommendedTime: '08:00 AM',
+          targetCalories: 580,
+          items: [
+            {
+              id: 'm-1',
+              name: 'High-Protein Rolled Oats with Chia & Blueberries',
+              portion: '1 Large Bowl (80g oats, 150ml almond milk)',
+              calories: 340,
+              proteinGrams: 16,
+              carbsGrams: 52,
+              fatGrams: 8,
+              micronutrientBoost: 'High Antioxidants & Soluble Fiber',
+              isLogged: true,
+              time: '08:15 AM'
+            },
+            {
+              id: 'm-2',
+              name: 'Organic Boiled Egg Whites with Spinach',
+              portion: '4 Whites + Handful sautéed greens',
+              calories: 140,
+              proteinGrams: 22,
+              carbsGrams: 2,
+              fatGrams: 2,
+              micronutrientBoost: 'Lutein & Complete Amino Acids',
+              isLogged: true,
+              time: '08:25 AM'
+            },
+            {
+              id: 'm-3',
+              name: 'Fresh Cold-Pressed Orange Juice',
+              portion: '200 ml',
+              calories: 100,
+              proteinGrams: 2,
+              carbsGrams: 22,
+              fatGrams: 0,
+              micronutrientBoost: 'Vitamin C Boost for Iron Absorption',
+              isLogged: true,
+              time: '08:30 AM'
+            }
+          ]
+        },
+        {
+          category: 'Lunch',
+          recommendedTime: '01:00 PM',
+          targetCalories: 720,
+          items: [
+            {
+              id: 'm-4',
+              name: 'Herb Grilled Chicken Breast with Lemon',
+              portion: '180 g fillet',
+              calories: 320,
+              proteinGrams: 42,
+              carbsGrams: 0,
+              fatGrams: 6,
+              micronutrientBoost: 'High Leucine for Muscle Synthesis',
+              isLogged: true,
+              time: '01:15 PM'
+            },
+            {
+              id: 'm-5',
+              name: 'Organic Tricolor Quinoa & Roasted Vegetables',
+              portion: '1 Cup cooked (Broccoli, Zucchini, Bell Pepper)',
+              calories: 260,
+              proteinGrams: 10,
+              carbsGrams: 46,
+              fatGrams: 5,
+              micronutrientBoost: 'Magnesium & Complex Micronutrients',
+              isLogged: true,
+              time: '01:25 PM'
+            },
+            {
+              id: 'm-6',
+              name: 'Slow-Cooked Yellow Lentil (Dal) Tadka',
+              portion: '1 Small Bowl',
+              calories: 140,
+              proteinGrams: 8,
+              carbsGrams: 20,
+              fatGrams: 3,
+              micronutrientBoost: 'Plant Polyphenols & Prebiotics',
+              isLogged: true,
+              time: '01:30 PM'
+            }
+          ]
+        },
+        {
+          category: 'Post-Workout',
+          recommendedTime: '05:30 PM',
+          targetCalories: 380,
+          items: [
+            {
+              id: 'm-7',
+              name: 'Hydrolyzed Whey Protein Shake with Banana',
+              portion: '1 Scoop in water + 1 medium banana',
+              calories: 260,
+              proteinGrams: 27,
+              carbsGrams: 32,
+              fatGrams: 2,
+              micronutrientBoost: 'Rapid Glycogen & Amino Restoration',
+              isLogged: true,
+              time: '05:45 PM'
+            },
+            {
+              id: 'm-8',
+              name: 'Roasted California Almonds & Walnuts',
+              portion: '15 pieces (20g)',
+              calories: 120,
+              proteinGrams: 4,
+              carbsGrams: 4,
+              fatGrams: 10,
+              micronutrientBoost: 'ALA Omega-3 & Vitamin E',
+              isLogged: true,
+              time: '05:50 PM'
+            }
+          ]
+        },
+        {
+          category: 'Dinner',
+          recommendedTime: '08:00 PM',
+          targetCalories: 680,
+          items: [
+            {
+              id: 'm-9',
+              name: 'Pan-Seared Atlantic Salmon Fillet',
+              portion: '160 g',
+              calories: 340,
+              proteinGrams: 34,
+              carbsGrams: 0,
+              fatGrams: 18,
+              micronutrientBoost: 'Natural Vitamin D3 & EPA/DHA Omega-3',
+              isLogged: false,
+              time: '08:15 PM'
+            },
+            {
+              id: 'm-10',
+              name: 'Steamed Sweet Potato Mash & Asparagus',
+              portion: '1 Cup with extra virgin olive oil drizzle',
+              calories: 240,
+              proteinGrams: 4,
+              carbsGrams: 48,
+              fatGrams: 4,
+              micronutrientBoost: 'Beta Carotene & Potassium',
+              isLogged: false,
+              time: '08:25 PM'
+            }
+          ]
+        },
+        {
+          category: 'Snacks',
+          recommendedTime: '10:00 PM',
+          targetCalories: 290,
+          items: [
+            {
+              id: 'm-11',
+              name: 'Probiotic Greek Yogurt with Wild Honey',
+              portion: '1 Cup (150g)',
+              calories: 150,
+              proteinGrams: 15,
+              carbsGrams: 14,
+              fatGrams: 3,
+              micronutrientBoost: 'Gut Microbiome & Overnight Casein',
+              isLogged: false,
+              time: '10:15 PM'
+            }
+          ]
+        }
+      ]
+    };
+    this.dietPlans.set(demoUserId, dietPlan);
+
+    // 10. Sleep & Circadian Telemetry
+    const sleepData: SleepData = {
+      id: 'sleep-aug30',
+      date: '2026-08-30',
+      totalDurationHours: 7.75,
+      totalMinutes: 465,
+      qualityScore: 89,
+      bedTime: '10:45 PM',
+      wakeTime: '06:30 AM',
+      restingHeartRateBpm: 56,
+      heartRateVariabilityMs: 68,
+      respiratoryRateBreathsPerMin: 14.5,
+      stages: [
+        { stage: 'DEEP', durationMinutes: 110, percentage: 24, color: '#0A84FF' },
+        { stage: 'REM', durationMinutes: 125, percentage: 27, color: '#5E5CE6' },
+        { stage: 'LIGHT', durationMinutes: 208, percentage: 45, color: '#64D2FF' },
+        { stage: 'AWAKE', durationMinutes: 22, percentage: 4, color: '#FF453A' }
+      ],
+      insights: [
+        'Deep sleep (1h 50m) was 18% above your 30-day baseline, indicating optimal athletic muscle recovery.',
+        'Resting heart rate dipped to 52 BPM at 03:15 AM (excellent parasympathetic tone).',
+        'Consistent bedtime alignment over the past 5 consecutive nights.'
+      ],
+      weeklyAverages: {
+        avgHours: 7.6,
+        avgScore: 87,
+        deepSleepPct: 22.5
+      }
+    };
+    this.sleepRecords.set(demoUserId, sleepData);
+
+    // 11. Medical Bills & Claims
+    const bill1: MedicalBill = {
+      id: 'bill-1',
+      invoiceNumber: 'APL-2026-89412',
+      hospitalName: 'Apollo Health City',
+      hospitalAddress: 'Jubilee Hills, Road No. 72, Hyderabad',
+      date: '2026-08-30',
+      totalAmount: 6500,
+      insuranceClaimedAmount: 5200,
+      patientPaidAmount: 1300,
+      paymentStatus: 'PAID',
+      insuranceProvider: 'Star Health Premier Comprehensive',
+      claimId: 'CLM-SH-2026-7812',
+      items: [
+        {
+          id: 'bi-1',
+          description: 'Comprehensive Complete Blood Count (CBC) with Automated Differential',
+          category: 'Diagnostics',
+          amount: 1400,
+          coveredByInsurance: 1120,
+          patientPayable: 280
+        },
+        {
+          id: 'bi-2',
+          description: 'Expanded Lipid Profile (Direct LDL, HDL, Triglycerides, VLDL)',
+          category: 'Diagnostics',
+          amount: 1800,
+          coveredByInsurance: 1440,
+          patientPayable: 360
+        },
+        {
+          id: 'bi-3',
+          description: 'Renal & Hepatic Baseline Chemistry (Serum Creatinine, SGPT/ALT)',
+          category: 'Diagnostics',
+          amount: 1800,
+          coveredByInsurance: 1440,
+          patientPayable: 360
+        },
+        {
+          id: 'bi-4',
+          description: 'Senior Consultant Preventive Physician Review',
+          category: 'Consultation',
+          amount: 1500,
+          coveredByInsurance: 1200,
+          patientPayable: 300
+        }
+      ],
+      receiptUrl: 'https://hospate.app/receipts/APL-2026-89412.pdf'
+    };
+
+    const bill2: MedicalBill = {
+      id: 'bill-2',
+      invoiceNumber: 'MXC-2026-44109',
+      hospitalName: 'MaxCure Heart Institute',
+      hospitalAddress: 'Mindspace IT Park, Hitec City, Hyderabad',
+      date: '2026-04-05',
+      totalAmount: 8200,
+      insuranceClaimedAmount: 7000,
+      patientPaidAmount: 1200,
+      paymentStatus: 'PAID',
+      insuranceProvider: 'Star Health Premier Comprehensive',
+      claimId: 'CLM-SH-2026-3391',
+      items: [
+        {
+          id: 'bi-5',
+          description: '12-Lead Resting Digital Electrocardiogram (ECG)',
+          category: 'Diagnostics',
+          amount: 1200,
+          coveredByInsurance: 1000,
+          patientPayable: 200
+        },
+        {
+          id: 'bi-6',
+          description: 'High-Resolution 2D Doppler Echocardiography',
+          category: 'Procedure',
+          amount: 5500,
+          coveredByInsurance: 4800,
+          patientPayable: 700
+        },
+        {
+          id: 'bi-7',
+          description: 'Cardiology Specialist Consultation & Report Certification',
+          category: 'Consultation',
+          amount: 1500,
+          coveredByInsurance: 1200,
+          patientPayable: 300
+        }
+      ],
+      receiptUrl: 'https://hospate.app/receipts/MXC-2026-44109.pdf'
+    };
+
+    this.medicalBills.set(bill1.id, bill1);
+    this.medicalBills.set(bill2.id, bill2);
+
+    // 12. Vaccinations
+    const vaxList: VaccinationRecord[] = [
+      {
+        id: 'vax-1',
+        vaccineName: 'COVID-19 mRNA Precautionary Booster',
+        targetDisease: 'SARS-CoV-2 (COVID-19)',
+        doseNumber: 3,
+        totalDoses: 3,
+        administeredDate: '2026-02-18',
+        administeredBy: 'Apollo Vaccination Hub, Hyderabad',
+        batchNumber: 'COV-BN-88912',
+        status: 'COMPLETED',
+        certificateUrl: 'https://cowin.gov.in/cert/998127'
+      },
+      {
+        id: 'vax-2',
+        vaccineName: 'Tdap (Tetanus, Diphtheria, Acellular Pertussis)',
+        targetDisease: 'Tetanus & Pertussis',
+        doseNumber: 1,
+        totalDoses: 1,
+        administeredDate: '2025-11-10',
+        expiryOrBoosterDate: '2035-11-10',
+        administeredBy: 'MaxCure Clinic',
+        batchNumber: 'TDP-2025-091',
+        status: 'COMPLETED'
+      },
+      {
+        id: 'vax-3',
+        vaccineName: 'Quadrivalent Influenza Vaccine (Flu Season)',
+        targetDisease: 'Seasonal Influenza',
+        doseNumber: 1,
+        totalDoses: 1,
+        administeredDate: '2025-10-15',
+        expiryOrBoosterDate: '2026-10-15',
+        administeredBy: 'Apollo Health City',
+        batchNumber: 'FLU-4V-781',
+        status: 'BOOSTER_DUE'
+      }
+    ];
+    this.vaccinations.set(demoUserId, vaxList);
+
+    // 13. Daily Live Vitals Telemetry
+    const vitals: DailyVitals = {
+      heartRateBpm: 72,
+      bloodPressureSystolic: 118,
+      bloodPressureDiastolic: 76,
+      spo2Percent: 98,
+      bodyTemperatureFahrenheit: 98.6,
+      dailySteps: 8640,
+      activeBurnCalories: 540,
+      lastSyncedAt: new Date().toISOString()
+    };
+    this.dailyVitals.set(demoUserId, vitals);
   }
 }
 

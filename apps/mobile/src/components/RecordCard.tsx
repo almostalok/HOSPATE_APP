@@ -25,6 +25,21 @@ export const RecordCard: React.FC<RecordCardProps> = ({ record, onPress }) => {
           icon: <Stethoscope size={18} color="#FFFFFF" />,
           bg: colors.primary
         };
+      case 'SCAN':
+        return {
+          icon: <Activity size={18} color="#FFFFFF" />,
+          bg: '#5E5CE6'
+        };
+      case 'BILL':
+        return {
+          icon: <FileText size={18} color="#FFFFFF" />,
+          bg: '#0A84FF'
+        };
+      case 'VACCINATION':
+        return {
+          icon: <Activity size={18} color="#FFFFFF" />,
+          bg: '#FF9F0A'
+        };
       case 'LAB_REPORT':
       default:
         return {

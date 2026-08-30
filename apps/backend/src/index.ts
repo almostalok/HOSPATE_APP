@@ -529,6 +529,63 @@ app.get('/api/debug/audit/:sessionId', (req: Request, res: Response) => {
   return res.json(audit);
 });
 
+// ----------------------------------------------------
+// NUTRITION & DIET PLANNER MODULE
+// ----------------------------------------------------
+
+app.get('/api/diet', (req: Request, res: Response) => {
+  const plan = dataStore.dietPlans.get('user-alex-001');
+  if (!plan) return res.status(404).json({ error: 'Diet plan not found' });
+  return res.json(plan);
+});
+
+app.post('/api/diet/log-water', (req: Request, res: Response) => {
+  const plan = dataStore.dietPlans.get('user-alex-001');
+  if (plan) {
+    plan.waterConsumedLiters = Math.min(plan.waterTargetLiters, Number((plan.waterConsumedLiters + 0.25).toFixed(2)));
+    dataStore.dietPlans.set('user-alex-001', plan);
+    return res.json(plan);
+  }
+  return res.status(404).json({ error: 'Diet plan not found' });
+});
+
+// ----------------------------------------------------
+// SLEEP & CIRCADIAN TELEMETRY MODULE
+// ----------------------------------------------------
+
+app.get('/api/sleep', (req: Request, res: Response) => {
+  const sleep = dataStore.sleepRecords.get('user-alex-001');
+  if (!sleep) return res.status(404).json({ error: 'Sleep data not found' });
+  return res.json(sleep);
+});
+
+// ----------------------------------------------------
+// MEDICAL BILLS & INSURANCE CLAIMS MODULE
+// ----------------------------------------------------
+
+app.get('/api/bills', (req: Request, res: Response) => {
+  const bills = Array.from(dataStore.medicalBills.values());
+  return res.json(bills);
+});
+
+// ----------------------------------------------------
+// VACCINATIONS & IMMUNIZATION PASSPORT
+// ----------------------------------------------------
+
+app.get('/api/vaccines', (req: Request, res: Response) => {
+  const vax = dataStore.vaccinations.get('user-alex-001') || [];
+  return res.json(vax);
+});
+
+// ----------------------------------------------------
+// DAILY LIVE VITALS TELEMETRY
+// ----------------------------------------------------
+
+app.get('/api/vitals', (req: Request, res: Response) => {
+  const vitals = dataStore.dailyVitals.get('user-alex-001');
+  return res.json(vitals);
+});
+
 // Health check endpoint
 app.get('/api/health-check', (req: Request, res: Response) => {
   return res.json({

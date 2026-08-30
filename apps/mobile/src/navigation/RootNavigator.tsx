@@ -50,6 +50,10 @@ import { HospitalDetailScreen } from '../screens/hospitals/HospitalDetailScreen'
 import { EmergencyCardScreen } from '../screens/emergency/EmergencyCardScreen';
 import { ProfileScreen } from '../screens/profile/ProfileScreen';
 import { SettingsScreen } from '../screens/profile/SettingsScreen';
+import { DietPlannerScreen } from '../screens/wellness/DietPlannerScreen';
+import { SleepTrackerScreen } from '../screens/wellness/SleepTrackerScreen';
+import { MedicalBillsScreen } from '../screens/bills/MedicalBillsScreen';
+import { VaccinationsScreen } from '../screens/wellness/VaccinationsScreen';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -175,6 +179,10 @@ export const RootNavigator: React.FC = () => {
         <Stack.Screen name="HospitalDetail" component={HospitalDetailScreen} />
         <Stack.Screen name="EmergencyCard" component={EmergencyCardScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="DietPlanner" component={DietPlannerScreen} />
+        <Stack.Screen name="SleepTracker" component={SleepTrackerScreen} />
+        <Stack.Screen name="MedicalBills" component={MedicalBillsScreen} />
+        <Stack.Screen name="Vaccinations" component={VaccinationsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

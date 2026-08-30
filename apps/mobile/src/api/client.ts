@@ -11,7 +11,12 @@ import {
   Hospital,
   EmergencyCard,
   AcademicDebugData,
-  LabParameter
+  LabParameter,
+  DietPlan,
+  SleepData,
+  MedicalBill,
+  VaccinationRecord,
+  DailyVitals
 } from '@hospate/types';
 import Constants from 'expo-constants';
 
@@ -446,15 +451,44 @@ class HospateApiClient {
           relationship: 'Primary Care Physician',
           phone: '+91 40 2360 7777'
         },
-        allergies: ['Penicillin', 'Sulfa Drugs'],
-        chronicConditions: ['Pre-hypertension'],
-        activeMedications: ['Metformin 500mg (1 daily)', 'Vitamin D3 60,000 IU (weekly)'],
-        criticalMedicalNotes: 'Allergic to penicillin. Carries inhaler if needed.',
+        allergies: ['Dust Mites', 'Mild Penicillin Sensitivity'],
+        chronicConditions: ['None (Active & Healthy)'],
+        activeMedications: ['Vitamin D3 60K weekly', 'Omega-3 1000mg daily'],
+        criticalMedicalNotes: 'Active fitness baseline. Allergic to penicillin.',
         qrPayload: 'https://emergency.hospate.app/card/HOSP-EMG-8921?token=exp-token-998811',
         secureToken: 'exp-token-998811',
         lastUpdated: new Date().toISOString()
       };
     }
+  }
+
+  // Nutrition & Diet Planner
+  public async getDietPlan(): Promise<DietPlan> {
+    return await this.request<DietPlan>('/diet');
+  }
+
+  public async logWater(): Promise<DietPlan> {
+    return await this.request<DietPlan>('/diet/log-water', { method: 'POST' });
+  }
+
+  // Sleep & Circadian Telemetry
+  public async getSleepData(): Promise<SleepData> {
+    return await this.request<SleepData>('/sleep');
+  }
+
+  // Medical Bills & Insurance Claims
+  public async getMedicalBills(): Promise<MedicalBill[]> {
+    return await this.request<MedicalBill[]>('/bills');
+  }
+
+  // Vaccinations & Immunization
+  public async getVaccinations(): Promise<VaccinationRecord[]> {
+    return await this.request<VaccinationRecord[]>('/vaccines');
+  }
+
+  // Daily Live Vitals Telemetry
+  public async getDailyVitals(): Promise<DailyVitals> {
+    return await this.request<DailyVitals>('/vitals');
   }
 }
 
