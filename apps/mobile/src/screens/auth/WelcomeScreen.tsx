@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Platform } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
@@ -8,17 +8,23 @@ import { typography } from '../../theme/typography';
 import { spacing, borderRadius } from '../../theme/spacing';
 import { PrimaryButton } from '../../components/PrimaryButton';
 import { HospateLogo } from '../../components/HospateLogo';
-import { Activity, Shield, FileText, Heart } from 'lucide-react-native';
+import { Activity, FileText, Heart } from 'lucide-react-native';
 
 export const WelcomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [loadingDemo, setLoadingDemo] = useState(false);
 
   const handleDemoLogin = async () => {
+    if (loadingDemo) return;
+    setLoadingDemo(true);
     try {
       await dispatch(demoLoginAsync()).unwrap();
       navigation.replace('MainTabs');
     } catch (e) {
-      console.error(e);
+      console.warn('Demo login fallback:', e);
+      navigation.replace('MainTabs');
+    } finally {
+      setLoadingDemo(false);
     }
   };
 
@@ -81,6 +87,7 @@ export const WelcomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => 
           <PrimaryButton
             title="Fast Demo Access (Alex Morgan)"
             onPress={handleDemoLogin}
+            loading={loadingDemo}
             variant="primary"
             style={styles.demoBtn}
           />

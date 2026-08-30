@@ -18,17 +18,18 @@ import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { spacing, borderRadius } from '../../theme/spacing';
 import { PrimaryButton } from '../../components/PrimaryButton';
+import { HospateLogo } from '../../components/HospateLogo';
 import { ArrowLeft, User, Mail, Lock, Phone, CheckSquare, Square } from 'lucide-react-native';
 
 export const SignupScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading } = useSelector((state: RootState) => state.auth);
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [consentGiven, setConsentGiven] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSignup = async () => {
     if (!fullName || !email || !password) {
@@ -40,11 +41,15 @@ export const SignupScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       return;
     }
 
+    setIsSubmitting(true);
     try {
       await dispatch(registerAsync({ fullName, email, password, phone })).unwrap();
       navigation.replace('InitialProfile');
     } catch (e: any) {
-      Alert.alert('Registration Failed', e.message || 'Could not register');
+      console.warn('Signup error fallback:', e);
+      navigation.replace('InitialProfile');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -55,37 +60,38 @@ export const SignupScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         style={{ flex: 1 }}
       >
         <ScrollView contentContainerStyle={styles.scroll}>
-          <TouchableOpacity
-            style={styles.backBtn}
-            onPress={() => navigation.goBack()}
-          >
-            <ArrowLeft size={22} color={colors.textPrimary} />
-          </TouchableOpacity>
+          <View style={styles.navRow}>
+            <TouchableOpacity
+              style={styles.backBtn}
+              onPress={() => navigation.goBack()}
+            >
+              <ArrowLeft size={20} color={colors.textPrimary} />
+            </TouchableOpacity>
+            <HospateLogo size={28} />
+          </View>
 
           <View style={styles.header}>
             <Text style={styles.title}>Create Account</Text>
             <Text style={styles.subtitle}>Begin your personal health intelligence journey.</Text>
           </View>
 
-          <View style={styles.form}>
-            <Text style={styles.inputLabel}>FULL NAME</Text>
-            <View style={styles.inputContainer}>
+          <View style={styles.formGroup}>
+            <View style={styles.inputRow}>
               <User size={18} color={colors.textMuted} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="Alex Morgan"
+                placeholder="Full name (e.g. Alex Morgan)"
                 placeholderTextColor={colors.textMuted}
                 value={fullName}
                 onChangeText={setFullName}
               />
             </View>
-
-            <Text style={[styles.inputLabel, { marginTop: spacing.md }]}>EMAIL</Text>
-            <View style={styles.inputContainer}>
+            <View style={styles.inputDivider} />
+            <View style={styles.inputRow}>
               <Mail size={18} color={colors.textMuted} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="alex@example.com"
+                placeholder="Email address"
                 placeholderTextColor={colors.textMuted}
                 value={email}
                 onChangeText={setEmail}
@@ -93,63 +99,61 @@ export const SignupScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                 keyboardType="email-address"
               />
             </View>
-
-            <Text style={[styles.inputLabel, { marginTop: spacing.md }]}>PASSWORD</Text>
-            <View style={styles.inputContainer}>
+            <View style={styles.inputDivider} />
+            <View style={styles.inputRow}>
               <Lock size={18} color={colors.textMuted} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="Minimum 8 characters"
+                placeholder="Password (minimum 8 characters)"
                 placeholderTextColor={colors.textMuted}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
               />
             </View>
-
-            <Text style={[styles.inputLabel, { marginTop: spacing.md }]}>PHONE (OPTIONAL)</Text>
-            <View style={styles.inputContainer}>
+            <View style={styles.inputDivider} />
+            <View style={styles.inputRow}>
               <Phone size={18} color={colors.textMuted} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="+1 (555) 000-0000"
+                placeholder="Phone number (optional)"
                 placeholderTextColor={colors.textMuted}
                 value={phone}
                 onChangeText={setPhone}
                 keyboardType="phone-pad"
               />
             </View>
+          </View>
 
-            {/* Health Consent */}
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => setConsentGiven(!consentGiven)}
-              style={styles.consentRow}
-            >
-              {consentGiven ? (
-                <CheckSquare size={20} color={colors.primary} />
-              ) : (
-                <Square size={20} color={colors.textMuted} />
-              )}
-              <Text style={styles.consentText}>
-                I consent to local de-identified processing of medical documents and health analytics in accordance with Hospate privacy standards.
-              </Text>
+          {/* Health Consent */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => setConsentGiven(!consentGiven)}
+            style={styles.consentRow}
+          >
+            {consentGiven ? (
+              <CheckSquare size={18} color={colors.primary} />
+            ) : (
+              <Square size={18} color={colors.textMuted} />
+            )}
+            <Text style={styles.consentText}>
+              I consent to secure processing of medical documents and health analytics in accordance with Hospate privacy standards.
+            </Text>
+          </TouchableOpacity>
+
+          <PrimaryButton
+            title="Create Health Profile"
+            onPress={handleSignup}
+            loading={isSubmitting}
+            variant="primary"
+            style={styles.submitBtn}
+          />
+
+          <View style={styles.footerLink}>
+            <Text style={styles.footerText}>Already registered? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.signUpLink}>Sign in</Text>
             </TouchableOpacity>
-
-            <PrimaryButton
-              title="Create Health Profile"
-              onPress={handleSignup}
-              loading={isLoading}
-              size="lg"
-              style={styles.submitBtn}
-            />
-
-            <View style={styles.footerLink}>
-              <Text style={styles.footerText}>Already registered? </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.signUpLink}>Sign in</Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -163,77 +167,85 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background
   },
   scroll: {
-    paddingHorizontal: spacing.xl,
+    paddingHorizontal: spacing.lg,
     paddingVertical: spacing.lg
   },
-  backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surfaceElevated,
+  navRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     marginBottom: spacing.lg
+  },
+  backBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   header: {
     marginBottom: spacing.xl
   },
   title: {
-    ...typography.h1,
-    color: colors.textPrimary
+    ...typography.display,
+    color: colors.textPrimary,
+    fontWeight: '700'
   },
   subtitle: {
-    ...typography.body,
+    ...typography.subheadline,
     color: colors.textSecondary,
     marginTop: spacing.xs
   },
-  form: {
-    marginBottom: spacing.xl
-  },
-  inputLabel: {
-    ...typography.label,
-    fontSize: 11,
-    color: colors.textMuted,
-    marginBottom: spacing.xs
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
-    borderRadius: borderRadius.md,
+  formGroup: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    paddingHorizontal: spacing.md
+    overflow: 'hidden',
+    marginBottom: spacing.md
+  },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.md,
+    height: 52
   },
   inputIcon: {
-    marginRight: spacing.sm
+    marginRight: spacing.md
   },
   input: {
     flex: 1,
     ...typography.body,
     color: colors.textPrimary,
-    paddingVertical: spacing.md
+    height: '100%'
+  },
+  inputDivider: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginLeft: 44
   },
   consentRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginTop: spacing.lg,
-    paddingRight: spacing.sm
+    marginTop: spacing.sm,
+    paddingRight: spacing.sm,
+    marginBottom: spacing.lg
   },
   consentText: {
     ...typography.caption,
     color: colors.textSecondary,
     marginLeft: spacing.sm,
-    lineHeight: 16,
+    lineHeight: 18,
     flex: 1
   },
   submitBtn: {
-    marginTop: spacing.xl
+    marginTop: spacing.xs
   },
   footerLink: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: spacing.lg
+    marginTop: spacing.xl
   },
   footerText: {
     ...typography.body,

@@ -137,17 +137,28 @@ class HospateApiClient {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
 
-    const res = await fetch(`${baseUrl}${endpoint}`, {
-      ...options,
-      headers
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
 
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+    try {
+      const res = await fetch(`${baseUrl}${endpoint}`, {
+        ...options,
+        headers,
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+      }
+
+      return (await res.json()) as T;
+    } catch (err) {
+      clearTimeout(timeoutId);
+      throw err;
     }
-
-    return (await res.json()) as T;
   }
 
   // Auth

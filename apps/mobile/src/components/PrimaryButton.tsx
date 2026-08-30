@@ -2,6 +2,7 @@ import React from 'react';
 import {
   TouchableOpacity,
   Text,
+  View,
   StyleSheet,
   ActivityIndicator,
   ViewStyle,
@@ -90,8 +91,8 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
       {loading ? (
         <ActivityIndicator size="small" color={btnStyle.textColor} />
       ) : (
-        <>
-          {icon ? <span style={{ marginRight: 6 }}>{icon}</span> : null}
+        <View style={styles.contentRow}>
+          {icon ? <View style={styles.iconContainer}>{icon}</View> : null}
           <Text
             style={[
               styles.text,
@@ -102,7 +103,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
           >
             {title}
           </Text>
-        </>
+        </View>
       )}
     </TouchableOpacity>
   );
@@ -126,6 +127,14 @@ const styles = StyleSheet.create({
   buttonLarge: {
     height: 54,
     borderRadius: borderRadius.lg
+  },
+  contentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  iconContainer: {
+    marginRight: 8
   },
   text: {
     ...typography.headline,
