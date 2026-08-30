@@ -12,6 +12,7 @@
     "start:mobile": "npm run start --workspace=apps/mobile",
     "start:tunnel": "npm run start --workspace=apps/mobile -- --tunnel",
     "start:lan": "npm run start --workspace=apps/mobile -- --lan -c",
+    "build:apk": "npm --prefix apps/mobile run build:apk",
     "test:api": "node test-api.js",
     "build": "npm run build --workspaces",
     "seed": "npm run seed --workspace=apps/backend"
