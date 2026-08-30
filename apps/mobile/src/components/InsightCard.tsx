@@ -5,14 +5,15 @@ import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { spacing, borderRadius } from '../theme/spacing';
 import { StatusBadge } from './StatusBadge';
-import { Activity, Heart, ShieldAlert, Stethoscope, ChevronRight } from 'lucide-react-native';
+import { Activity, Heart, Stethoscope } from 'lucide-react-native';
 
 interface InsightCardProps {
   insight: HealthInsight;
   onPress?: () => void;
+  onUnderstandPress?: (insight: HealthInsight) => void;
 }
 
-export const InsightCard: React.FC<InsightCardProps> = ({ insight, onPress }) => {
+export const InsightCard: React.FC<InsightCardProps> = ({ insight, onPress, onUnderstandPress }) => {
   const getIcon = () => {
     if (insight.severity === 'DANGER' || insight.title?.toLowerCase().includes('cholesterol') || insight.parameter?.toLowerCase().includes('ldl')) {
       return {
@@ -34,10 +35,18 @@ export const InsightCard: React.FC<InsightCardProps> = ({ insight, onPress }) =>
 
   const iconConfig = getIcon();
 
+  const handlePress = () => {
+    if (onUnderstandPress) {
+      onUnderstandPress(insight);
+    } else if (onPress) {
+      onPress();
+    }
+  };
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={onPress}
+      onPress={handlePress}
       style={styles.card}
     >
       {/* Top row: Icon, Title, Status */}
@@ -70,16 +79,6 @@ export const InsightCard: React.FC<InsightCardProps> = ({ insight, onPress }) =>
           <Text style={styles.actionText}>{insight.recommendation}</Text>
         </View>
       ) : null}
-
-      {/* Doctor discussion bullet */}
-      {insight.doctorTalkingPoints && insight.doctorTalkingPoints.length > 0 && (
-        <View style={styles.doctorRow}>
-          <Stethoscope size={13} color={colors.textSecondary} />
-          <Text style={styles.doctorText} numberOfLines={1}>
-            Ask doctor: "{insight.doctorTalkingPoints[0]}"
-          </Text>
-        </View>
-      )}
     </TouchableOpacity>
   );
 };
@@ -131,8 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceElevated,
     borderRadius: borderRadius.md,
     padding: spacing.md,
-    marginTop: spacing.xs,
-    marginBottom: spacing.xs
+    marginTop: spacing.xs
   },
   actionLabel: {
     ...typography.label,
@@ -145,20 +143,5 @@ const styles = StyleSheet.create({
     ...typography.caption,
     color: colors.textPrimary,
     lineHeight: 18
-  },
-  doctorRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: spacing.sm,
-    paddingTop: spacing.xs + 2,
-    borderTopWidth: 1,
-    borderTopColor: colors.border
-  },
-  doctorText: {
-    ...typography.caption,
-    color: colors.textSecondary,
-    marginLeft: 6,
-    flex: 1,
-    fontStyle: 'italic'
   }
 });

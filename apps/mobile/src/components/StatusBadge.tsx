@@ -5,9 +5,9 @@ import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { borderRadius, spacing } from '../theme/spacing';
 
-interface StatusBadgeProps {
+export interface StatusBadgeProps {
   status?: ParameterStatus | Severity | string;
-  size?: 'small' | 'medium';
+  size?: 'small' | 'medium' | 'sm' | 'md';
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status = 'NORMAL', size = 'small' }) => {
@@ -58,20 +58,21 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status = 'NORMAL', siz
   };
 
   const styleConfig = getStyle();
+  const isMedium = size === 'medium' || size === 'md';
 
   return (
     <View
       style={[
         styles.badge,
         { backgroundColor: styleConfig.bg },
-        size === 'medium' && styles.badgeMedium
+        isMedium && styles.badgeMedium
       ]}
     >
       <Text
         style={[
           styles.text,
           { color: styleConfig.color },
-          size === 'medium' && styles.textMedium
+          isMedium && styles.textMedium
         ]}
       >
         {styleConfig.label}
