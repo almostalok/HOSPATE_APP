@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Platform } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { demoLoginAsync } from '../../store/authSlice';
@@ -7,7 +7,8 @@ import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { spacing, borderRadius } from '../../theme/spacing';
 import { PrimaryButton } from '../../components/PrimaryButton';
-import { Sparkles, Shield, Activity, FileCheck } from 'lucide-react-native';
+import { HospateLogo } from '../../components/HospateLogo';
+import { Activity, Shield, FileText, Heart } from 'lucide-react-native';
 
 export const WelcomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,84 +25,80 @@ export const WelcomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        {/* Brand Badge */}
+        {/* Brand Header */}
         <View style={styles.brandRow}>
-          <View style={styles.logoBadge}>
-            <Sparkles size={16} color="#FFFFFF" />
-          </View>
-          <Text style={styles.brandName}>HOSPATE</Text>
+          <HospateLogo size={34} />
+          <Text style={styles.brandName}>Hospate</Text>
         </View>
 
         {/* Hero Section */}
         <View style={styles.heroSection}>
           <Text style={styles.headline}>
-            Your health.{'\n'}
-            <Text style={{ color: colors.primary }}>Finally in one place.</Text>
+            Your health records,{'\n'}
+            <Text style={{ color: colors.primary }}>organized & clear.</Text>
           </Text>
 
           <Text style={styles.subheadline}>
-            Understand your lab reports, track your vital biomarkers and get clinically grounded insights from your medical data.
+            Understand your lab reports, track key vital parameters, and explore health trends with structured clinical intelligence.
           </Text>
         </View>
 
-        {/* Feature Highlights */}
+        {/* Apple HIG Feature Inset Group */}
         <View style={styles.featuresList}>
           <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <FileCheck size={18} color={colors.primary} />
+            <View style={[styles.featureIcon, { backgroundColor: colors.primary }]}>
+              <FileText size={18} color="#FFFFFF" />
             </View>
             <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Instant Report Ingestion</Text>
-              <Text style={styles.featureDesc}>Automatic OCR & NLP parameter extraction</Text>
+              <Text style={styles.featureTitle}>Lab Report Digitization</Text>
+              <Text style={styles.featureDesc}>Extract and organize biomarkers into clear reference ranges</Text>
             </View>
           </View>
 
           <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Activity size={18} color={colors.accent} />
+            <View style={[styles.featureIcon, { backgroundColor: colors.success }]}>
+              <Activity size={18} color="#FFFFFF" />
             </View>
             <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Continuous AI Health Score</Text>
-              <Text style={styles.featureDesc}>Holistic tracking across 5 health dimensions</Text>
+              <Text style={styles.featureTitle}>Personal Health Score</Text>
+              <Text style={styles.featureDesc}>Holistic tracking across cardiovascular, metabolic and lifestyle metrics</Text>
             </View>
           </View>
 
           <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Shield size={18} color={colors.accentPurple} />
+            <View style={[styles.featureIcon, { backgroundColor: colors.brandNavy }]}>
+              <Heart size={18} color="#FFFFFF" />
             </View>
             <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>AI Health Buddy</Text>
-              <Text style={styles.featureDesc}>Personalized answers grounded in your data</Text>
+              <Text style={styles.featureTitle}>Health Intelligence Buddy</Text>
+              <Text style={styles.featureDesc}>Clear explanations grounded strictly in your personal records</Text>
             </View>
           </View>
         </View>
 
-        {/* Action Buttons */}
+        {/* Action Section */}
         <View style={styles.buttonSection}>
           <PrimaryButton
             title="Fast Demo Access (Alex Morgan)"
             onPress={handleDemoLogin}
-            variant="ai"
-            size="lg"
-            icon={<Sparkles size={18} color="#FFFFFF" />}
+            variant="primary"
             style={styles.demoBtn}
           />
 
           <PrimaryButton
-            title="Get Started"
-            onPress={() => navigation.navigate('Signup')}
-            size="lg"
+            title="Sign In with Email"
+            onPress={() => navigation.navigate('Login')}
+            variant="secondary"
             style={styles.mainBtn}
           />
 
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate('Signup')}
             style={styles.loginLink}
           >
             <Text style={styles.loginLinkText}>
-              I already have an account • <Text style={{ color: colors.primary }}>Sign in</Text>
+              Don't have an account? <Text style={{ color: colors.primary }}>Create Patient Profile</Text>
             </Text>
           </TouchableOpacity>
         </View>
@@ -118,28 +115,19 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.lg,
+    paddingTop: Platform.OS === 'ios' ? spacing.md : spacing.xl,
+    paddingBottom: spacing.lg,
     justifyContent: 'space-between'
   },
   brandRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: spacing.sm
-  },
-  logoBadge: {
-    width: 32,
-    height: 32,
-    borderRadius: 9,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: spacing.sm
+    alignItems: 'center'
   },
   brandName: {
-    ...typography.h3,
-    letterSpacing: 1.5,
-    fontWeight: '800',
-    color: colors.textPrimary
+    ...typography.h2,
+    fontWeight: '700',
+    color: colors.textPrimary,
+    marginLeft: spacing.sm + 2
   },
   heroSection: {
     marginTop: spacing.md
@@ -147,28 +135,31 @@ const styles = StyleSheet.create({
   headline: {
     ...typography.display,
     color: colors.textPrimary,
-    fontSize: 32,
-    lineHeight: 38
+    fontSize: 30,
+    lineHeight: 36
   },
   subheadline: {
-    ...typography.bodyLarge,
+    ...typography.callout,
     color: colors.textSecondary,
-    marginTop: spacing.md,
-    lineHeight: 24
+    marginTop: spacing.sm + 2,
+    lineHeight: 22
   },
   featuresList: {
-    marginVertical: spacing.md
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border
   },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.md
+    paddingVertical: spacing.sm + 2
   },
   featureIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
-    backgroundColor: colors.surfaceElevated,
+    width: 36,
+    height: 36,
+    borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md
@@ -178,12 +169,14 @@ const styles = StyleSheet.create({
   },
   featureTitle: {
     ...typography.bodySemibold,
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontSize: 15
   },
   featureDesc: {
     ...typography.caption,
-    color: colors.textSecondary,
-    marginTop: 1
+    color: colors.textMuted,
+    marginTop: 2,
+    lineHeight: 16
   },
   buttonSection: {
     marginTop: spacing.sm
@@ -192,14 +185,15 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm
   },
   mainBtn: {
-    marginBottom: spacing.sm
+    marginBottom: spacing.xs
   },
   loginLink: {
     alignItems: 'center',
     paddingVertical: spacing.sm
   },
   loginLinkText: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary
+    ...typography.caption,
+    color: colors.textSecondary,
+    fontSize: 13
   }
 });

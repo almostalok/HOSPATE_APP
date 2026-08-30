@@ -15,8 +15,6 @@ import { typography } from '../../theme/typography';
 import { spacing, borderRadius } from '../../theme/spacing';
 import {
   ArrowLeft,
-  Sparkles,
-  TrendingUp,
   Heart,
   Activity,
   Apple,
@@ -24,7 +22,8 @@ import {
   Pill,
   CheckCircle,
   AlertTriangle,
-  Info
+  Info,
+  ArrowUpRight
 } from 'lucide-react-native';
 
 export const HealthScoreScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -35,55 +34,52 @@ export const HealthScoreScreen: React.FC<{ navigation: any }> = ({ navigation })
     dispatch(fetchHealthScore());
   }, []);
 
-  const totalScore = score?.score || 82;
+  const totalScore = score?.score || 80;
   const status = score?.status || 'GOOD';
   const delta = score?.changeDelta || 4;
   const dims = score?.dimensions || {
-    cardiovascular: 86,
-    metabolic: 79,
-    nutrition: 74,
+    cardiovascular: 73,
+    metabolic: 82,
+    nutrition: 70,
     lifestyle: 88,
-    medicationAdherence: 91
+    medicationAdherence: 92
   };
 
   const positives = score?.positiveFactors || [
-    'Consistent medication adherence (92%)',
-    'Normal oxygen-carrying Hemoglobin baseline',
+    'Consistent medication adherence (94%)',
+    'Normal oxygen-carrying Hemoglobin baseline (14.2 g/dL)',
     'Stable fasting glycemic profile (88 mg/dL)'
   ];
 
   const negatives = score?.negativeFactors || [
-    'Vitamin D levels below recommended reference range (18 ng/mL)',
+    'Vitamin D3 levels below recommended reference range (18 ng/mL)',
     'LDL cholesterol slightly elevated above optimal threshold (142 mg/dL)'
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
+      {/* Apple Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <ArrowLeft size={22} color={colors.textPrimary} />
+          <ArrowLeft size={20} color={colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>AI HEALTH SCORE</Text>
-        <View style={{ width: 40 }} />
+        <Text style={styles.headerTitle}>Health Score</Text>
+        <View style={{ width: 36 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Score Hero Card */}
         <View style={styles.scoreHero}>
-          <View style={styles.scoreBadge}>
-            <Sparkles size={14} color={colors.primary} />
-            <Text style={styles.scoreBadgeText}>COMPOSITE HEALTH RATING</Text>
-          </View>
-
+          <Text style={styles.scoreLabel}>COMPOSITE HEALTH SCORE</Text>
           <Text style={styles.scoreValue}>{totalScore}</Text>
+
           <View style={styles.statusRow}>
             <View style={styles.statusPill}>
               <Text style={styles.statusText}>{status}</Text>
             </View>
-            <View style={styles.trendPill}>
-              <TrendingUp size={12} color={colors.successText} />
-              <Text style={styles.trendText}>+{delta} pts vs last month</Text>
+            <View style={styles.trendRow}>
+              <ArrowUpRight size={14} color={colors.success} />
+              <Text style={styles.trendText}>+{delta} pts this week</Text>
             </View>
           </View>
         </View>
@@ -93,13 +89,13 @@ export const HealthScoreScreen: React.FC<{ navigation: any }> = ({ navigation })
 
         <View style={styles.dimensionCard}>
           <View style={styles.dimRow}>
-            <View style={[styles.dimIcon, { backgroundColor: 'rgba(239, 68, 68, 0.15)' }]}>
-              <Heart size={18} color={colors.dimensionCardio} />
+            <View style={[styles.dimIcon, { backgroundColor: colors.dimensionCardio }]}>
+              <Heart size={18} color="#FFFFFF" />
             </View>
             <View style={styles.dimInfo}>
               <View style={styles.dimTitleRow}>
                 <Text style={styles.dimTitle}>Cardiovascular</Text>
-                <Text style={styles.dimScore}>{dims.cardiovascular} / 100</Text>
+                <Text style={styles.dimScore}>{dims.cardiovascular}%</Text>
               </View>
               <View style={styles.barTrack}>
                 <View style={[styles.barFill, { width: `${dims.cardiovascular}%`, backgroundColor: colors.dimensionCardio }]} />
@@ -111,13 +107,13 @@ export const HealthScoreScreen: React.FC<{ navigation: any }> = ({ navigation })
 
         <View style={styles.dimensionCard}>
           <View style={styles.dimRow}>
-            <View style={[styles.dimIcon, { backgroundColor: 'rgba(245, 158, 11, 0.15)' }]}>
-              <Activity size={18} color={colors.dimensionMetabolic} />
+            <View style={[styles.dimIcon, { backgroundColor: colors.dimensionMetabolic }]}>
+              <Activity size={18} color="#FFFFFF" />
             </View>
             <View style={styles.dimInfo}>
               <View style={styles.dimTitleRow}>
                 <Text style={styles.dimTitle}>Metabolic & Glycemic</Text>
-                <Text style={styles.dimScore}>{dims.metabolic} / 100</Text>
+                <Text style={styles.dimScore}>{dims.metabolic}%</Text>
               </View>
               <View style={styles.barTrack}>
                 <View style={[styles.barFill, { width: `${dims.metabolic}%`, backgroundColor: colors.dimensionMetabolic }]} />
@@ -129,88 +125,88 @@ export const HealthScoreScreen: React.FC<{ navigation: any }> = ({ navigation })
 
         <View style={styles.dimensionCard}>
           <View style={styles.dimRow}>
-            <View style={[styles.dimIcon, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
-              <Apple size={18} color={colors.dimensionNutrition} />
+            <View style={[styles.dimIcon, { backgroundColor: colors.dimensionNutrition }]}>
+              <Apple size={18} color="#FFFFFF" />
             </View>
             <View style={styles.dimInfo}>
               <View style={styles.dimTitleRow}>
                 <Text style={styles.dimTitle}>Nutrition & Micronutrients</Text>
-                <Text style={styles.dimScore}>{dims.nutrition} / 100</Text>
+                <Text style={styles.dimScore}>{dims.nutrition}%</Text>
               </View>
               <View style={styles.barTrack}>
                 <View style={[styles.barFill, { width: `${dims.nutrition}%`, backgroundColor: colors.dimensionNutrition }]} />
               </View>
-              <Text style={styles.dimDetail}>Vitamin D (18 ng/mL [Low]), Vitamin B12 (420)</Text>
+              <Text style={styles.dimDetail}>Vitamin D3 (18 ng/mL [Low]), Vitamin B12 (420 pg/mL)</Text>
             </View>
           </View>
         </View>
 
         <View style={styles.dimensionCard}>
           <View style={styles.dimRow}>
-            <View style={[styles.dimIcon, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
-              <Footprints size={18} color={colors.dimensionLifestyle} />
+            <View style={[styles.dimIcon, { backgroundColor: colors.dimensionLifestyle }]}>
+              <Footprints size={18} color="#FFFFFF" />
             </View>
             <View style={styles.dimInfo}>
               <View style={styles.dimTitleRow}>
-                <Text style={styles.dimTitle}>Lifestyle & Physical Activity</Text>
-                <Text style={styles.dimScore}>{dims.lifestyle} / 100</Text>
+                <Text style={styles.dimTitle}>Lifestyle & Activity</Text>
+                <Text style={styles.dimScore}>{dims.lifestyle}%</Text>
               </View>
               <View style={styles.barTrack}>
                 <View style={[styles.barFill, { width: `${dims.lifestyle}%`, backgroundColor: colors.dimensionLifestyle }]} />
               </View>
-              <Text style={styles.dimDetail}>Active physical baseline • Regular sleep</Text>
+              <Text style={styles.dimDetail}>Moderate aerobic baseline • Consistent sleep</Text>
             </View>
           </View>
         </View>
 
         <View style={styles.dimensionCard}>
           <View style={styles.dimRow}>
-            <View style={[styles.dimIcon, { backgroundColor: 'rgba(139, 92, 246, 0.15)' }]}>
-              <Pill size={18} color={colors.dimensionMedication} />
+            <View style={[styles.dimIcon, { backgroundColor: colors.dimensionMedication }]}>
+              <Pill size={18} color="#FFFFFF" />
             </View>
             <View style={styles.dimInfo}>
               <View style={styles.dimTitleRow}>
                 <Text style={styles.dimTitle}>Medication Adherence</Text>
-                <Text style={styles.dimScore}>{dims.medicationAdherence} / 100</Text>
+                <Text style={styles.dimScore}>{dims.medicationAdherence}%</Text>
               </View>
               <View style={styles.barTrack}>
                 <View style={[styles.barFill, { width: `${dims.medicationAdherence}%`, backgroundColor: colors.dimensionMedication }]} />
               </View>
-              <Text style={styles.dimDetail}>92% 7-day adherence rate on active doses</Text>
+              <Text style={styles.dimDetail}>94% 7-day adherence rate on active prescriptions</Text>
             </View>
           </View>
         </View>
 
-        {/* What Changed? */}
-        <Text style={[styles.sectionHeader, { marginTop: spacing.lg }]}>WHAT CHANGED?</Text>
+        {/* Factors List */}
+        <Text style={[styles.sectionHeader, { marginTop: spacing.lg }]}>FACTORS & HIGHLIGHTS</Text>
 
         <View style={styles.factorsCard}>
           {positives.map((pos, idx) => (
             <View key={idx} style={styles.factorItem}>
-              <CheckCircle size={16} color={colors.successText} />
+              <CheckCircle size={16} color={colors.success} />
               <Text style={styles.positiveText}>{pos}</Text>
             </View>
           ))}
 
           {negatives.map((neg, idx) => (
-            <View key={idx} style={styles.factorItem}>
-              <AlertTriangle size={16} color={colors.warningText} />
+            <View key={idx} style={[styles.factorItem, { borderTopWidth: 1, borderTopColor: colors.border }]}>
+              <AlertTriangle size={16} color={colors.warning} />
               <Text style={styles.negativeText}>{neg}</Text>
             </View>
           ))}
         </View>
 
-        {/* Scoring Engine Formula Note */}
+        {/* Formula summary */}
         <View style={styles.algorithmNote}>
           <Info size={16} color={colors.primary} />
           <Text style={styles.algorithmText}>
-            Scoring Engine Formula: 25% Cardiovascular Biomarkers • 20% Metabolic Profile • 20% Nutrition • 20% Lifestyle • 15% Medication Adherence.
+            Weighted scoring: 25% Cardiovascular • 20% Metabolic • 20% Nutrition • 20% Lifestyle • 15% Medication Adherence.
           </Text>
         </View>
 
         {/* Disclaimer */}
         <Text style={styles.disclaimer}>
-          Hospate AI Health Score is an experimental health awareness indicator synthesized from available personal data. It does not constitute clinical diagnosis or medical judgment.
+          Hospate Health Score is a personal tracking index synthesized from laboratory findings and daily logs. It is not a clinical diagnosis.
         </Text>
       </ScrollView>
     </SafeAreaView>
@@ -232,46 +228,42 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border
   },
   backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surfaceElevated,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center'
   },
   headerTitle: {
-    ...typography.label,
-    fontSize: 13,
+    ...typography.headline,
     color: colors.textPrimary,
-    letterSpacing: 1
+    fontSize: 16
   },
   scroll: {
     padding: spacing.lg
   },
   scoreHero: {
-    backgroundColor: colors.surfaceElevated,
-    borderRadius: borderRadius.xl,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
     padding: spacing.xl,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(14, 165, 233, 0.3)',
+    borderColor: colors.border,
     marginBottom: spacing.lg
   },
-  scoreBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.sm
-  },
-  scoreBadgeText: {
+  scoreLabel: {
     ...typography.label,
     fontSize: 11,
-    color: colors.primary,
-    marginLeft: 6
+    color: colors.textMuted,
+    letterSpacing: 0.5,
+    marginBottom: spacing.xs
   },
   scoreValue: {
     ...typography.heroScore,
-    fontSize: 64,
-    color: colors.textPrimary
+    fontSize: 60,
+    color: colors.textPrimary,
+    fontWeight: '700'
   },
   statusRow: {
     flexDirection: 'row',
@@ -279,43 +271,39 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm
   },
   statusPill: {
-    backgroundColor: colors.successGlow,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
-    borderWidth: 1,
+    backgroundColor: 'rgba(48, 209, 88, 0.14)',
     paddingHorizontal: spacing.md,
     paddingVertical: 3,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.pill,
     marginRight: spacing.sm
   },
   statusText: {
-    ...typography.label,
-    color: colors.successText
+    ...typography.captionSemibold,
+    color: colors.success,
+    fontSize: 12
   },
-  trendPill: {
+  trendRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 3,
-    borderRadius: borderRadius.pill
+    alignItems: 'center'
   },
   trendText: {
-    ...typography.captionSemibold,
-    color: colors.successText,
-    marginLeft: 4
+    ...typography.caption,
+    color: colors.success,
+    marginLeft: 3,
+    fontSize: 12
   },
   sectionHeader: {
     ...typography.label,
     fontSize: 11,
-    color: colors.textMuted,
-    letterSpacing: 1,
+    color: colors.textSecondary,
+    letterSpacing: 0.5,
     marginBottom: spacing.sm
   },
   dimensionCard: {
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs + 2,
     borderWidth: 1,
     borderColor: colors.border
   },
@@ -324,9 +312,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   dimIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: borderRadius.md,
+    width: 36,
+    height: 36,
+    borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md
@@ -342,32 +330,34 @@ const styles = StyleSheet.create({
   },
   dimTitle: {
     ...typography.bodySemibold,
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontSize: 15
   },
   dimScore: {
     ...typography.captionSemibold,
-    color: colors.primary
+    color: colors.primary,
+    fontSize: 13
   },
   barTrack: {
     width: '100%',
-    height: 5,
-    backgroundColor: colors.surface,
-    borderRadius: 2.5,
+    height: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 2,
     overflow: 'hidden',
     marginVertical: 4
   },
   barFill: {
     height: '100%',
-    borderRadius: 2.5
+    borderRadius: 2
   },
   dimDetail: {
     ...typography.caption,
     fontSize: 11,
-    color: colors.textSecondary,
+    color: colors.textMuted,
     marginTop: 2
   },
   factorsCard: {
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     borderWidth: 1,
@@ -377,43 +367,43 @@ const styles = StyleSheet.create({
   factorItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: spacing.xs + 2
+    paddingVertical: spacing.sm
   },
   positiveText: {
     ...typography.body,
-    fontSize: 13,
+    fontSize: 14,
     color: colors.textPrimary,
     marginLeft: spacing.sm,
     flex: 1
   },
   negativeText: {
     ...typography.body,
-    fontSize: 13,
-    color: colors.warningText,
+    fontSize: 14,
+    color: colors.textSecondary,
     marginLeft: spacing.sm,
     flex: 1
   },
   algorithmNote: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(14, 165, 233, 0.08)',
+    backgroundColor: colors.surface,
     padding: spacing.md,
     borderRadius: borderRadius.md,
     borderWidth: 1,
-    borderColor: 'rgba(14, 165, 233, 0.2)',
+    borderColor: colors.border,
     marginBottom: spacing.md
   },
   algorithmText: {
     ...typography.caption,
-    fontSize: 11,
-    color: colors.textSecondary,
+    fontSize: 12,
+    color: colors.textMuted,
     marginLeft: spacing.sm,
     flex: 1,
-    lineHeight: 16
+    lineHeight: 17
   },
   disclaimer: {
     ...typography.caption,
-    fontSize: 10,
+    fontSize: 11,
     color: colors.textMuted,
     textAlign: 'center',
     marginTop: spacing.sm,

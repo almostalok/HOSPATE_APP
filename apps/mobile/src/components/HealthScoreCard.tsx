@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { HealthScore } from '@hospate/types';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { spacing, borderRadius } from '../theme/spacing';
-import { HealthScore } from '@hospate/types';
-import { ArrowUpRight, TrendingUp, Sparkles, ChevronRight } from 'lucide-react-native';
+import { ChevronRight, ArrowUpRight, ArrowDownRight } from 'lucide-react-native';
 
 interface HealthScoreCardProps {
   scoreData?: HealthScore | null;
@@ -12,99 +12,122 @@ interface HealthScoreCardProps {
 }
 
 export const HealthScoreCard: React.FC<HealthScoreCardProps> = ({ scoreData, onPress }) => {
-  const score = scoreData?.score || 82;
-  const status = scoreData?.status || 'GOOD';
-  const delta = scoreData?.changeDelta || 4;
-
-  const dims = scoreData?.dimensions || {
-    cardiovascular: 86,
-    metabolic: 79,
-    nutrition: 74,
+  const score = scoreData?.score ?? 80;
+  const status = scoreData?.status ?? 'GOOD';
+  const delta = scoreData?.changeDelta ?? 4;
+  const dims = scoreData?.dimensions ?? {
+    cardiovascular: 73,
+    metabolic: 82,
+    nutrition: 70,
     lifestyle: 88,
-    medicationAdherence: 91
+    medicationAdherence: 92
+  };
+
+  const getStatusColor = () => {
+    switch (status) {
+      case 'EXCELLENT':
+      case 'GOOD':
+        return colors.success;
+      case 'FAIR':
+        return colors.warning;
+      case 'NEEDS_ATTENTION':
+      default:
+        return colors.danger;
+    }
   };
 
   return (
     <TouchableOpacity
-      activeOpacity={0.9}
+      activeOpacity={0.8}
       onPress={onPress}
       style={styles.card}
     >
+      {/* Header */}
       <View style={styles.headerRow}>
-        <View style={styles.badgeRow}>
-          <Sparkles size={14} color={colors.primary} />
-          <Text style={styles.headerLabel}>AI HEALTH SCORE</Text>
-        </View>
-        <View style={styles.trendPill}>
-          <TrendingUp size={12} color={colors.successText} />
-          <Text style={styles.trendText}>+{delta} pts this month</Text>
-        </View>
+        <Text style={styles.cardLabel}>HEALTH SCORE</Text>
+        <ChevronRight size={16} color={colors.textMuted} />
       </View>
 
+      {/* Main Score Row */}
       <View style={styles.scoreRow}>
         <View style={styles.scoreLeft}>
-          <Text style={styles.heroScore}>{score}</Text>
-          <View style={styles.scoreMeta}>
-            <View style={styles.statusPill}>
-              <Text style={styles.statusText}>{status}</Text>
+          <Text style={styles.scoreNumber}>{score}</Text>
+          <Text style={styles.scoreMax}>/100</Text>
+        </View>
+
+        <View style={styles.badgeCol}>
+          <View style={[styles.statusBadge, { backgroundColor: 'rgba(48, 209, 88, 0.14)' }]}>
+            <Text style={[styles.statusText, { color: getStatusColor() }]}>
+              {status}
+            </Text>
+          </View>
+
+          {delta !== undefined && delta !== 0 && (
+            <View style={styles.trendRow}>
+              {delta > 0 ? (
+                <ArrowUpRight size={13} color={colors.success} />
+              ) : (
+                <ArrowDownRight size={13} color={colors.danger} />
+              )}
+              <Text style={[styles.trendText, { color: delta > 0 ? colors.success : colors.danger }]}>
+                {delta > 0 ? `+${delta}` : delta} pts this week
+              </Text>
             </View>
-            <Text style={styles.scaleText}>out of 100</Text>
-          </View>
-        </View>
-
-        <View style={styles.viewDetailRow}>
-          <Text style={styles.viewDetailText}>Details</Text>
-          <ChevronRight size={16} color={colors.primary} />
+          )}
         </View>
       </View>
 
-      {/* Mini Dimension Bars Preview */}
-      <View style={styles.dimensionsPreview}>
-        <View style={styles.dimensionCol}>
-          <Text style={styles.dimLabel}>Cardio</Text>
-          <View style={styles.barTrack}>
-            <View style={[styles.barFill, { width: `${dims.cardiovascular}%`, backgroundColor: colors.dimensionCardio }]} />
+      {/* 5-Dimension Mini Bars */}
+      <View style={styles.dimensionsGrid}>
+        <View style={styles.dimItem}>
+          <View style={styles.dimLabelRow}>
+            <Text style={styles.dimName}>Cardio</Text>
+            <Text style={styles.dimVal}>{dims.cardiovascular}%</Text>
           </View>
-          <Text style={styles.dimVal}>{dims.cardiovascular}</Text>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${dims.cardiovascular}%`, backgroundColor: colors.dimensionCardio }]} />
+          </View>
         </View>
 
-        <View style={styles.dimensionCol}>
-          <Text style={styles.dimLabel}>Metabolic</Text>
-          <View style={styles.barTrack}>
-            <View style={[styles.barFill, { width: `${dims.metabolic}%`, backgroundColor: colors.dimensionMetabolic }]} />
+        <View style={styles.dimItem}>
+          <View style={styles.dimLabelRow}>
+            <Text style={styles.dimName}>Metabolic</Text>
+            <Text style={styles.dimVal}>{dims.metabolic}%</Text>
           </View>
-          <Text style={styles.dimVal}>{dims.metabolic}</Text>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${dims.metabolic}%`, backgroundColor: colors.dimensionMetabolic }]} />
+          </View>
         </View>
 
-        <View style={styles.dimensionCol}>
-          <Text style={styles.dimLabel}>Nutrition</Text>
-          <View style={styles.barTrack}>
-            <View style={[styles.barFill, { width: `${dims.nutrition}%`, backgroundColor: colors.dimensionNutrition }]} />
+        <View style={styles.dimItem}>
+          <View style={styles.dimLabelRow}>
+            <Text style={styles.dimName}>Nutrition</Text>
+            <Text style={styles.dimVal}>{dims.nutrition}%</Text>
           </View>
-          <Text style={styles.dimVal}>{dims.nutrition}</Text>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${dims.nutrition}%`, backgroundColor: colors.dimensionNutrition }]} />
+          </View>
         </View>
 
-        <View style={styles.dimensionCol}>
-          <Text style={styles.dimLabel}>Lifestyle</Text>
-          <View style={styles.barTrack}>
-            <View style={[styles.barFill, { width: `${dims.lifestyle}%`, backgroundColor: colors.dimensionLifestyle }]} />
+        <View style={styles.dimItem}>
+          <View style={styles.dimLabelRow}>
+            <Text style={styles.dimName}>Lifestyle</Text>
+            <Text style={styles.dimVal}>{dims.lifestyle}%</Text>
           </View>
-          <Text style={styles.dimVal}>{dims.lifestyle}</Text>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${dims.lifestyle}%`, backgroundColor: colors.dimensionLifestyle }]} />
+          </View>
         </View>
 
-        <View style={styles.dimensionCol}>
-          <Text style={styles.dimLabel}>Meds</Text>
-          <View style={styles.barTrack}>
-            <View style={[styles.barFill, { width: `${dims.medicationAdherence}%`, backgroundColor: colors.dimensionMedication }]} />
+        <View style={styles.dimItem}>
+          <View style={styles.dimLabelRow}>
+            <Text style={styles.dimName}>Meds</Text>
+            <Text style={styles.dimVal}>{dims.medicationAdherence}%</Text>
           </View>
-          <Text style={styles.dimVal}>{dims.medicationAdherence}</Text>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${dims.medicationAdherence}%`, backgroundColor: colors.dimensionMedication }]} />
+          </View>
         </View>
-      </View>
-
-      <View style={styles.footerNote}>
-        <Text style={styles.disclaimerText}>
-          Experimental health awareness indicator • Not a clinical diagnosis
-        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -112,18 +135,12 @@ export const HealthScoreCard: React.FC<HealthScoreCardProps> = ({ scoreData, onP
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surfaceElevated,
-    borderRadius: borderRadius.xl,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    marginHorizontal: spacing.lg,
-    marginVertical: spacing.sm,
     borderWidth: 1,
-    borderColor: 'rgba(14, 165, 233, 0.25)',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4
+    borderColor: colors.border,
+    marginBottom: spacing.md
   },
   headerRow: {
     flexDirection: 'row',
@@ -131,125 +148,82 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: spacing.sm
   },
-  badgeRow: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  headerLabel: {
+  cardLabel: {
     ...typography.label,
-    fontSize: 11,
-    color: colors.primary,
-    marginLeft: 6
-  },
-  trendPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.successGlow,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 3,
-    borderRadius: borderRadius.pill
-  },
-  trendText: {
-    ...typography.captionSemibold,
-    fontSize: 11,
-    color: colors.successText,
-    marginLeft: 4
+    fontSize: 12,
+    color: colors.textSecondary,
+    letterSpacing: 0.5
   },
   scoreRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'space-between',
-    marginVertical: spacing.xs
+    marginBottom: spacing.lg
   },
   scoreLeft: {
     flexDirection: 'row',
     alignItems: 'baseline'
   },
-  heroScore: {
+  scoreNumber: {
     ...typography.heroScore,
-    fontSize: 56,
     color: colors.textPrimary,
-    marginRight: spacing.md
+    fontWeight: '700'
   },
-  scoreMeta: {
-    justifyContent: 'center'
-  },
-  statusPill: {
-    backgroundColor: colors.successGlow,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
-    borderWidth: 1,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 2,
-    borderRadius: borderRadius.sm,
-    alignSelf: 'flex-start'
-  },
-  statusText: {
-    ...typography.label,
-    fontSize: 11,
-    color: colors.successText
-  },
-  scaleText: {
-    ...typography.caption,
+  scoreMax: {
+    ...typography.body,
     color: colors.textMuted,
-    marginTop: 3
+    marginLeft: 4
   },
-  viewDetailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+  badgeCol: {
+    alignItems: 'flex-end'
+  },
+  statusBadge: {
     paddingHorizontal: spacing.sm + 2,
-    paddingVertical: spacing.xs + 2,
-    borderRadius: borderRadius.md
-  },
-  viewDetailText: {
-    ...typography.captionSemibold,
-    color: colors.primary,
-    marginRight: 2
-  },
-  dimensionsPreview: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spacing.md,
-    paddingTop: spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.border
-  },
-  dimensionCol: {
-    flex: 1,
-    alignItems: 'center',
-    marginHorizontal: 2
-  },
-  dimLabel: {
-    ...typography.caption,
-    fontSize: 10,
-    color: colors.textSecondary,
+    paddingVertical: 3,
+    borderRadius: borderRadius.pill,
     marginBottom: 4
   },
-  barTrack: {
-    width: '100%',
-    height: 4,
-    backgroundColor: colors.surface,
-    borderRadius: 2,
-    overflow: 'hidden'
+  statusText: {
+    ...typography.captionSemibold,
+    fontSize: 11
   },
-  barFill: {
-    height: '100%',
-    borderRadius: 2
+  trendRow: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  trendText: {
+    ...typography.caption,
+    fontSize: 11,
+    marginLeft: 2
+  },
+  dimensionsGrid: {
+    gap: spacing.sm + 2,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: spacing.md
+  },
+  dimItem: {},
+  dimLabelRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 4
+  },
+  dimName: {
+    ...typography.caption,
+    color: colors.textSecondary
   },
   dimVal: {
     ...typography.captionSemibold,
-    fontSize: 10,
-    color: colors.textPrimary,
-    marginTop: 4
+    color: colors.textPrimary
   },
-  footerNote: {
-    marginTop: spacing.sm,
-    alignItems: 'center'
+  progressBar: {
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    overflow: 'hidden'
   },
-  disclaimerText: {
-    ...typography.caption,
-    fontSize: 10,
-    color: colors.textMuted,
-    textAlign: 'center'
+  progressFill: {
+    height: '100%',
+    borderRadius: 2
   }
 });

@@ -18,7 +18,8 @@ import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { spacing, borderRadius } from '../../theme/spacing';
 import { PrimaryButton } from '../../components/PrimaryButton';
-import { ArrowLeft, Sparkles, Mail, Lock } from 'lucide-react-native';
+import { HospateLogo } from '../../components/HospateLogo';
+import { ArrowLeft, Mail, Lock, UserCheck } from 'lucide-react-native';
 
 export const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -52,42 +53,44 @@ export const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         style={{ flex: 1 }}
       >
         <ScrollView contentContainerStyle={styles.scroll}>
-          {/* Back button */}
-          <TouchableOpacity
-            style={styles.backBtn}
-            onPress={() => navigation.goBack()}
-          >
-            <ArrowLeft size={22} color={colors.textPrimary} />
-          </TouchableOpacity>
-
-          <View style={styles.header}>
-            <Text style={styles.title}>Welcome back</Text>
-            <Text style={styles.subtitle}>Sign in to your Hospate health profile.</Text>
+          {/* Header Row */}
+          <View style={styles.navRow}>
+            <TouchableOpacity
+              style={styles.backBtn}
+              onPress={() => navigation.goBack()}
+            >
+              <ArrowLeft size={20} color={colors.textPrimary} />
+            </TouchableOpacity>
+            <HospateLogo size={28} />
           </View>
 
-          {/* Quick Demo Fill Card */}
+          <View style={styles.header}>
+            <Text style={styles.title}>Sign In</Text>
+            <Text style={styles.subtitle}>Access your Hospate health profile and medical history.</Text>
+          </View>
+
+          {/* Quick Demo Access Card */}
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={handleFastDemo}
             style={styles.demoCard}
           >
             <View style={styles.demoHeader}>
-              <Sparkles size={16} color={colors.accentPurple} />
+              <UserCheck size={16} color={colors.primary} />
               <Text style={styles.demoTitle}>QUICK DEMO ACCESS</Text>
             </View>
             <Text style={styles.demoDesc}>
-              Tap here to instantly log into Alex Morgan's populated health profile.
+              Instant 1-tap sign in with pre-populated patient profile (Alex Morgan).
             </Text>
           </TouchableOpacity>
 
-          {/* Form */}
-          <View style={styles.form}>
-            <Text style={styles.inputLabel}>EMAIL OR PHONE</Text>
-            <View style={styles.inputContainer}>
+          {/* Apple Form Group */}
+          <View style={styles.formGroup}>
+            <View style={styles.inputRow}>
               <Mail size={18} color={colors.textMuted} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="demo@hospate.app"
+                placeholder="Email address"
                 placeholderTextColor={colors.textMuted}
                 value={email}
                 onChangeText={setEmail}
@@ -95,38 +98,35 @@ export const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                 keyboardType="email-address"
               />
             </View>
-
-            <Text style={[styles.inputLabel, { marginTop: spacing.md }]}>PASSWORD</Text>
-            <View style={styles.inputContainer}>
+            <View style={styles.inputDivider} />
+            <View style={styles.inputRow}>
               <Lock size={18} color={colors.textMuted} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="••••••••"
+                placeholder="Password"
                 placeholderTextColor={colors.textMuted}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
               />
             </View>
+          </View>
 
-            {error && (
-              <Text style={styles.errorText}>{error}</Text>
-            )}
+          {error && <Text style={styles.errorText}>{error}</Text>}
 
-            <PrimaryButton
-              title="Sign In"
-              onPress={handleLogin}
-              loading={isLoading}
-              size="lg"
-              style={styles.submitBtn}
-            />
+          <PrimaryButton
+            title="Sign In"
+            onPress={handleLogin}
+            loading={isLoading}
+            variant="primary"
+            style={styles.submitBtn}
+          />
 
-            <View style={styles.footerLink}>
-              <Text style={styles.footerText}>Don't have an account? </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                <Text style={styles.signUpLink}>Create Account</Text>
-              </TouchableOpacity>
-            </View>
+          <View style={styles.footerLink}>
+            <Text style={styles.footerText}>New to Hospate? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+              <Text style={styles.signUpLink}>Create Patient Profile</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -140,36 +140,42 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background
   },
   scroll: {
-    paddingHorizontal: spacing.xl,
+    paddingHorizontal: spacing.lg,
     paddingVertical: spacing.lg
   },
-  backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surfaceElevated,
+  navRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     marginBottom: spacing.lg
+  },
+  backBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   header: {
     marginBottom: spacing.xl
   },
   title: {
-    ...typography.h1,
-    color: colors.textPrimary
+    ...typography.display,
+    color: colors.textPrimary,
+    fontWeight: '700'
   },
   subtitle: {
-    ...typography.body,
+    ...typography.subheadline,
     color: colors.textSecondary,
     marginTop: spacing.xs
   },
   demoCard: {
-    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     borderWidth: 1,
-    borderColor: 'rgba(139, 92, 246, 0.3)',
+    borderColor: colors.border,
     marginBottom: spacing.xl
   },
   demoHeader: {
@@ -179,54 +185,56 @@ const styles = StyleSheet.create({
   },
   demoTitle: {
     ...typography.label,
-    fontSize: 10,
-    color: colors.accentPurple,
+    fontSize: 11,
+    color: colors.primary,
     marginLeft: 6
   },
   demoDesc: {
     ...typography.caption,
     color: colors.textSecondary,
-    lineHeight: 16
+    lineHeight: 18
   },
-  form: {
-    marginBottom: spacing.xl
-  },
-  inputLabel: {
-    ...typography.label,
-    fontSize: 11,
-    color: colors.textMuted,
-    marginBottom: spacing.xs
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
-    borderRadius: borderRadius.md,
+  formGroup: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    paddingHorizontal: spacing.md
+    overflow: 'hidden',
+    marginBottom: spacing.md
+  },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.md,
+    height: 52
   },
   inputIcon: {
-    marginRight: spacing.sm
+    marginRight: spacing.md
   },
   input: {
     flex: 1,
     ...typography.body,
     color: colors.textPrimary,
-    paddingVertical: spacing.md
+    height: '100%'
+  },
+  inputDivider: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginLeft: 44
   },
   errorText: {
     ...typography.caption,
-    color: colors.dangerText,
-    marginTop: spacing.sm
+    color: colors.danger,
+    marginTop: spacing.xs,
+    marginBottom: spacing.sm
   },
   submitBtn: {
-    marginTop: spacing.xl
+    marginTop: spacing.md
   },
   footerLink: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: spacing.lg
+    marginTop: spacing.xl
   },
   footerText: {
     ...typography.body,

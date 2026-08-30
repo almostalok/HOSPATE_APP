@@ -20,16 +20,16 @@ import { HealthScoreCard } from '../../components/HealthScoreCard';
 import { InsightCard } from '../../components/InsightCard';
 import { AcademicDebugModal } from '../../components/AcademicDebugModal';
 import { StatusBadge } from '../../components/StatusBadge';
+import { HospateLogo } from '../../components/HospateLogo';
 import {
-  Sparkles,
   Upload,
   Calendar,
   Pill,
   ChevronRight,
-  TrendingUp,
   Clock,
-  CheckCircle2,
-  Stethoscope
+  Stethoscope,
+  Activity,
+  Heart
 } from 'lucide-react-native';
 
 export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -59,16 +59,12 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     setRefreshing(false);
   };
 
-  const handleUnderstandInsight = (insight: any) => {
-    navigation.navigate('AIHealthBuddy', { initialPrompt: `Why is my ${insight.parameter} ${insight.severity === 'DANGER' ? 'abnormal' : 'outside range'}?` });
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <HospateHeader
-        userName={user?.fullName?.split(' ')[0] || 'Alex'}
-        onOpenEmergency={() => navigation.navigate('EmergencyCard')}
-        onOpenAcademicDebug={() => setDebugModalVisible(true)}
+        navigation={navigation}
+        onDebugPress={() => setDebugModalVisible(true)}
+        onEmergencyPress={() => navigation.navigate('EmergencyCard')}
       />
 
       <ScrollView
@@ -78,35 +74,35 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           <RefreshControl refreshing={refreshing || isLoading} onRefresh={onRefresh} tintColor={colors.primary} />
         }
       >
-        {/* 1. Hero AI Health Score */}
+        {/* 1. Hero Health Score Summary */}
         <HealthScoreCard
           scoreData={score}
           onPress={() => navigation.navigate('HealthScore')}
         />
 
-        {/* 2. Hero Action: Upload New Health Document */}
+        {/* 2. Apple-Style Action Card: Upload Report */}
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => navigation.navigate('UploadDocument')}
           style={styles.uploadBanner}
         >
-          <View style={styles.uploadIconCircle}>
-            <Upload size={20} color="#FFFFFF" />
+          <View style={styles.uploadIconBox}>
+            <Upload size={18} color="#FFFFFF" />
           </View>
           <View style={styles.uploadTextContainer}>
-            <Text style={styles.uploadTitle}>Upload Medical Report</Text>
+            <Text style={styles.uploadTitle}>Upload Lab Report</Text>
             <Text style={styles.uploadSubtitle}>
-              OCR extraction, reference ranges & instant health score update
+              Scan report, extract biomarkers & update your health metrics
             </Text>
           </View>
-          <ChevronRight size={20} color={colors.primary} />
+          <ChevronRight size={18} color={colors.textMuted} />
         </TouchableOpacity>
 
-        {/* 3. Health At a Glance (Biomarker Quick Grid) */}
+        {/* 3. Biomarkers At a Glance (Apple Health Metrics Grid) */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>HEALTH AT A GLANCE</Text>
+          <Text style={styles.sectionTitle}>KEY BIOMARKERS</Text>
           <TouchableOpacity onPress={() => navigation.navigate('MedicalRecords')}>
-            <Text style={styles.sectionLink}>View all</Text>
+            <Text style={styles.sectionLink}>See all</Text>
           </TouchableOpacity>
         </View>
 
@@ -114,79 +110,78 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Hemoglobin</Text>
             <Text style={styles.metricValue}>14.2 <Text style={styles.metricUnit}>g/dL</Text></Text>
-            <StatusBadge status="NORMAL" size="sm" />
+            <StatusBadge status="NORMAL" />
           </View>
 
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Fasting Glucose</Text>
             <Text style={styles.metricValue}>88 <Text style={styles.metricUnit}>mg/dL</Text></Text>
-            <StatusBadge status="NORMAL" size="sm" />
+            <StatusBadge status="NORMAL" />
           </View>
 
           <View style={styles.metricCard}>
-            <Text style={styles.metricLabel}>Vitamin D</Text>
+            <Text style={styles.metricLabel}>Vitamin D3</Text>
             <Text style={styles.metricValue}>18 <Text style={styles.metricUnit}>ng/mL</Text></Text>
-            <StatusBadge status="LOW" size="sm" />
+            <StatusBadge status="LOW" />
           </View>
 
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>LDL Cholesterol</Text>
             <Text style={styles.metricValue}>142 <Text style={styles.metricUnit}>mg/dL</Text></Text>
-            <StatusBadge status="HIGH" size="sm" />
+            <StatusBadge status="HIGH" />
           </View>
         </View>
 
-        {/* 4. Actionable Health Insights */}
+        {/* 4. Actionable Health Highlights */}
         {insights.length > 0 && (
           <>
             <View style={[styles.sectionHeader, { marginTop: spacing.lg }]}>
-              <Text style={styles.sectionTitle}>CRITICAL HEALTH INSIGHTS</Text>
-              <Text style={styles.insightCount}>{insights.length} active</Text>
+              <Text style={styles.sectionTitle}>CLINICAL HIGHLIGHTS</Text>
+              <Text style={styles.insightCount}>{insights.length} alerts</Text>
             </View>
 
             {insights.slice(0, 2).map((ins) => (
               <InsightCard
                 key={ins.id}
                 insight={ins}
-                onUnderstandPress={handleUnderstandInsight}
+                onPress={() => navigation.navigate('AIHealthBuddy', {
+                  initialPrompt: `Explain what my ${ins.title} finding means and what to ask my doctor.`
+                })}
               />
             ))}
           </>
         )}
 
-        {/* 5. Today's Plan (Meds & Appointments) */}
+        {/* 5. Today's Health Schedule */}
         <View style={[styles.sectionHeader, { marginTop: spacing.lg }]}>
           <Text style={styles.sectionTitle}>TODAY'S SCHEDULE</Text>
         </View>
 
         <View style={styles.todayCard}>
-          {/* Medication schedule item */}
+          {/* Medication row */}
           <TouchableOpacity
-            activeOpacity={0.8}
+            activeOpacity={0.7}
             onPress={() => navigation.navigate('Medications')}
             style={styles.todayItem}
           >
-            <View style={[styles.itemIcon, { backgroundColor: 'rgba(139, 92, 246, 0.15)' }]}>
-              <Pill size={18} color={colors.dimensionMedication} />
+            <View style={[styles.itemIcon, { backgroundColor: colors.dimensionMedication }]}>
+              <Pill size={18} color="#FFFFFF" />
             </View>
             <View style={styles.itemContent}>
               <Text style={styles.itemTitle}>Metformin • 500 mg</Text>
               <Text style={styles.itemMeta}>Scheduled: 08:00 PM • After dinner</Text>
             </View>
-            <View style={styles.statusPillPending}>
-              <Clock size={12} color={colors.warningText} />
-              <Text style={styles.pendingText}>Pending</Text>
-            </View>
+            <StatusBadge status="PENDING" />
           </TouchableOpacity>
 
           {/* Upcoming appointment */}
           <TouchableOpacity
-            activeOpacity={0.8}
+            activeOpacity={0.7}
             onPress={() => navigation.navigate('Appointments')}
-            style={[styles.todayItem, { borderTopWidth: 1, borderTopColor: colors.border, marginTop: spacing.xs, paddingTop: spacing.sm }]}
+            style={[styles.todayItem, styles.todayDivider]}
           >
-            <View style={[styles.itemIcon, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
-              <Stethoscope size={18} color={colors.accent} />
+            <View style={[styles.itemIcon, { backgroundColor: colors.primary }]}>
+              <Stethoscope size={18} color="#FFFFFF" />
             </View>
             <View style={styles.itemContent}>
               <Text style={styles.itemTitle}>Dr. Sarah Sharma</Text>
@@ -196,20 +191,20 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={{ height: 90 }} />
+        <View style={{ height: 80 }} />
       </ScrollView>
 
-      {/* Floating AI Health Buddy Action Button */}
+      {/* Apple Floating Health Buddy Button */}
       <TouchableOpacity
         activeOpacity={0.85}
         onPress={() => navigation.navigate('AIHealthBuddy')}
-        style={styles.floatingAIButton}
+        style={styles.floatingButton}
       >
-        <Sparkles size={20} color="#FFFFFF" />
-        <Text style={styles.floatingAIText}>AI Health Buddy</Text>
+        <HospateLogo size={20} />
+        <Text style={styles.floatingText}>Health Buddy</Text>
       </TouchableOpacity>
 
-      {/* Academic Debug Viva Modal */}
+      {/* Academic Debug Modal */}
       <AcademicDebugModal
         visible={debugModalVisible}
         onClose={() => setDebugModalVisible(false)}
@@ -225,97 +220,100 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background
   },
   scroll: {
+    padding: spacing.lg,
     paddingBottom: spacing.xxl
   },
   uploadBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(14, 165, 233, 0.12)',
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    marginHorizontal: spacing.lg,
-    marginVertical: spacing.xs + 2,
+    marginBottom: spacing.md,
     borderWidth: 1,
-    borderColor: 'rgba(14, 165, 233, 0.3)'
+    borderColor: colors.border
   },
-  uploadIconCircle: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
+  uploadIconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md
   },
   uploadTextContainer: {
-    flex: 1
+    flex: 1,
+    marginRight: spacing.sm
   },
   uploadTitle: {
     ...typography.bodySemibold,
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontSize: 15
   },
   uploadSubtitle: {
     ...typography.caption,
-    color: colors.textSecondary,
+    color: colors.textMuted,
     marginTop: 2
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    marginTop: spacing.md,
-    marginBottom: spacing.xs + 2
+    marginBottom: spacing.xs + 2,
+    marginTop: spacing.sm
   },
   sectionTitle: {
     ...typography.label,
-    fontSize: 11,
-    color: colors.textMuted,
-    letterSpacing: 1
+    fontSize: 12,
+    color: colors.textSecondary,
+    letterSpacing: 0.5
   },
   sectionLink: {
     ...typography.captionSemibold,
-    color: colors.primary
+    color: colors.primary,
+    fontSize: 13
   },
   insightCount: {
     ...typography.caption,
-    color: colors.warningText
+    color: colors.warningText,
+    fontSize: 12
   },
   metricGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: spacing.lg - 4,
-    marginTop: spacing.xs
+    justifyContent: 'space-between',
+    marginBottom: spacing.xs
   },
   metricCard: {
-    width: '47%',
-    backgroundColor: colors.surfaceElevated,
+    width: '48.5%',
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.md,
     padding: spacing.md,
-    margin: 4,
+    marginBottom: spacing.sm,
     borderWidth: 1,
     borderColor: colors.border
   },
   metricLabel: {
     ...typography.caption,
-    color: colors.textSecondary,
+    color: colors.textMuted,
     marginBottom: 4
   },
   metricValue: {
     ...typography.h3,
     color: colors.textPrimary,
-    marginBottom: 6
+    marginBottom: 6,
+    fontWeight: '700'
   },
   metricUnit: {
     ...typography.caption,
-    color: colors.textMuted
+    color: colors.textMuted,
+    fontWeight: '400'
   },
   todayCard: {
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    marginHorizontal: spacing.lg,
-    marginTop: spacing.xs,
     borderWidth: 1,
     borderColor: colors.border
   },
@@ -324,61 +322,55 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: spacing.xs
   },
+  todayDivider: {
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    marginTop: spacing.xs,
+    paddingTop: spacing.sm
+  },
   itemIcon: {
     width: 36,
     height: 36,
-    borderRadius: borderRadius.md,
+    borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md
   },
   itemContent: {
-    flex: 1
+    flex: 1,
+    marginRight: spacing.sm
   },
   itemTitle: {
     ...typography.bodySemibold,
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontSize: 15
   },
   itemMeta: {
     ...typography.caption,
-    color: colors.textSecondary,
+    color: colors.textMuted,
     marginTop: 2
   },
-  statusPillPending: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.warningGlow,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 3,
-    borderRadius: borderRadius.pill
-  },
-  pendingText: {
-    ...typography.captionSemibold,
-    fontSize: 10,
-    color: colors.warningText,
-    marginLeft: 3
-  },
-  floatingAIButton: {
+  floatingButton: {
     position: 'absolute',
     bottom: 24,
     right: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.accentPurple,
+    backgroundColor: colors.primary,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderRadius: borderRadius.pill,
-    shadowColor: colors.accentPurple,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.5,
-    shadowRadius: 12,
-    elevation: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)'
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6
   },
-  floatingAIText: {
-    ...typography.bodySemibold,
+  floatingText: {
+    ...typography.headline,
     color: '#FFFFFF',
-    marginLeft: spacing.xs + 2
+    fontSize: 15,
+    marginLeft: 8,
+    fontWeight: '600'
   }
 });

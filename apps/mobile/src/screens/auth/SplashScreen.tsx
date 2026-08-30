@@ -3,30 +3,30 @@ import { View, Text, StyleSheet, Animated, Platform, TouchableOpacity } from 're
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { spacing } from '../../theme/spacing';
-import { HeartPulse } from 'lucide-react-native';
+import { HospateLogo } from '../../components/HospateLogo';
 
 export const SplashScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const fadeAnim = new Animated.Value(0);
-  const scaleAnim = new Animated.Value(0.9);
+  const scaleAnim = new Animated.Value(0.95);
 
   useEffect(() => {
     const isWeb = Platform.OS === 'web';
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 600,
+        duration: 500,
         useNativeDriver: !isWeb
       }),
       Animated.spring(scaleAnim, {
         toValue: 1,
-        friction: 6,
+        friction: 7,
         useNativeDriver: !isWeb
       })
     ]).start();
 
     const timer = setTimeout(() => {
       navigation.replace('Welcome');
-    }, 1200);
+    }, 1100);
 
     return () => clearTimeout(timer);
   }, []);
@@ -42,20 +42,14 @@ export const SplashScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       style={styles.container}
     >
       <Animated.View style={[styles.content, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
-        <View style={styles.iconCircle}>
-          <HeartPulse size={44} color="#FFFFFF" />
-        </View>
+        <HospateLogo size={80} showBackground={true} />
 
-        <Text style={styles.title}>HOSPATE</Text>
-        <Text style={styles.subtitle}>AI HEALTH BUDDY</Text>
-
-        <View style={styles.taglineBox}>
-          <Text style={styles.tagline}>"Your health, connected."</Text>
-        </View>
+        <Text style={styles.title}>Hospate</Text>
+        <Text style={styles.subtitle}>Health Intelligence</Text>
       </Animated.View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>Personal Health Intelligence Platform</Text>
+        <Text style={styles.footerText}>Secure Personal Health Records</Text>
       </View>
     </TouchableOpacity>
   );
@@ -72,46 +66,17 @@ const styles = StyleSheet.create({
   content: {
     alignItems: 'center'
   },
-  iconCircle: {
-    width: 88,
-    height: 88,
-    borderRadius: 28,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: spacing.lg,
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.5,
-    shadowRadius: 16,
-    elevation: 8
-  },
   title: {
     ...typography.display,
     color: colors.textPrimary,
-    letterSpacing: 2,
-    fontWeight: '900'
+    marginTop: spacing.xl,
+    fontWeight: '700'
   },
   subtitle: {
-    ...typography.label,
-    fontSize: 13,
-    color: colors.primary,
-    letterSpacing: 3,
-    marginTop: 4
-  },
-  taglineBox: {
-    marginTop: spacing.xl,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.xs + 2,
-    backgroundColor: colors.surfaceElevated,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.border
-  },
-  tagline: {
-    ...typography.bodyMedium,
+    ...typography.subheadline,
     color: colors.textSecondary,
-    fontStyle: 'italic'
+    marginTop: 4,
+    fontSize: 16
   },
   footer: {
     position: 'absolute',
@@ -119,8 +84,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     ...typography.caption,
-    fontSize: 11,
-    color: colors.textMuted,
-    letterSpacing: 0.5
+    fontSize: 12,
+    color: colors.textMuted
   }
 });

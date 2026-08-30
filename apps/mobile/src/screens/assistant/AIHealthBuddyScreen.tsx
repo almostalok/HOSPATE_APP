@@ -18,14 +18,8 @@ import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { spacing, borderRadius } from '../../theme/spacing';
 import { AIMessage } from '../../components/AIMessage';
-import {
-  ArrowLeft,
-  Sparkles,
-  Send,
-  Trash2,
-  ShieldAlert,
-  Bot
-} from 'lucide-react-native';
+import { HospateLogo } from '../../components/HospateLogo';
+import { ArrowLeft, Send, Trash2, Shield } from 'lucide-react-native';
 
 export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = ({
   route,
@@ -35,7 +29,6 @@ export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = (
   const { messages, isThinking, suggestedPrompts } = useSelector(
     (state: RootState) => state.assistant
   );
-  const { user } = useSelector((state: RootState) => state.auth);
 
   const [inputMessage, setInputMessage] = useState('');
   const scrollViewRef = useRef<ScrollView>(null);
@@ -62,18 +55,18 @@ export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = (
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
+      {/* Apple Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <ArrowLeft size={22} color={colors.textPrimary} />
+          <ArrowLeft size={20} color={colors.textPrimary} />
         </TouchableOpacity>
 
         <View style={styles.headerCenter}>
           <View style={styles.titleRow}>
-            <Sparkles size={16} color={colors.accentPurple} />
-            <Text style={styles.headerTitle}>AI HEALTH BUDDY</Text>
+            <HospateLogo size={20} />
+            <Text style={styles.headerTitle}>Health Buddy</Text>
           </View>
-          <Text style={styles.headerSubtitle}>Grounded in Alex Morgan's Health Data</Text>
+          <Text style={styles.headerSubtitle}>Grounded in your medical records</Text>
         </View>
 
         <TouchableOpacity style={styles.clearBtn} onPress={() => dispatch(clearChat())}>
@@ -94,9 +87,9 @@ export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = (
         >
           {/* Medical Safety Disclaimer Pill */}
           <View style={styles.safetyDisclaimer}>
-            <ShieldAlert size={14} color={colors.textMuted} />
+            <Shield size={14} color={colors.textMuted} />
             <Text style={styles.safetyText}>
-              Grounded AI health awareness assistant. Always consult your qualified healthcare provider for clinical diagnosis and emergency care.
+              Grounded health intelligence assistant. Not intended for diagnosis or emergency triage. Always consult your qualified physician.
             </Text>
           </View>
 
@@ -110,15 +103,15 @@ export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = (
 
           {isThinking && (
             <View style={styles.thinkingBox}>
-              <ActivityIndicator size="small" color={colors.accentPurple} />
-              <Text style={styles.thinkingText}>AI Health Buddy is reviewing your medical parameters...</Text>
+              <ActivityIndicator size="small" color={colors.primary} />
+              <Text style={styles.thinkingText}>Reviewing your health parameters...</Text>
             </View>
           )}
 
           <View style={{ height: 16 }} />
         </ScrollView>
 
-        {/* Suggested Quick Prompts Horizontal Scroll */}
+        {/* Suggested Quick Prompts */}
         {suggestedPrompts.length > 0 && !isThinking && (
           <View style={styles.promptsBar}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.promptsScroll}>
@@ -129,7 +122,6 @@ export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = (
                   onPress={() => handleSend(p)}
                   style={styles.promptChip}
                 >
-                  <Sparkles size={12} color={colors.primary} />
                   <Text style={styles.promptChipText}>{p}</Text>
                 </TouchableOpacity>
               ))}
@@ -137,11 +129,11 @@ export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = (
           </View>
         )}
 
-        {/* Input Bar */}
+        {/* Apple iOS Input Bar */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.textInput}
-            placeholder="Ask about your lab results, medications..."
+            placeholder="Ask about lab results, vitals, medications..."
             placeholderTextColor={colors.textMuted}
             value={inputMessage}
             onChangeText={setInputMessage}
@@ -159,7 +151,7 @@ export const AIHealthBuddyScreen: React.FC<{ route?: any; navigation: any }> = (
               (!inputMessage.trim() || isThinking) && styles.sendButtonDisabled
             ]}
           >
-            <Send size={18} color="#FFFFFF" />
+            <Send size={16} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -182,10 +174,10 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border
   },
   backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surfaceElevated,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -197,22 +189,21 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   headerTitle: {
-    ...typography.label,
-    fontSize: 13,
+    ...typography.headline,
     color: colors.textPrimary,
-    letterSpacing: 1,
+    fontSize: 16,
     marginLeft: 6
   },
   headerSubtitle: {
     ...typography.caption,
-    fontSize: 10,
+    fontSize: 11,
     color: colors.textMuted,
     marginTop: 1
   },
   clearBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -222,9 +213,9 @@ const styles = StyleSheet.create({
   safetyDisclaimer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'rgba(15, 23, 42, 0.7)',
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.md,
-    padding: spacing.sm,
+    padding: spacing.sm + 2,
     marginHorizontal: spacing.lg,
     marginBottom: spacing.md,
     borderWidth: 1,
@@ -232,22 +223,22 @@ const styles = StyleSheet.create({
   },
   safetyText: {
     ...typography.caption,
-    fontSize: 10,
+    fontSize: 11,
     color: colors.textMuted,
     marginLeft: spacing.xs + 2,
     flex: 1,
-    lineHeight: 14
+    lineHeight: 16
   },
   thinkingBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.md,
     padding: spacing.md,
     marginHorizontal: spacing.lg,
     marginTop: spacing.sm,
     borderWidth: 1,
-    borderColor: 'rgba(139, 92, 246, 0.3)'
+    borderColor: colors.border
   },
   thinkingText: {
     ...typography.caption,
@@ -255,7 +246,7 @@ const styles = StyleSheet.create({
     marginLeft: spacing.sm
   },
   promptsBar: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
     paddingVertical: spacing.xs + 2,
     borderTopWidth: 1,
     borderTopColor: colors.border
@@ -264,26 +255,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg
   },
   promptChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
-    paddingVertical: 6,
+    paddingVertical: 7,
     borderRadius: borderRadius.pill,
     marginRight: spacing.xs + 2,
     borderWidth: 1,
-    borderColor: 'rgba(14, 165, 233, 0.25)'
+    borderColor: colors.border
   },
   promptChipText: {
     ...typography.captionSemibold,
     color: colors.textPrimary,
-    marginLeft: 4,
-    fontSize: 11
+    fontSize: 12
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.pill,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
@@ -300,16 +288,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xs
   },
   sendButton: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    backgroundColor: colors.accentPurple,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: spacing.xs
   },
   sendButtonDisabled: {
-    backgroundColor: colors.surfaceHover,
+    backgroundColor: colors.surfaceElevated,
     opacity: 0.5
   }
 });

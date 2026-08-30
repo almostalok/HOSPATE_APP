@@ -1,59 +1,60 @@
 /**
- * HOSPATE DESIGN SYSTEM - Color Tokens
- * Premium, calm, intelligent, medical-tech aesthetic
+ * HOSPATE DESIGN SYSTEM - Apple Human Interface Guidelines (HIG) Colors
+ * Authentic Apple Health Dark Mode Palette
  */
 
 export const colors = {
-  // Backgrounds
-  background: '#090D16',       // Deepest obsidian navy
-  surface: '#111827',          // Slate dark surface
-  surfaceElevated: '#1F2937',  // Elevated container / card
-  surfaceBorder: '#374151',    // Subtle separator border
-  surfaceHover: '#283548',
+  // Backgrounds (Apple iOS Dark System)
+  background: '#000000',            // Pure Apple OLED Black
+  surface: '#1C1C1E',               // iOS System Gray 6 (Grouped Card Background)
+  surfaceElevated: '#2C2C2E',       // iOS System Gray 5 (Elevated Card / Modal)
+  surfaceBorder: 'rgba(255, 255, 255, 0.08)',
+  surfaceHover: '#3A3A3C',
 
-  // Primary Brand & Accents
-  primary: '#0EA5E9',          // Electric Cyan / Hospate Blue
-  primaryDark: '#0284C7',
-  primaryGlow: 'rgba(14, 165, 233, 0.15)',
-  accent: '#06B6D4',           // Teal cyan accent
-  accentPurple: '#8B5CF6',     // AI Intelligence Purple
-  accentPurpleGlow: 'rgba(139, 92, 246, 0.15)',
+  // Apple System Tint & Brand
+  primary: '#0A84FF',               // Apple System Blue (iOS 17/18 Tint)
+  primaryDark: '#0066CC',
+  primaryGlow: 'rgba(10, 132, 255, 0.12)',
+  brandNavy: '#002B5B',             // Hospate Deep Navy Blue
+  accent: '#64D2FF',                // Apple System Cyan
+  accentPurple: '#5E5CE6',          // Apple System Indigo
+  accentPurpleGlow: 'rgba(94, 92, 230, 0.12)',
 
-  // Semantic Status Colors
-  success: '#10B981',          // Emerald Green (Healthy / Normal)
-  successGlow: 'rgba(16, 185, 129, 0.15)',
-  successText: '#34D399',
+  // Apple Health Semantic Status
+  success: '#30D158',               // Apple Activity Green (Normal / Optimal)
+  successGlow: 'rgba(48, 209, 88, 0.12)',
+  successText: '#30D158',
 
-  warning: '#F59E0B',          // Warm Amber (Needs Attention / Borderline)
-  warningGlow: 'rgba(245, 158, 11, 0.15)',
-  warningText: '#FBBF24',
+  warning: '#FF9F0A',               // Apple System Orange (Borderline / Warning)
+  warningGlow: 'rgba(255, 159, 10, 0.12)',
+  warningText: '#FF9F0A',
 
-  danger: '#EF4444',           // Crimson (Significantly Abnormal / Danger)
-  dangerGlow: 'rgba(239, 68, 68, 0.15)',
-  dangerText: '#F87171',
+  danger: '#FF453A',                // Apple System Red (Attention / Critical)
+  dangerGlow: 'rgba(255, 69, 58, 0.12)',
+  dangerText: '#FF453A',
 
-  info: '#3B82F6',
+  info: '#0A84FF',
 
-  // Typography Colors
-  textPrimary: '#F8FAFC',      // Crisp off-white
-  textSecondary: '#94A3B8',    // Muted slate
-  textMuted: '#64748B',        // Subdued caption
-  textInverse: '#090D16',
+  // Apple SF Pro Typography Colors
+  textPrimary: '#FFFFFF',           // 100% White
+  textSecondary: 'rgba(235, 235, 245, 0.60)', // iOS Secondary Label (60%)
+  textMuted: 'rgba(235, 235, 245, 0.38)',     // iOS Tertiary Label (38%)
+  textInverse: '#000000',
 
-  // Borders & Dividers
-  border: '#1E293B',
-  borderLight: '#334155',
-  borderFocus: '#0EA5E9',
+  // Apple Separators & Hairlines
+  border: 'rgba(255, 255, 255, 0.08)',
+  borderLight: 'rgba(255, 255, 255, 0.14)',
+  borderFocus: '#0A84FF',
 
-  // Dimension Category Accents
-  dimensionCardio: '#EF4444',
-  dimensionMetabolic: '#F59E0B',
-  dimensionNutrition: '#10B981',
-  dimensionLifestyle: '#06B6D4',
-  dimensionMedication: '#8B5CF6',
+  // Apple Health Dimension Metrics
+  dimensionCardio: '#FF375F',       // Apple Heart Red
+  dimensionMetabolic: '#FF9F0A',    // Apple Orange
+  dimensionNutrition: '#30D158',    // Apple Activity Green
+  dimensionLifestyle: '#64D2FF',    // Apple Cyan
+  dimensionMedication: '#0A84FF',   // Apple Blue
 
-  // Glass & Gradients
-  gradientHero: ['#0F172A', '#090D16'],
-  gradientScore: ['#0284C7', '#0EA5E9', '#06B6D4'],
-  gradientAI: ['#4C1D95', '#1E1B4B']
+  // Clean Subtle Gradients
+  gradientHero: ['#1C1C1E', '#000000'],
+  gradientScore: ['#0A84FF', '#0066CC'],
+  gradientAI: ['#1C1C1E', '#1C1C1E']
 };

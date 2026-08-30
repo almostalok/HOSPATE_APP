@@ -5,8 +5,7 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
-  TouchableOpacity,
-  Alert
+  TouchableOpacity
 } from 'react-native';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
@@ -18,14 +17,14 @@ import {
   Activity,
   Camera,
   UploadCloud,
-  Sparkles,
-  FileCheck2
+  ChevronRight,
+  FileCheck
 } from 'lucide-react-native';
 
 const DOC_TYPES = [
-  { id: 'LAB_REPORT', title: 'Lab Report', desc: 'Blood test, lipid profile, metabolic panel', icon: FileText },
-  { id: 'PRESCRIPTION', title: 'Prescription', desc: 'Doctor clinic slip, dosage schedule', icon: Pill },
-  { id: 'SCAN', title: 'Scan / Imaging', desc: 'X-Ray, Ultrasound, MRI report', icon: Activity }
+  { id: 'LAB_REPORT', title: 'Lab Pathology Report', desc: 'Blood panel, lipid profile, metabolic test', icon: FileText },
+  { id: 'PRESCRIPTION', title: 'Doctor Prescription', desc: 'Clinical prescription & medication dosages', icon: Pill },
+  { id: 'SCAN', title: 'Diagnostic Scan', desc: 'Imaging report, ECG, Ultrasound', icon: Activity }
 ];
 
 const DEMO_PRESETS = [
@@ -41,7 +40,7 @@ const DEMO_PRESETS = [
     title: 'Micronutrient & Vitamin Panel',
     source: 'Max Labs Central',
     paramsCount: 3,
-    tags: ['Vitamin D (25-OH)', 'Vitamin B12', 'Hemoglobin']
+    tags: ['Vitamin D3', 'Vitamin B12', 'Hemoglobin']
   },
   {
     id: 'metabolic_panel',
@@ -64,18 +63,18 @@ export const UploadDocumentScreen: React.FC<{ navigation: any }> = ({ navigation
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
+      {/* Apple Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <ArrowLeft size={22} color={colors.textPrimary} />
+          <ArrowLeft size={20} color={colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>UPLOAD HEALTH DOCUMENT</Text>
-        <View style={{ width: 40 }} />
+        <Text style={styles.headerTitle}>Upload Document</Text>
+        <View style={{ width: 36 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* Step 1: Select Document Type */}
-        <Text style={styles.sectionHeader}>SELECT DOCUMENT CATEGORY</Text>
+        {/* Step 1: Select Category */}
+        <Text style={styles.sectionHeader}>DOCUMENT CATEGORY</Text>
 
         <View style={styles.typeSelector}>
           {DOC_TYPES.map(dt => {
@@ -84,12 +83,12 @@ export const UploadDocumentScreen: React.FC<{ navigation: any }> = ({ navigation
             return (
               <TouchableOpacity
                 key={dt.id}
-                activeOpacity={0.8}
+                activeOpacity={0.7}
                 onPress={() => setSelectedType(dt.id)}
                 style={[styles.typeCard, isSelected && styles.typeCardActive]}
               >
-                <View style={[styles.typeIconBox, isSelected && styles.typeIconBoxActive]}>
-                  <Icon size={20} color={isSelected ? '#FFFFFF' : colors.primary} />
+                <View style={[styles.typeIconBox, { backgroundColor: isSelected ? colors.primary : colors.surfaceElevated }]}>
+                  <Icon size={18} color={isSelected ? '#FFFFFF' : colors.textSecondary} />
                 </View>
                 <View style={styles.typeInfo}>
                   <Text style={[styles.typeTitle, isSelected && styles.typeTitleActive]}>
@@ -102,61 +101,54 @@ export const UploadDocumentScreen: React.FC<{ navigation: any }> = ({ navigation
           })}
         </View>
 
-        {/* Step 2: Upload Action Area */}
-        <Text style={[styles.sectionHeader, { marginTop: spacing.lg }]}>CHOOSE UPLOAD METHOD</Text>
+        {/* Step 2: Upload Action Tiles */}
+        <Text style={[styles.sectionHeader, { marginTop: spacing.lg }]}>IMPORT METHOD</Text>
 
         <View style={styles.uploadOptionsRow}>
           <TouchableOpacity
-            activeOpacity={0.8}
+            activeOpacity={0.7}
             onPress={() => handleStartProcessing('cbc_lipid')}
             style={styles.uploadTile}
           >
             <View style={styles.tileIconCircle}>
-              <Camera size={22} color={colors.primary} />
+              <Camera size={20} color="#FFFFFF" />
             </View>
             <Text style={styles.tileTitle}>Scan Camera</Text>
             <Text style={styles.tileDesc}>Capture document photo</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            activeOpacity={0.8}
+            activeOpacity={0.7}
             onPress={() => handleStartProcessing('cbc_lipid')}
             style={styles.uploadTile}
           >
-            <View style={[styles.tileIconCircle, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
-              <UploadCloud size={22} color={colors.accent} />
+            <View style={[styles.tileIconCircle, { backgroundColor: colors.dimensionLifestyle }]}>
+              <UploadCloud size={20} color="#FFFFFF" />
             </View>
-            <Text style={styles.tileTitle}>Browse PDF / Image</Text>
-            <Text style={styles.tileDesc}>Import from files</Text>
+            <Text style={styles.tileTitle}>Files & PDFs</Text>
+            <Text style={styles.tileDesc}>Import from device files</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Step 3: Fast Demo Pathology Reports */}
-        <View style={styles.demoSectionHeader}>
-          <View style={styles.demoTitleRow}>
-            <Sparkles size={16} color={colors.accentPurple} />
-            <Text style={styles.demoHeaderTitle}>DEMO SAMPLE REPORTS (VIVA PRESETS)</Text>
-          </View>
-          <Text style={styles.demoHeaderDesc}>
-            Select a realistic medical report to test live OCR parameter extraction & analysis.
-          </Text>
-        </View>
+        {/* Step 3: Sample Pathology Reports */}
+        <Text style={[styles.sectionHeader, { marginTop: spacing.lg }]}>SAMPLE CLINICAL REPORTS</Text>
 
         {DEMO_PRESETS.map(preset => (
           <TouchableOpacity
             key={preset.id}
-            activeOpacity={0.8}
+            activeOpacity={0.7}
             onPress={() => handleStartProcessing(preset.id)}
             style={styles.presetCard}
           >
             <View style={styles.presetTop}>
               <View style={styles.presetIcon}>
-                <FileCheck2 size={18} color={colors.primary} />
+                <FileCheck size={18} color="#FFFFFF" />
               </View>
               <View style={styles.presetInfo}>
                 <Text style={styles.presetTitle}>{preset.title}</Text>
-                <Text style={styles.presetSource}>{preset.source} • {preset.paramsCount} parameters</Text>
+                <Text style={styles.presetSource}>{preset.source} • {preset.paramsCount} biomarkers</Text>
               </View>
+              <ChevronRight size={16} color={colors.textMuted} />
             </View>
 
             <View style={styles.tagRow}>
@@ -190,18 +182,17 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border
   },
   backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surfaceElevated,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center'
   },
   headerTitle: {
-    ...typography.label,
-    fontSize: 12,
+    ...typography.headline,
     color: colors.textPrimary,
-    letterSpacing: 1
+    fontSize: 16
   },
   scroll: {
     padding: spacing.lg
@@ -209,8 +200,8 @@ const styles = StyleSheet.create({
   sectionHeader: {
     ...typography.label,
     fontSize: 11,
-    color: colors.textMuted,
-    letterSpacing: 1,
+    color: colors.textSecondary,
+    letterSpacing: 0.5,
     marginBottom: spacing.sm
   },
   typeSelector: {
@@ -219,7 +210,7 @@ const styles = StyleSheet.create({
   typeCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     marginBottom: spacing.xs + 2,
@@ -227,44 +218,40 @@ const styles = StyleSheet.create({
     borderColor: colors.border
   },
   typeCardActive: {
-    borderColor: colors.primary,
-    backgroundColor: 'rgba(14, 165, 233, 0.08)'
+    borderColor: colors.primary
   },
   typeIconBox: {
-    width: 40,
-    height: 40,
-    borderRadius: borderRadius.md,
-    backgroundColor: colors.surface,
+    width: 36,
+    height: 36,
+    borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md
-  },
-  typeIconBoxActive: {
-    backgroundColor: colors.primary
   },
   typeInfo: {
     flex: 1
   },
   typeTitle: {
     ...typography.bodySemibold,
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontSize: 15
   },
   typeTitleActive: {
     color: colors.primary
   },
   typeDesc: {
     ...typography.caption,
-    color: colors.textSecondary,
+    color: colors.textMuted,
     marginTop: 2
   },
   uploadOptionsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: spacing.lg
+    marginBottom: spacing.xs
   },
   uploadTile: {
-    width: '48%',
-    backgroundColor: colors.surfaceElevated,
+    width: '48.5%',
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     alignItems: 'center',
@@ -272,10 +259,10 @@ const styles = StyleSheet.create({
     borderColor: colors.border
   },
   tileIconCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.primaryGlow,
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.sm
@@ -283,56 +270,32 @@ const styles = StyleSheet.create({
   tileTitle: {
     ...typography.bodySemibold,
     color: colors.textPrimary,
-    textAlign: 'center'
+    fontSize: 15
   },
   tileDesc: {
     ...typography.caption,
-    color: colors.textSecondary,
+    color: colors.textMuted,
     textAlign: 'center',
     marginTop: 2
   },
-  demoSectionHeader: {
-    backgroundColor: 'rgba(139, 92, 246, 0.08)',
-    borderRadius: borderRadius.md,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    borderWidth: 1,
-    borderColor: 'rgba(139, 92, 246, 0.25)'
-  },
-  demoTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  demoHeaderTitle: {
-    ...typography.label,
-    fontSize: 11,
-    color: colors.accentPurple,
-    marginLeft: 6
-  },
-  demoHeaderDesc: {
-    ...typography.caption,
-    color: colors.textSecondary,
-    marginTop: 4,
-    lineHeight: 16
-  },
   presetCard: {
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs + 2,
     borderWidth: 1,
     borderColor: colors.border
   },
   presetTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.sm
+    marginBottom: spacing.xs + 2
   },
   presetIcon: {
     width: 36,
     height: 36,
-    borderRadius: borderRadius.md,
-    backgroundColor: colors.surface,
+    borderRadius: 9,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md
@@ -342,28 +305,30 @@ const styles = StyleSheet.create({
   },
   presetTitle: {
     ...typography.bodySemibold,
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontSize: 15
   },
   presetSource: {
     ...typography.caption,
-    color: colors.textSecondary,
-    marginTop: 1
+    color: colors.textMuted,
+    marginTop: 2
   },
   tagRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    marginTop: 4
   },
   paramTag: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceElevated,
     paddingHorizontal: spacing.sm,
     paddingVertical: 3,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.xs,
     marginRight: spacing.xs,
     marginTop: 2
   },
   paramTagText: {
     ...typography.caption,
-    fontSize: 10,
+    fontSize: 11,
     color: colors.textSecondary
   }
 });

@@ -2,8 +2,8 @@ import React from 'react';
 import {
   TouchableOpacity,
   Text,
-  ActivityIndicator,
   StyleSheet,
+  ActivityIndicator,
   ViewStyle,
   TextStyle
 } from 'react-native';
@@ -11,11 +11,10 @@ import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { borderRadius, spacing } from '../theme/spacing';
 
-interface ButtonProps {
+interface PrimaryButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'ai';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
   loading?: boolean;
   disabled?: boolean;
   icon?: React.ReactNode;
@@ -23,67 +22,69 @@ interface ButtonProps {
   textStyle?: TextStyle;
 }
 
-export const PrimaryButton: React.FC<ButtonProps> = ({
+export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   title,
   onPress,
   variant = 'primary',
-  size = 'md',
   loading = false,
   disabled = false,
   icon,
   style,
   textStyle
 }) => {
-  let bgColor = colors.primary;
-  let textColor = '#FFFFFF';
-  let borderColor = 'transparent';
+  const getButtonStyles = () => {
+    switch (variant) {
+      case 'secondary':
+        return {
+          bg: colors.surfaceElevated,
+          textColor: colors.textPrimary,
+          border: colors.border
+        };
+      case 'danger':
+        return {
+          bg: colors.danger,
+          textColor: '#FFFFFF',
+          border: 'transparent'
+        };
+      case 'ghost':
+        return {
+          bg: 'transparent',
+          textColor: colors.primary,
+          border: 'transparent'
+        };
+      case 'primary':
+      default:
+        return {
+          bg: colors.primary,
+          textColor: '#FFFFFF',
+          border: 'transparent'
+        };
+    }
+  };
 
-  if (variant === 'secondary') {
-    bgColor = colors.surfaceElevated;
-    textColor = colors.textPrimary;
-    borderColor = colors.border;
-  } else if (variant === 'outline') {
-    bgColor = 'transparent';
-    textColor = colors.primary;
-    borderColor = colors.primary;
-  } else if (variant === 'danger') {
-    bgColor = colors.danger;
-    textColor = '#FFFFFF';
-  } else if (variant === 'ai') {
-    bgColor = colors.accentPurple;
-    textColor = '#FFFFFF';
-  }
-
-  const isSmall = size === 'sm';
-  const isLarge = size === 'lg';
+  const btnStyle = getButtonStyles();
 
   return (
     <TouchableOpacity
-      activeOpacity={0.8}
+      activeOpacity={0.75}
       onPress={onPress}
       disabled={disabled || loading}
       style={[
         styles.button,
-        { backgroundColor: bgColor, borderColor },
-        isSmall && styles.btnSm,
-        isLarge && styles.btnLg,
-        disabled && styles.btnDisabled,
+        {
+          backgroundColor: btnStyle.bg,
+          borderColor: btnStyle.border
+        },
+        disabled && styles.disabled,
         style
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={textColor} size="small" />
+        <ActivityIndicator size="small" color={btnStyle.textColor} />
       ) : (
         <>
-          {icon && <>{icon}</>}
-          <Text
-            style={[
-              styles.text,
-              { color: textColor, marginLeft: icon ? spacing.xs + 2 : 0 },
-              isSmall && styles.textSm,
-              textStyle
-            ]}
-          >
+          {icon ? <span style={{ marginRight: 6 }}>{icon}</span> : null}
+          <Text style={[styles.text, { color: btnStyle.textColor }, textStyle]}>
             {title}
           </Text>
         </>
@@ -94,32 +95,20 @@ export const PrimaryButton: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
+    height: 50,
+    borderRadius: borderRadius.md + 2,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
-    borderRadius: borderRadius.md,
     borderWidth: 1
   },
-  btnSm: {
-    paddingVertical: spacing.xs + 2,
-    paddingHorizontal: spacing.md,
-    borderRadius: borderRadius.sm
-  },
-  btnLg: {
-    paddingVertical: spacing.lg,
-    paddingHorizontal: spacing.xl,
-    borderRadius: borderRadius.lg
-  },
-  btnDisabled: {
-    opacity: 0.5
-  },
   text: {
-    ...typography.bodySemibold,
-    textAlign: 'center'
+    ...typography.headline,
+    fontSize: 16,
+    fontWeight: '600'
   },
-  textSm: {
-    fontSize: 12
+  disabled: {
+    opacity: 0.45
   }
 });

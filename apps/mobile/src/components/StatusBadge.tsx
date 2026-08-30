@@ -1,52 +1,80 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { ParameterStatus, Severity } from '@hospate/types';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { borderRadius, spacing } from '../theme/spacing';
-import { ParameterStatus, Severity } from '@hospate/types';
 
 interface StatusBadgeProps {
   status?: ParameterStatus | Severity | string;
-  label?: string;
-  size?: 'sm' | 'md';
+  size?: 'small' | 'medium';
 }
 
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ status = 'NORMAL', label, size = 'md' }) => {
-  const normStatus = String(status).toUpperCase();
+export const StatusBadge: React.FC<StatusBadgeProps> = ({ status = 'NORMAL', size = 'small' }) => {
+  const norm = String(status).toUpperCase();
 
-  let bg = colors.successGlow;
-  let text = colors.successText;
-  let displayLabel = label || 'NORMAL';
+  const getStyle = () => {
+    switch (norm) {
+      case 'NORMAL':
+      case 'EXCELLENT':
+      case 'GOOD':
+      case 'COMPLETED':
+      case 'TAKEN':
+        return {
+          bg: 'rgba(48, 209, 88, 0.12)',
+          color: colors.success,
+          label: norm === 'NORMAL' ? 'Normal' : norm
+        };
+      case 'LOW':
+      case 'HIGH':
+      case 'WARNING':
+      case 'FAIR':
+      case 'NEEDS_REVIEW':
+      case 'PENDING':
+        return {
+          bg: 'rgba(255, 159, 10, 0.12)',
+          color: colors.warning,
+          label: norm === 'WARNING' ? 'Attention' : norm === 'HIGH' ? 'High' : norm === 'LOW' ? 'Low' : norm
+        };
+      case 'CRITICAL_HIGH':
+      case 'CRITICAL_LOW':
+      case 'DANGER':
+      case 'NEEDS_ATTENTION':
+      case 'MISSED':
+      case 'FAILED':
+      case 'ABNORMAL':
+        return {
+          bg: 'rgba(255, 69, 58, 0.12)',
+          color: colors.danger,
+          label: norm === 'DANGER' || norm === 'ABNORMAL' ? 'Abnormal' : norm
+        };
+      default:
+        return {
+          bg: 'rgba(255, 255, 255, 0.08)',
+          color: colors.textSecondary,
+          label: norm
+        };
+    }
+  };
 
-  if (normStatus === 'HIGH' || normStatus === 'WARNING') {
-    bg = colors.warningGlow;
-    text = colors.warningText;
-    displayLabel = label || 'ELEVATED';
-  } else if (normStatus === 'LOW') {
-    bg = colors.warningGlow;
-    text = colors.warningText;
-    displayLabel = label || 'LOW';
-  } else if (normStatus === 'CRITICAL_HIGH' || normStatus === 'CRITICAL_LOW' || normStatus === 'DANGER') {
-    bg = colors.dangerGlow;
-    text = colors.dangerText;
-    displayLabel = label || 'CRITICAL';
-  } else if (normStatus === 'NEEDS_REVIEW') {
-    bg = 'rgba(148, 163, 184, 0.15)';
-    text = colors.textSecondary;
-    displayLabel = label || 'REVIEW';
-  } else if (normStatus === 'NORMAL') {
-    bg = colors.successGlow;
-    text = colors.successText;
-    displayLabel = label || 'NORMAL';
-  }
-
-  const isSmall = size === 'sm';
+  const styleConfig = getStyle();
 
   return (
-    <View style={[styles.badge, { backgroundColor: bg }, isSmall && styles.badgeSm]}>
-      <View style={[styles.dot, { backgroundColor: text }]} />
-      <Text style={[styles.text, { color: text }, isSmall && styles.textSm]}>
-        {displayLabel}
+    <View
+      style={[
+        styles.badge,
+        { backgroundColor: styleConfig.bg },
+        size === 'medium' && styles.badgeMedium
+      ]}
+    >
+      <Text
+        style={[
+          styles.text,
+          { color: styleConfig.color },
+          size === 'medium' && styles.textMedium
+        ]}
+      >
+        {styleConfig.label}
       </Text>
     </View>
   );
@@ -54,28 +82,23 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status = 'NORMAL', lab
 
 const styles = StyleSheet.create({
   badge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.sm + 2,
-    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
     borderRadius: borderRadius.pill,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  badgeSm: {
-    paddingHorizontal: spacing.xs + 2,
-    paddingVertical: 2
-  },
-  dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginRight: spacing.xs + 1
+  badgeMedium: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: 4
   },
   text: {
-    ...typography.label,
-    fontSize: 10
+    ...typography.captionSemibold,
+    fontSize: 11,
+    fontWeight: '600'
   },
-  textSm: {
-    fontSize: 9
+  textMedium: {
+    fontSize: 12
   }
 });

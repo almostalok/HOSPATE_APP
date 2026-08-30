@@ -1,181 +1,164 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { HealthInsight } from '@hospate/types';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { spacing, borderRadius } from '../theme/spacing';
-import { HealthInsight } from '@hospate/types';
 import { StatusBadge } from './StatusBadge';
-import { AlertCircle, AlertTriangle, CheckCircle, Sparkles, ChevronRight } from 'lucide-react-native';
+import { Activity, Heart, ShieldAlert, Stethoscope, ChevronRight } from 'lucide-react-native';
 
 interface InsightCardProps {
   insight: HealthInsight;
-  onUnderstandPress?: (insight: HealthInsight) => void;
+  onPress?: () => void;
 }
 
-export const InsightCard: React.FC<InsightCardProps> = ({ insight, onUnderstandPress }) => {
-  const isDanger = insight.severity === 'DANGER';
-  const isWarning = insight.severity === 'WARNING';
+export const InsightCard: React.FC<InsightCardProps> = ({ insight, onPress }) => {
+  const getIcon = () => {
+    if (insight.severity === 'DANGER' || insight.title?.toLowerCase().includes('cholesterol') || insight.parameter?.toLowerCase().includes('ldl')) {
+      return {
+        icon: <Heart size={18} color="#FFFFFF" />,
+        bg: colors.dimensionCardio
+      };
+    }
+    if (insight.title?.toLowerCase().includes('vitamin') || insight.parameter?.toLowerCase().includes('vitamin')) {
+      return {
+        icon: <Activity size={18} color="#FFFFFF" />,
+        bg: colors.dimensionNutrition
+      };
+    }
+    return {
+      icon: <Stethoscope size={18} color="#FFFFFF" />,
+      bg: colors.primary
+    };
+  };
 
-  let borderColor = 'rgba(148, 163, 184, 0.2)';
-  let accentIcon = <CheckCircle size={16} color={colors.successText} />;
-
-  if (isDanger) {
-    borderColor = 'rgba(239, 68, 68, 0.4)';
-    accentIcon = <AlertCircle size={16} color={colors.dangerText} />;
-  } else if (isWarning) {
-    borderColor = 'rgba(245, 158, 11, 0.4)';
-    accentIcon = <AlertTriangle size={16} color={colors.warningText} />;
-  }
+  const iconConfig = getIcon();
 
   return (
-    <View style={[styles.card, { borderColor }]}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={onPress}
+      style={styles.card}
+    >
+      {/* Top row: Icon, Title, Status */}
       <View style={styles.topRow}>
-        <View style={styles.headerLeft}>
-          {accentIcon}
-          <Text style={styles.title} numberOfLines={1}>{insight.title}</Text>
+        <View style={[styles.iconBox, { backgroundColor: iconConfig.bg }]}>
+          {iconConfig.icon}
         </View>
-        <StatusBadge status={insight.severity} />
-      </View>
 
-      <View style={styles.parameterRow}>
-        <View style={styles.paramBox}>
-          <Text style={styles.paramLabel}>Measured Value</Text>
-          <Text style={styles.paramValue}>
-            {insight.measuredValue} <Text style={styles.paramUnit}>{insight.unit}</Text>
+        <View style={styles.titleCol}>
+          <Text style={styles.title} numberOfLines={2}>
+            {insight.title}
+          </Text>
+          <Text style={styles.sourceText}>
+            {insight.sourceDocumentTitle || 'Lab Pathology'} • {insight.sourceDate || 'Recent'}
           </Text>
         </View>
 
-        {insight.referenceRange ? (
-          <View style={styles.refBox}>
-            <Text style={styles.paramLabel}>Reference Target</Text>
-            <Text style={styles.refValue}>{insight.referenceRange}</Text>
-          </View>
-        ) : null}
+        <StatusBadge status={insight.severity} />
       </View>
 
-      <Text style={styles.interpretation} numberOfLines={2}>
+      {/* Interpretation / Summary */}
+      <Text style={styles.summaryText}>
         {insight.interpretation}
       </Text>
 
-      <View style={styles.footerRow}>
-        <Text style={styles.sourceText} numberOfLines={1}>
-          Source: {insight.sourceDocumentTitle}
-        </Text>
+      {/* Recommendation */}
+      {insight.recommendation ? (
+        <View style={styles.actionBox}>
+          <Text style={styles.actionLabel}>RECOMMENDED FOCUS</Text>
+          <Text style={styles.actionText}>{insight.recommendation}</Text>
+        </View>
+      ) : null}
 
-        {onUnderstandPress && (
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => onUnderstandPress(insight)}
-            style={styles.actionBtn}
-          >
-            <Sparkles size={12} color={colors.primary} />
-            <Text style={styles.actionText}>Understand this</Text>
-            <ChevronRight size={14} color={colors.primary} />
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
+      {/* Doctor discussion bullet */}
+      {insight.doctorTalkingPoints && insight.doctorTalkingPoints.length > 0 && (
+        <View style={styles.doctorRow}>
+          <Stethoscope size={13} color={colors.textSecondary} />
+          <Text style={styles.doctorText} numberOfLines={1}>
+            Ask doctor: "{insight.doctorTalkingPoints[0]}"
+          </Text>
+        </View>
+      )}
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
-    padding: spacing.md,
-    marginHorizontal: spacing.lg,
-    marginVertical: spacing.xs + 2,
-    borderWidth: 1
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border
   },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: spacing.xs + 2
+    marginBottom: spacing.sm
   },
-  headerLeft: {
-    flexDirection: 'row',
+  iconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
     alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.md
+  },
+  titleCol: {
     flex: 1,
     marginRight: spacing.sm
   },
   title: {
-    ...typography.bodySemibold,
+    ...typography.headline,
     color: colors.textPrimary,
-    marginLeft: spacing.xs + 2,
-    flex: 1
-  },
-  parameterRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    padding: spacing.sm,
-    borderRadius: borderRadius.md,
-    marginVertical: spacing.xs
-  },
-  paramBox: {
-    flex: 1
-  },
-  paramLabel: {
-    ...typography.caption,
-    fontSize: 10,
-    color: colors.textMuted
-  },
-  paramValue: {
-    ...typography.h3,
-    fontSize: 16,
-    color: colors.textPrimary
-  },
-  paramUnit: {
-    ...typography.caption,
-    fontSize: 11,
-    color: colors.textSecondary
-  },
-  refBox: {
-    flex: 1,
-    borderLeftWidth: 1,
-    borderLeftColor: colors.border,
-    paddingLeft: spacing.sm
-  },
-  refValue: {
-    ...typography.captionSemibold,
-    color: colors.textSecondary
-  },
-  interpretation: {
-    ...typography.body,
-    fontSize: 12,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
-    lineHeight: 18
-  },
-  footerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: spacing.sm,
-    paddingTop: spacing.xs + 2,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(51, 65, 85, 0.4)'
+    fontSize: 16
   },
   sourceText: {
     ...typography.caption,
+    color: colors.textMuted,
+    marginTop: 2
+  },
+  summaryText: {
+    ...typography.body,
+    color: colors.textSecondary,
+    lineHeight: 21,
+    marginTop: 4,
+    marginBottom: spacing.sm
+  },
+  actionBox: {
+    backgroundColor: colors.surfaceElevated,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    marginTop: spacing.xs,
+    marginBottom: spacing.xs
+  },
+  actionLabel: {
+    ...typography.label,
     fontSize: 10,
     color: colors.textMuted,
-    flex: 1,
-    marginRight: spacing.xs
-  },
-  actionBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(14, 165, 233, 0.12)',
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
-    borderRadius: borderRadius.pill
+    letterSpacing: 0.5,
+    marginBottom: 2
   },
   actionText: {
-    ...typography.captionSemibold,
-    fontSize: 11,
-    color: colors.primary,
-    marginHorizontal: 3
+    ...typography.caption,
+    color: colors.textPrimary,
+    lineHeight: 18
+  },
+  doctorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: spacing.sm,
+    paddingTop: spacing.xs + 2,
+    borderTopWidth: 1,
+    borderTopColor: colors.border
+  },
+  doctorText: {
+    ...typography.caption,
+    color: colors.textSecondary,
+    marginLeft: 6,
+    flex: 1,
+    fontStyle: 'italic'
   }
 });
